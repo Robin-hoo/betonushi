@@ -2,7 +2,7 @@ import { useState } from 'react'
 import reactLogo from './assets/react.svg'
 import viteLogo from '/vite.svg'
 import './App.css'
-import { useTranslation, Trans } from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 import LanguageSwitcher from './components/LanguageSwitcher';
 
 function App() {
@@ -26,9 +26,7 @@ function App() {
           {t('count_is', { count })}
         </button>
         <p>
-          <Trans i18nKey="edit_save">
-            Edit <code>src/App.tsx</code> and save to test HMR
-          </Trans>
+          {t('edit_save')}
         </p>
       </div>
       <p className="read-the-docs">
