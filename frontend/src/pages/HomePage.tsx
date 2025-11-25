@@ -1,4 +1,4 @@
-import { Button } from "@/components/ui/button"
+import { Button } from "@/components/ui/button";
 
 export default function HomePage() {
   return (
@@ -12,5 +12,5 @@ export default function HomePage() {
         <Button variant="destructive">Toi khong dong tinh</Button>
       </div>
     </div>
-  )
+  );
 }
