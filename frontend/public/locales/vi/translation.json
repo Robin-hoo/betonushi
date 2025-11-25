@@ -1,0 +1,6 @@
+{
+    "title": "Vite + React",
+    "count_is": "Bây giờ là{{count}}",
+    "edit_save": "Chỉnh sửa <1>src/App.tsx</1> và lưu để kiểm tra HMR",
+    "read_docs": "Nhấn vào logo Vite và React để tìm hiểu thêm"
+}
