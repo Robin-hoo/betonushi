@@ -2,7 +2,7 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import MainLayout from '@/layouts/MainLayout';
 import AuthLayout from '@/layouts/AuthLayout';
 import HomePage from '@/pages/HomePage';
-import HelpfulPage from '@/pages/Helpfulpage';
+import HelpfulPage from '@/pages/HelpfulPage';
 import FoodDetailPage from "./pages/FoodDetailPage";
 
 function App() {
@@ -16,7 +16,7 @@ function App() {
           <Route path="/food" element={<HomePage />} />
           <Route path="/food/:id" element={<FoodDetailPage />} />
           <Route path="/restaurant" element={<HomePage />} />
-          <Route path="/phrases" element={<HomePage />} />
+          <Route path="/phrases" element={<HelpfulPage />} />
           <Route
             path="/about"
             element={<div className="p-4">About Page</div>}

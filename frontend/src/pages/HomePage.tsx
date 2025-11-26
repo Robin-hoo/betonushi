@@ -22,14 +22,14 @@ export default function HomePage() {
         <div className="absolute inset-0 bg-black/25" />
 
         {/* Nội dung banner nằm giữa, max width */}
-        <div className="relative w-full max-w-6xl mx-auto px-4 text-center text-white">
-          <h2 className="text-3xl font-bold tracking-wide">
+        <div className="relative w-full max-w-6xl mx-auto px-4 text-center text-black">
+          <h2 className="text-5xl tracking-wide">
             {t("banner1.title")}
           </h2>
-          <h1 className="text-5xl font-extrabold mt-2">{t("banner2.title")}</h1>
+          <h1 className="text-5xl mt-2">{t("banner2.title")}</h1>
 
           <div className="mt-6">
-            <Button className="bg-pink-500 hover:bg-pink-600 text-white text-lg px-6 py-4 rounded-full shadow-xl">
+            <Button className="bg-orange-500 hover:bg-orange-600 text-white text-lg px-6 py-4 rounded-full shadow-xl">
               {t("button1.title")}
             </Button>
           </div>
@@ -43,42 +43,50 @@ export default function HomePage() {
         <div className="max-w-6xl mx-auto px-4">
 
           {/* Tiêu đề */}
-          <div className="flex items-center justify-between mb-6">
-            <Badge className="text-lg px-4 py-2 bg-orange-300 text-orange-900 rounded-full">
+          <div className="flex items-center justify-center mb-8 relative">
+            <Badge className="text-lg px-8 py-3 bg-[#f4d5c0] text-[#8b4513] rounded-full shadow-sm font-medium">
               {t("popular_menu.title")}
             </Badge>
 
-            <button className="text-gray-500 hover:underline text-sm">
+            <button className="absolute right-0 text-gray-700 hover:text-gray-900 text-sm flex items-center gap-1">
               {t("button2.title")}
             </button>
           </div>
 
           {/* Card Menu */}
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
-            {[1, 2, 3, 4].map((item) => (
-              <a href = "helpful">
-              <Card key={item} className="shadow-md hover:shadow-lg transition rounded-xl">
-                <CardHeader className="p-0">
-                  <img
-                    src="/food.jpg"
-                    alt="food"
-                    className="w-full h-40 object-cover rounded-t-xl"
-                  />
+            {[
+              { nameKey: "menu.items.bunbohue.name", descKey: "menu.items.bunbohue.desc" },
+              { nameKey: "menu.items.banhmi.name", descKey: "menu.items.banhmi.desc" },
+              { nameKey: "menu.items.bunbohue.name", descKey: "menu.items.bunbohue.desc" },
+              { nameKey: "menu.items.banhmi.name", descKey: "menu.items.banhmi.desc" }
+            ].map((item, index) => (
+              <Card key={index} className="bg-[#f5e6dc] border-none shadow-md hover:shadow-xl transition-all duration-300 rounded-2xl overflow-hidden">
+                <CardHeader className="p-4 pb-3">
+                  <div className="w-full aspect-square rounded-xl overflow-hidden bg-white">
+                    <img
+                      src="/food.jpg"
+                      alt={t(item.nameKey)}
+                      className="w-full h-full object-cover"
+                    />
+                  </div>
                 </CardHeader>
 
-                <CardContent className="mt-3">
-                  <CardTitle className="text-lg">パスタシーフード</CardTitle>
-                  <p className="text-sm text-muted-foreground">
-                    シーフードとクリーミーなソース…
+                <CardContent className="px-4 pb-3 text-center">
+                  <CardTitle className="text-lg font-bold text-gray-800 mb-2">
+                    {t(item.nameKey)}
+                  </CardTitle>
+                  <p className="text-sm text-gray-600 leading-relaxed">
+                    {t(item.descKey)}
                   </p>
                 </CardContent>
 
-                <CardFooter className="flex justify-between items-center text-sm text-muted-foreground">
-                  <span>レビュー 4.8/5.0</span>
-                  <span className="font-bold text-orange-600">¥1,280</span>
+                <CardFooter className="px-4 pb-4 flex justify-center">
+                  <button className="text-[#c44536] hover:text-[#a03628] text-sm font-medium transition-colors">
+                    {t("menu.view_details")}
+                  </button>
                 </CardFooter>
               </Card>
-              </a>
             ))}
           </div>
         </div>
