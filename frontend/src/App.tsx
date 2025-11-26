@@ -1,7 +1,8 @@
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import MainLayout from "@/layouts/MainLayout";
-import AuthLayout from "@/layouts/AuthLayout";
-import HomePage from "@/pages/HomePage";
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import MainLayout from '@/layouts/MainLayout';
+import AuthLayout from '@/layouts/AuthLayout';
+import HomePage from '@/pages/HomePage';
+import HelpfulPage from '@/pages/Helpfulpage';
 import FoodDetailPage from "./pages/FoodDetailPage";
 
 function App() {
@@ -10,6 +11,8 @@ function App() {
       <Routes>
         <Route element={<MainLayout />}>
           <Route path="/" element={<HomePage />} />
+          <Route path="/about" element={<div className="p-4">About Page</div>} />
+          <Route path="/helpful" element={<HelpfulPage />} />
           <Route path="/food" element={<HomePage />} />
           <Route path="/food/:id" element={<FoodDetailPage />} />
           <Route path="/restaurant" element={<HomePage />} />
