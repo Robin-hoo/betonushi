@@ -3,11 +3,9 @@
   "count_is": "count is {{count}}",
   "edit_save": "Edit src/App.tsx and save to test HMR",
   "read_docs": "Click on the Vite and React logos to learn more",
-
   "section1": {
     "title": "1. invite"
   },
-
   "section2": {
     "title": "2. Asking Questions"
   },
@@ -24,13 +22,13 @@
     "title": "Popular Food"
   },
   "banner1": {
-    "title": "Satisfy Your Taste Buds"   
+    "title": "Satisfy Your Taste Buds"
   },
   "banner2": {
-    "title": "Best Foods"   
+    "title": "Best Foods"
   },
   "button1": {
-    "title": "Take the Survey"
+    "title": "🍣 Take the Survey"
   },
   "button2": {
     "title": "Explore More →"
@@ -40,5 +38,36 @@
   },
   "saveButton": {
     "title": "save"
+  },
+  "header": {
+    "nav": {
+      "home": "Home",
+      "menu": "Menu",
+      "restaurant": "Restaurant",
+      "phrases": "Phrases"
+    },
+    "login": "Login",
+    "signup": "Sign Up"
+  },
+  "menu": {
+    "items": {
+      "bunbohue": {
+        "name": "Bun Bo Hue",
+        "desc": "Spicy Central Vietnamese noodle soup with lemongrass."
+      },
+      "banhmi": {
+        "name": "Banh Mi",
+        "desc": "Vietnamese sandwich with meat and vegetables."
+      },
+      "comtam": {
+        "name": "Com Tam",
+        "desc": "Vietnamese rice with pickled vegetables and grilled pork."
+      },
+      "pho": {
+        "name": "Pho",
+        "desc": "Vietnamese noodle soup with beef broth, rice noodles, and herbs."
+      }
+    },
+    "view_details": "View Details"
   }
 }
