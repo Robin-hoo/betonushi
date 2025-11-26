@@ -57,7 +57,7 @@ export default function Helpfulpage() {
       onClick={() => setEdit3(false)} 
       className="mt-2 px-4 py-2 bg-blue-500 text-white rounded"
     >
-      保存
+      {t("saveButton.title")}
     </button>
     </div>
     ) : (
@@ -78,7 +78,7 @@ export default function Helpfulpage() {
       onClick={() => setEdit3(true)} 
       className="px-6 py-3 bg-blue-500 text-white rounded-lg shadow hover:bg-blue-600"
     >
-      食事を観察
+      {t("helpButton.title")}
     </button>
     </div>
     </div>

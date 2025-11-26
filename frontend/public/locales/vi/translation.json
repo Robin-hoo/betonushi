@@ -35,6 +35,12 @@
     },
     "button2": {
       "title": "Tìm hiểu thêm →"
+    },
+    "helpButton": {
+      "title": "Chỉnh sửa"
+    },
+    "saveButton": {
+      "title": "Lưu"
     }
 
 }

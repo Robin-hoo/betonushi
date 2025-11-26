@@ -34,5 +34,11 @@
   },
   "button2": {
     "title": "Explore More →"
+  },
+  "helpButton": {
+    "title": "edit"
+  },
+  "saveButton": {
+    "title": "save"
   }
 }
