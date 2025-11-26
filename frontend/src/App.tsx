@@ -4,6 +4,7 @@ import AuthLayout from '@/layouts/AuthLayout';
 import HomePage from '@/pages/HomePage';
 import HelpfulPage from '@/pages/Helpfulpage';
 import FoodDetailPage from "./pages/FoodDetailPage";
+import MenuPage from '@/pages/MenuPage';
 
 function App() {
   return (
@@ -13,7 +14,7 @@ function App() {
           <Route path="/" element={<HomePage />} />
           <Route path="/about" element={<div className="p-4">About Page</div>} />
           <Route path="/helpful" element={<HelpfulPage />} />
-          <Route path="/food" element={<HomePage />} />
+          <Route path="/food" element={<MenuPage />} />
           <Route path="/food/:id" element={<FoodDetailPage />} />
           <Route path="/restaurant" element={<HomePage />} />
           <Route path="/phrases" element={<HomePage />} />
