@@ -2,5 +2,44 @@
     "title": "Vite + React",
     "count_is": "今は {{count}}",
     "edit_save": "src/App.tsxを編集して保存してHMRを確認してください",
-    "read_docs": "ViteとReactのロゴを押してさらに詳しく学ぶ"
+    "read_docs": "ViteとReactのロゴを押してさらに詳しく学ぶ",
+
+    "section1": {
+      "title": "1. 誘う"
+    },
+
+    "section2": {
+      "title": "2. 質問する"
+    },
+
+    "section3": {
+    "title": "3. 会話例"
+  },
+  "block1": {
+    "title": "ベトナム的料理実施ガイド"
+  },
+  "block2": {
+    "title": "食事や招待に関する役立つ日本語フレーズ"
+  },
+  "popular_menu": {
+    "title": "人気メニュー"
+  }
+    ,"banner1": {
+        "title": "あなたの味覚を満たす"   
+    },
+    "banner2": {
+        "title": "ベストフード"   
+    },
+    "button1": {
+        "title": "味のアンケート"
+    },
+    "button2": {
+        "title": "他のカテゴリを見る →"
+    },
+    "helpButton": {
+        "title": "食事を観察"
+    },
+    "saveButton": {
+        "title": "保存"
+    }
 }

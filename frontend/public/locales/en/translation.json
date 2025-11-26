@@ -2,5 +2,43 @@
   "title": "Vite + React",
   "count_is": "count is {{count}}",
   "edit_save": "Edit src/App.tsx and save to test HMR",
-  "read_docs": "Click on the Vite and React logos to learn more"
+  "read_docs": "Click on the Vite and React logos to learn more",
+
+  "section1": {
+    "title": "1. invite"
+  },
+
+  "section2": {
+    "title": "2. Asking Questions"
+  },
+  "section3": {
+    "title": "3. Sample Dialogue"
+  },
+  "block1": {
+    "title": "Vietnamese Culinary Practice Guide"
+  },
+  "block2": {
+    "title": "Helpful Japanese Phrases for Food & Invitations"
+  },
+  "popular_menu": {
+    "title": "Popular Food"
+  },
+  "banner1": {
+    "title": "Satisfy Your Taste Buds"   
+  },
+  "banner2": {
+    "title": "Best Foods"   
+  },
+  "button1": {
+    "title": "Take the Survey"
+  },
+  "button2": {
+    "title": "Explore More →"
+  },
+  "helpButton": {
+    "title": "edit"
+  },
+  "saveButton": {
+    "title": "save"
+  }
 }

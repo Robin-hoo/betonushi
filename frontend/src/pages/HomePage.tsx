@@ -1,8 +1,9 @@
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
-
+import { useTranslation } from "react-i18next";
 export default function HomePage() {
+  const { t } = useTranslation();
   return (
     <div className="w-full flex flex-col gap-20">
 
@@ -23,13 +24,13 @@ export default function HomePage() {
         {/* Nội dung banner nằm giữa, max width */}
         <div className="relative w-full max-w-6xl mx-auto px-4 text-center text-white">
           <h2 className="text-3xl font-bold tracking-wide">
-            あなたの味覚を満たす
+            {t("banner1.title")}
           </h2>
-          <h1 className="text-5xl font-extrabold mt-2">ベストフード</h1>
+          <h1 className="text-5xl font-extrabold mt-2">{t("banner2.title")}</h1>
 
           <div className="mt-6">
             <Button className="bg-pink-500 hover:bg-pink-600 text-white text-lg px-6 py-4 rounded-full shadow-xl">
-              味のアンケート
+              {t("button1.title")}
             </Button>
           </div>
         </div>
@@ -44,11 +45,11 @@ export default function HomePage() {
           {/* Tiêu đề */}
           <div className="flex items-center justify-between mb-6">
             <Badge className="text-lg px-4 py-2 bg-orange-300 text-orange-900 rounded-full">
-              人気メニュー
+              {t("popular_menu.title")}
             </Badge>
 
             <button className="text-gray-500 hover:underline text-sm">
-              他のカテゴリを見る →
+              {t("button2.title")}
             </button>
           </div>
 
