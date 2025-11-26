@@ -4,8 +4,10 @@ import { Star } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { getFoodById, type Food } from "@/api/food.api";
 import InteractiveStarRating from "@/components/InteractiveStarRating";
+import { useTranslation } from "react-i18next";
 
 const FoodDetailPage: React.FC = () => {
+  const { t } = useTranslation();
   const { id } = useParams<{ id: string }>();
   const [dishData, setDishData] = useState<Food | null>(null);
   const [loading, setLoading] = useState(true);
@@ -39,9 +41,9 @@ const FoodDetailPage: React.FC = () => {
     console.log("User selected rating:", newRating);
   };
 
-  if (loading) return <div className="p-6">Loading...</div>;
+  if (loading) return <div className="p-6">{t("loading")}</div>;
   if (error) return <div className="p-6 text-red-500">{error}</div>;
-  if (!dishData) return <div className="p-6">Food not found</div>;
+  if (!dishData) return <div className="p-6">{t("food_not_found")}</div>;
 
   return (
     <div className="min-h-screen bg-white">
@@ -107,7 +109,7 @@ const FoodDetailPage: React.FC = () => {
                     : "bg-red-100 text-red-600 hover:bg-red-200"
                 }`}
               >
-                お気に入り登録
+                {isFavorite ? t("unfavorites") : t("add_to_favorites")}
               </Button>
               <Button className="w-full px-4 py-2 bg-blue-500 text-white rounded-lg font-medium hover:bg-blue-600 transition-colors mb-4">
                 Help
@@ -131,10 +133,10 @@ const FoodDetailPage: React.FC = () => {
 
             <div className="flex gap-8 mb-6 ">
               <Button className="w-full px-4 py-2 bg-orange-500 text-white rounded-lg hover:bg-orange-600 transition-colors mb-2">
-                送信する
+                {t("send")}
               </Button>
               <Button className="w-full px-4 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600 transition-colors">
-                レストラン検索
+                {t("find_restaurant")}
               </Button>
             </div>
           </div>
@@ -143,14 +145,14 @@ const FoodDetailPage: React.FC = () => {
           <div className="space-y-6 col-span-7">
             {/** Các section: story, ingredient, taste, style, comparison */}
             {[
-              { title: "1. ストーリー", content: dishData.story },
-              { title: "2. 主な使用材料", content: dishData.ingredient },
-              { title: "3. 味わいについて", content: dishData.taste },
+              { title: "1. " + t("storys"), content: dishData.story },
+              { title: "2. " + t("ingredients"), content: dishData.ingredient },
+              { title: "3. " + t("taste"), content: dishData.taste },
               {
-                title: "4. ベトナム流・美味しい食べ方",
+                title: "4. " + t("style"),
                 content: dishData.style,
               },
-              { title: "5. 日本料理との比較", content: dishData.comparison },
+              { title: "5. " + t("comparison"), content: dishData.comparison },
             ].map((section, i) => (
               <div key={i}>
                 <h2 className="text-xl font-bold text-red-500 mb-3">
@@ -168,7 +170,7 @@ const FoodDetailPage: React.FC = () => {
         {/* Bottom Section - Reviews */}
         <div className="bg-white rounded-lg border border-gray-200 p-6 mt-6">
           <h2 className="text-2xl font-bold text-red-500 mb-6 text-center">
-            最新レビュー
+            {t("reviews")}
           </h2>
           <div className="space-y-4">
             {dishData.reviews?.map((review) => (

@@ -1,6 +1,23 @@
 {
-    "title": "Vite + React",
-    "count_is": "Bây giờ là {{count}}",
-    "edit_save": "Chỉnh sửa src/App.tsx và lưu để kiểm tra HMR",
-    "read_docs": "Nhấn vào logo Vite và React để tìm hiểu thêm"
+  "title": "Vite + React",
+  "count_is": "Bây giờ là {{count}}",
+  "edit_save": "Chỉnh sửa src/App.tsx và lưu để kiểm tra HMR",
+  "read_docs": "Nhấn vào logo Vite và React để tìm hiểu thêm",
+  "home": "Trang Chủ",
+  "menu": "Thực Đơn",
+  "restaurant": "Nhà Hàng",
+  "phrases": "Cụm Từ",
+  "login": "Đăng Nhập",
+  "loading": "Đang tải...",
+  "food_not_found": "Không tìm thấy món ăn",
+  "add_to_favorites": "Thêm vào danh sách yêu thích",
+  "unfavorite": "Bỏ yêu thích",
+  "send": "Gửi",
+  "find_restaurant": "Tìm Nhà Hàng",
+  "storys": "Câu Chuyện",
+  "ingredients": "Nguyên Liệu Chính",
+  "taste": "Hương Vị",
+  "style": "Phong Cách Việt Nam",
+  "comparison": "So Sánh Với Ẩm Thực Nhật Bản",
+  "reviews": "Đánh Giá"
 }

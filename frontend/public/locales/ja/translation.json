@@ -1,6 +1,23 @@
 {
-    "title": "Vite + React",
-    "count_is": "今は {{count}}",
-    "edit_save": "src/App.tsxを編集して保存してHMRを確認してください",
-    "read_docs": "ViteとReactのロゴを押してさらに詳しく学ぶ"
+  "title": "Vite + React",
+  "count_is": "今は {{count}}",
+  "edit_save": "src/App.tsxを編集して保存してHMRを確認してください",
+  "read_docs": "ViteとReactのロゴを押してさらに詳しく学ぶ",
+  "home": "ホーム",
+  "menu": "メニュー",
+  "restaurant": "レストラン",
+  "phrases": "会話フレーズ",
+  "login": "ログイン",
+  "loading": "読み込み中...",
+  "food_not_found": "料理が見つかりません",
+  "add_to_favorites": "お気に入りに追加",
+  "unfavorite": "お気に入り解除",
+  "send": "送信する",
+  "find_restaurant": "レストラン検索",
+  "storys": "ストーリー",
+  "ingredients": "主な使用材料",
+  "taste": "味わいについて",
+  "style": "ベトナム流・美味しい食べ方",
+  "comparison": "日本料理との比較",
+  "reviews": "最新レビュー"
 }

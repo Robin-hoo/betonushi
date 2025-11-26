@@ -3,15 +3,17 @@ import { Link, NavLink } from "react-router-dom";
 import foodIcon from "../assets/icon/japanese-food.svg";
 import LanguageSwitcher from "@/components/LanguageSwitcher";
 import { Button } from "@/components/ui/button";
-
-const navLinks = [
-  { name: "ホーム", href: "/" },
-  { name: "メニュー", href: "/food" },
-  { name: "レストラン", href: "/restaurant" },
-  { name: "会話フレーズ", href: "/phrases" },
-];
+import { useTranslation } from "react-i18next";
 
 const MainLayout = () => {
+  const { t } = useTranslation();
+  const navLinks = [
+    { name: t("home"), href: "/" },
+    { name: t("menu"), href: "/food" },
+    { name: t("restaurant"), href: "/restaurant" },
+    { name: t("phrases"), href: "/phrases" },
+  ];
+
   return (
     <div className="min-h-screen bg-background font-sans antialiased">
       <header className="flex flex-col md:flex-row md:items-center justify-between px-8 py-4 md:py-0 bg-transparent min-w-[320px] w-full gap-4">
@@ -46,7 +48,7 @@ const MainLayout = () => {
             variant="login_style"
             className="px-4 py-2 rounded-full text-black hover:text-gray-800 transition-colors"
           >
-            <span className="get-started-now">ログイン</span>
+            <span className="get-started-now">{t("login")}</span>
           </Button>
         </div>
       </header>

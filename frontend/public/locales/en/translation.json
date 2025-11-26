@@ -2,5 +2,22 @@
   "title": "Vite + React",
   "count_is": "count is {{count}}",
   "edit_save": "Edit src/App.tsx and save to test HMR",
-  "read_docs": "Click on the Vite and React logos to learn more"
+  "read_docs": "Click on the Vite and React logos to learn more",
+  "home": "Home",
+  "menu": "Menu",
+  "restaurant": "Restaurant",
+  "phrases": "Phrases",
+  "login": "Login",
+  "loading": "Loading...",
+  "food_not_found": "Food not found",
+  "add_to_favorites": "Add to favorites",
+  "unfavorite": "Unfavorite",
+  "send": "Send",
+  "find_restaurant": "Find Restaurant",
+  "storys": "Stories",
+  "ingredients": "Main Ingredients",
+  "taste": "Taste",
+  "style": "Vietnamese Style",
+  "comparison": "Comparison with Japanese Cuisine",
+  "reviews": "Reviews"
 }
