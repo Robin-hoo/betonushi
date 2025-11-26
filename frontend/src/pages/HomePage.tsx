@@ -2,6 +2,11 @@ import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { useTranslation } from "react-i18next";
+import bunbohue from "@/assets/image/food/bunbo.jpeg"
+import banhmi from "@/assets/image/food/banhmi.png"
+import comtam from "@/assets/image/food/comtam.jpg"
+import pho from "@/assets/image/food/pho.jpg"
+
 export default function HomePage() {
   const { t } = useTranslation();
   return (
@@ -56,16 +61,16 @@ export default function HomePage() {
           {/* Card Menu */}
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
             {[
-              { nameKey: "menu.items.bunbohue.name", descKey: "menu.items.bunbohue.desc" },
-              { nameKey: "menu.items.banhmi.name", descKey: "menu.items.banhmi.desc" },
-              { nameKey: "menu.items.bunbohue.name", descKey: "menu.items.bunbohue.desc" },
-              { nameKey: "menu.items.banhmi.name", descKey: "menu.items.banhmi.desc" }
+              { nameKey: "menu.items.bunbohue.name", descKey: "menu.items.bunbohue.desc", img: bunbohue },
+              { nameKey: "menu.items.banhmi.name", descKey: "menu.items.banhmi.desc", img: banhmi },
+              { nameKey: "menu.items.comtam.name", descKey: "menu.items.comtam.desc", img: comtam },
+              { nameKey: "menu.items.pho.name", descKey: "menu.items.pho.desc", img: pho }
             ].map((item, index) => (
               <Card key={index} className="bg-[#f5e6dc] border-none shadow-md hover:shadow-xl transition-all duration-300 rounded-2xl overflow-hidden">
                 <CardHeader className="p-4 pb-3">
                   <div className="w-full aspect-square rounded-xl overflow-hidden bg-white">
                     <img
-                      src="/food.jpg"
+                      src={item.img}
                       alt={t(item.nameKey)}
                       className="w-full h-full object-cover"
                     />

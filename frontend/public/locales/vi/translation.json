@@ -58,6 +58,14 @@
       "banhmi": {
         "name": "Bánh mì",
         "desc": "Bánh mì Việt Nam kẹp thịt và rau củ."
+      },
+      "comtam": {
+        "name": "Cơm tấm",
+        "desc": "Cơm ăn kèm với nước nắm và thịt nướng."
+      },
+      "pho": {
+        "name": "Phở",
+        "desc": "Phở là món ăn thanh đạm, tao nhã Việt Nam."
       }
     },
     "view_details": "Xem chi tiết"

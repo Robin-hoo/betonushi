@@ -58,6 +58,14 @@
       "banhmi": {
         "name": "Banh Mi",
         "desc": "Vietnamese sandwich with meat and vegetables."
+      },
+      "comtam": {
+        "name": "Com Tam",
+        "desc": "Vietnamese rice with pickled vegetables and grilled pork."
+      },
+      "pho": {
+        "name": "Pho",
+        "desc": "Vietnamese noodle soup with beef broth, rice noodles, and herbs."
       }
     },
     "view_details": "View Details"
