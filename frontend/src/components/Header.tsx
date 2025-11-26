@@ -9,8 +9,8 @@ const Header = () => {
 
     const navLinks = [
         { name: t("header.nav.home"), href: "/" },
-        { name: t("header.nav.menu"), href: "/food" },
-        { name: t("header.nav.restaurant"), href: "/restaurant" },
+        { name: t("header.nav.menu"), href: "/foods" },
+        { name: t("header.nav.restaurant"), href: "/restaurants" },
         { name: t("header.nav.phrases"), href: "/phrases" },
     ];
 

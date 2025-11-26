@@ -50,6 +50,42 @@
     "signup": "Sign Up"
   },
   "menu": {
+    "view_details": "View Details",
+    "search": {
+      "placeholder": "Dish name",
+      "button": "Search"
+    },
+    "filter": {
+      "button": "Filter"
+    },
+    "categories": {
+      "main_ingredients": "Main Ingredients",
+      "dish_type": "Dish Type",
+      "preference": "Preference",
+      "items": {
+        "all": "All",
+        "beef": "Beef",
+        "pork": "Pork",
+        "chicken": "Chicken",
+        "seafood": "Seafood",
+        "vegetable": "Vegetable / Vegetarian",
+        "noodle": "Noodle Dish",
+        "rice": "Rice Dish",
+        "bread": "Bread Dish",
+        "side_dish": "Side Dish",
+        "salad": "Salad",
+        "hotpot": "Hotpot",
+        "sour": "Sour",
+        "sweet": "Sweet",
+        "herb": "Herbs & Spices",
+        "light": "Light",
+        "spicy": "Spicy"
+      }
+    },
+    "pagination": {
+      "prev": "Prev",
+      "next": "Next"
+    },
     "items": {
       "bunbohue": {
         "name": "Bun Bo Hue",
@@ -66,8 +102,19 @@
       "pho": {
         "name": "Pho",
         "desc": "Vietnamese noodle soup with beef broth, rice noodles, and herbs."
+      },
+      "buncha": {
+        "name": "Bun Cha",
+        "desc": "Hanoi specialty dipping noodles with grilled pork and meatballs in sweet and sour sauce."
+      },
+      "goicuon": {
+        "name": "Goi Cuon",
+        "desc": "Healthy appetizer with shrimp, pork, vermicelli, and fresh vegetables wrapped in rice paper."
+      },
+      "banhxeo": {
+        "name": "Banh Xeo",
+        "desc": "Yellow crispy Vietnamese pancake with shrimp, pork, and bean sprouts."
       }
-    },
-    "view_details": "View Details"
+    }
   }
 }

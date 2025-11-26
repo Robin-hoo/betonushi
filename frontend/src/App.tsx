@@ -14,9 +14,9 @@ function App() {
           <Route path="/" element={<HomePage />} />
           <Route path="/about" element={<div className="p-4">About Page</div>} />
           <Route path="/helpful" element={<HelpfulPage />} />
-          <Route path="/food" element={<MenuPage />} />
-          <Route path="/food/:id" element={<FoodDetailPage />} />
-          <Route path="/restaurant" element={<HomePage />} />
+          <Route path="/foods" element={<MenuPage />} />
+          <Route path="/foods/:id" element={<FoodDetailPage />} />
+          <Route path="/restaurants" element={<HomePage />} />
           <Route path="/phrases" element={<HelpfulPage />} />
           <Route
             path="/about"

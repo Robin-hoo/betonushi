@@ -50,6 +50,42 @@
     "signup": "Đăng ký"
   },
   "menu": {
+    "view_details": "Xem chi tiết",
+    "search": {
+      "placeholder": "Tên món ăn",
+      "button": "Tìm kiếm"
+    },
+    "filter": {
+      "button": "Lọc"
+    },
+    "categories": {
+      "main_ingredients": "Nguyên liệu chính",
+      "dish_type": "Loại món ăn",
+      "preference": "Sở thích",
+      "items": {
+        "all": "Tất cả",
+        "beef": "Thịt bò",
+        "pork": "Thịt heo",
+        "chicken": "Thịt gà",
+        "seafood": "Hải sản",
+        "vegetable": "Rau củ / Chay",
+        "noodle": "Món nước",
+        "rice": "Món cơm",
+        "bread": "Món bánh mì",
+        "side_dish": "Món ăn kèm",
+        "salad": "Gỏi / Salad",
+        "hotpot": "Lẩu",
+        "sour": "Chua",
+        "sweet": "Ngọt",
+        "herb": "Hương thảo mộc",
+        "light": "Thanh đạm",
+        "spicy": "Cay"
+      }
+    },
+    "pagination": {
+      "prev": "Trước",
+      "next": "Sau"
+    },
     "items": {
       "bunbohue": {
         "name": "Bún bò Huế",
@@ -66,8 +102,19 @@
       "pho": {
         "name": "Phở",
         "desc": "Phở là món ăn thanh đạm, tao nhã Việt Nam."
+      },
+      "buncha": {
+        "name": "Bún chả",
+        "desc": "Món bún chả Hà Nội với thịt nướng và chả viên trong nước chấm chua ngọt."
+      },
+      "goicuon": {
+        "name": "Gỏi cuốn",
+        "desc": "Món khai vị lành mạnh với tôm, thịt heo, bún và rau sống cuốn trong bánh tráng."
+      },
+      "banhxeo": {
+        "name": "Bánh xèo",
+        "desc": "Bánh xèo vàng giòn với nhân tôm, thịt heo và giá đỗ."
       }
-    },
-    "view_details": "Xem chi tiết"
+    }
   }
 }
