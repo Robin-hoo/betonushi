@@ -51,7 +51,7 @@ const MainLayout = () => {
         </div>
       </header>
 
-      <main className="container py-6 flex justify-center">
+      <main className="py-6 flex justify-center">
         <Outlet />
       </main>
       <footer className="w-full border-t py-6">
