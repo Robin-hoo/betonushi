@@ -137,5 +137,59 @@
       "invalid_email": "Định dạng email không hợp lệ",
       "failed": "Email hoặc mật khẩu không đúng"
     }
+  },
+  "registerPage": {
+    "title": "Đăng ký",
+    "firstName": {
+      "label": "Tên",
+      "placeholder": "Shinichi"
+    },
+    "lastName": {
+      "label": "Họ",
+      "placeholder": "Kudo"
+    },
+    "email": {
+      "label": "Địa chỉ Email",
+      "placeholder": "Shinichi@email.com"
+    },
+    "phone": {
+      "label": "Số điện thoại",
+      "placeholder": "0901234567"
+    },
+    "gender": {
+      "label": "Giới tính",
+      "options": {
+        "male": "Nam",
+        "female": "Nữ",
+        "other": "Khác"
+      }
+    },
+    "dob": {
+      "label": "Ngày sinh"
+    },
+    "address": {
+      "label": "Địa chỉ"
+    },
+    "password": {
+      "label": "Mật khẩu"
+    },
+    "confirmPassword": {
+      "label": "Xác nhận mật khẩu"
+    },
+    "button": {
+      "submit": "Đăng ký"
+    },
+    "footer": {
+      "text": "Đã có tài khoản?",
+      "link": "Đăng nhập"
+    },
+    "success": "Đăng ký thành công!",
+    "error": {
+      "invalid_email": "Định dạng email không hợp lệ",
+      "invalid_phone": "Số điện thoại phải có 10 chữ số bắt đầu bằng 0",
+      "weak_password": "Mật khẩu phải có ít nhất 8 ký tự và chứa 2 trong 3 loại: chữ cái, số, ký hiệu.",
+      "password_mismatch": "Xác nhận mật khẩu không khớp",
+      "failed": "Đăng ký thất bại"
+    }
   }
 }

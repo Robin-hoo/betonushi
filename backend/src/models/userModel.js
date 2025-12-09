@@ -20,4 +20,14 @@ async function findByEmail(email) {
 
 module.exports = {
     findByEmail,
+    create: async (userData) => {
+        const { name, email, password, first_name, last_name, phone, gender, dob, address } = userData;
+        const result = await db.query(
+            `INSERT INTO users (name, email, password, first_name, last_name, phone, gender, dob, address) 
+             VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9) 
+             RETURNING *`,
+            [name, email, password, first_name, last_name, phone, gender, dob, address]
+        );
+        return result.rows[0];
+    }
 };

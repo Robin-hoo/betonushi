@@ -62,12 +62,13 @@ const Header = () => {
                                 {t("header.login")}
                             </Button>
                         </Link>
-
-                        <Button
-                            className="px-5 py-2 rounded-full text-sm font-medium bg-gray-800 text-white hover:bg-gray-900 transition-colors"
-                        >
-                            {t("header.signup")}
-                        </Button>
+                        <Link to="/register">
+                            <Button
+                                className="px-5 py-2 rounded-full text-sm font-medium bg-gray-800 text-white hover:bg-gray-900 transition-colors"
+                            >
+                                {t("header.signup")}
+                            </Button>
+                        </Link>
                     </>
                 )}
             </div>

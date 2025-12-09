@@ -137,5 +137,59 @@
       "invalid_email": "メールアドレスの形式が正しくありません",
       "failed": "メールアドレスまたはパスワードが間違っています"
     }
+  },
+  "registerPage": {
+    "title": "登録フォーム",
+    "firstName": {
+      "label": "名",
+      "placeholder": "Shinichi"
+    },
+    "lastName": {
+      "label": "姓",
+      "placeholder": "Kudo"
+    },
+    "email": {
+      "label": "メールアドレス",
+      "placeholder": "Shinichi@email.com"
+    },
+    "phone": {
+      "label": "電話番号",
+      "placeholder": "090-1234-5678"
+    },
+    "gender": {
+      "label": "性別",
+      "options": {
+        "male": "男性",
+        "female": "女性",
+        "other": "その他"
+      }
+    },
+    "dob": {
+      "label": "生年月日"
+    },
+    "address": {
+      "label": "住所"
+    },
+    "password": {
+      "label": "パスワード"
+    },
+    "confirmPassword": {
+      "label": "パスワード確認"
+    },
+    "button": {
+      "submit": "送信"
+    },
+    "footer": {
+      "text": "アカウントをお持ちですか？",
+      "link": "ログイン"
+    },
+    "success": "登録が完了しました！",
+    "error": {
+      "invalid_email": "メールアドレスの形式が正しくありません",
+      "invalid_phone": "電話番号は0から始まる10桁の数字である必要があります",
+      "weak_password": "パスワードは8文字以上で、文字、数字、記号のうち2つ以上を含む必要があります。",
+      "password_mismatch": "パスワードが一致しません",
+      "failed": "登録に失敗しました"
+    }
   }
 }

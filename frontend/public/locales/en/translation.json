@@ -137,5 +137,59 @@
       "invalid_email": "Invalid email format",
       "failed": "Invalid email or password"
     }
+  },
+  "registerPage": {
+    "title": "Register",
+    "firstName": {
+      "label": "First Name",
+      "placeholder": "Shinichi"
+    },
+    "lastName": {
+      "label": "Last Name",
+      "placeholder": "Kudo"
+    },
+    "email": {
+      "label": "Email Address",
+      "placeholder": "Shinichi@email.com"
+    },
+    "phone": {
+      "label": "Phone Number",
+      "placeholder": "0901234567"
+    },
+    "gender": {
+      "label": "Gender",
+      "options": {
+        "male": "Male",
+        "female": "Female",
+        "other": "Other"
+      }
+    },
+    "dob": {
+      "label": "Date of Birth"
+    },
+    "address": {
+      "label": "Address"
+    },
+    "password": {
+      "label": "Password"
+    },
+    "confirmPassword": {
+      "label": "Confirm Password"
+    },
+    "button": {
+      "submit": "Sign Up"
+    },
+    "footer": {
+      "text": "Already have an account?",
+      "link": "Login"
+    },
+    "success": "Registration successful!",
+    "error": {
+      "invalid_email": "Invalid email format",
+      "invalid_phone": "Phone number must be 10 digits starting with 0",
+      "weak_password": "Password must be at least 8 chars and contain 2 of 3 types: letters, numbers, symbols.",
+      "password_mismatch": "Passwords do not match",
+      "failed": "Registration failed"
+    }
   }
 }

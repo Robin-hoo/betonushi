@@ -5,6 +5,7 @@ import HomePage from '@/pages/HomePage';
 import HelpfulPage from '@/pages/HelpfulPage';
 import FoodDetailPage from "./pages/FoodDetailPage";
 import LoginPage from '@/pages/LoginPage';
+import RegisterPage from '@/pages/RegisterPage';
 import MenuPage from './pages/MenuPage';
 
 function App() {
@@ -20,14 +21,7 @@ function App() {
           <Route path="/restaurant" element={<HomePage />} />
           <Route path="/phrases" element={<HelpfulPage />} />
           <Route path="/login" element={<LoginPage />} />
-        </Route>
-        <Route element={<AuthLayout />}>
-          <Route
-            path="/register"
-            element={
-              <div className="text-center">Register Form Placeholder</div>
-            }
-          />
+          <Route path="/register" element={<RegisterPage />} />
         </Route>
       </Routes>
     </Router>
