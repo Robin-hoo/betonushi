@@ -1,6 +1,11 @@
 @import "tailwindcss";
 
 @theme {
+  /* Font Families */
+  --font-sans: 'Inter', 'Noto Sans JP', system-ui, -apple-system, sans-serif;
+  --font-heading: 'Inter', 'Noto Sans JP', system-ui, -apple-system, sans-serif;
+
+  /* Colors */
   --color-background: hsl(0 0% 100%);
   --color-foreground: hsl(222.2 84% 4.9%);
   --color-card: hsl(0 0% 100%);
@@ -20,6 +25,8 @@
   --color-border: hsl(214.3 31.8% 91.4%);
   --color-input: hsl(214.3 31.8% 91.4%);
   --color-ring: hsl(222.2 84% 4.9%);
+
+  /* Border Radius */
   --radius: 0.5rem;
 }
 

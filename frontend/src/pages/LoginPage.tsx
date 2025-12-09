@@ -2,10 +2,12 @@ import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import { login } from '../api/auth.api';
+import { useAuth } from '@/context/AuthContext';
 
 const LoginPage: React.FC = () => {
     const { t } = useTranslation();
     const navigate = useNavigate();
+    const { login: contextLogin } = useAuth();
 
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
@@ -48,8 +50,9 @@ const LoginPage: React.FC = () => {
             // Assuming response contains token/user
             console.log('Login success:', response);
             // Store token (e.g., localStorage)
-            localStorage.setItem('token', response.token);
-            // Redirect
+            // Use context to update state
+            contextLogin(response.token, response.user);
+            // Redirect to home
             navigate('/');
         } catch (err: any) {
             console.error('Login failed:', err);
@@ -59,7 +62,7 @@ const LoginPage: React.FC = () => {
     };
 
     return (
-        <div className="flex flex-col items-center justify-center min-h-[60vh] py-10">
+        <div className="flex flex-col items-center justify-center min-h-[60vh] w-[500px] py-10">
             <div className="w-full max-w-md bg-white rounded-lg shadow-md p-8">
                 <h2 className="text-2xl font-bold text-center mb-8 drop-shadow-md">
                     {t('loginPage.title')}

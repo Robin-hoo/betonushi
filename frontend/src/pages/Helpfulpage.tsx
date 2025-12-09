@@ -1,88 +1,100 @@
-import { useState } from "react";
+import instruction1 from "@/assets/image/helpfulpage/instruction1.png";
+import instruction2 from "@/assets/image/helpfulpage/instruction2.png";
+import instruction3 from "@/assets/image/helpfulpage/instruction3.png";
 import { useTranslation } from "react-i18next";
 
-
-export default function Helpfulpage() {
-        const [edit3, setEdit3] = useState(false);
-        const [text3, setText3] = useState(
-        `Aさん:「Bさん、ベトナム料理好き？」
-        Bさん:「う、好き！ 特にフォー！」
-        (DI)「B-san、よトナム料理ど？」「け、後一緒行う！」`
-    );
-  const { t } = useTranslation();
+export default function HelpfulPage() {
+  const { t } = useTranslation()
   return (
-    <div className="w-full flex flex-col items-center p-6 bg-gray-50 min-h-screen">
-
-      {/* Block 1 - Title */}
-      <div className="w-full max-w-3xl text-center border p-6 bg-white rounded-xl shadow-sm mb-8">
-        <h1 className="text-3xl font-bold mb-2">{t("block1.title")}</h1>
-        <p className="text-gray-600 text-sm">{t("block2.title")}</p>
+    <div className="w-full flex flex-col items-center py-12 bg-white min-h-screen">
+      {/* Title Section */}
+      <div className="w-full max-w-4xl text-center mb-12 px-4">
+        <h1 className="text-4xl font-bold mb-3 text-gray-900">
+          ベトナム的料理実施ガイド
+        </h1>
+        <p className="text-gray-500 text-lg">
+          Helpful Japanese Phrases for Food & Invitations
+        </p>
       </div>
 
-      {/* Block 2 - Content */}
-      <div className="w-full max-w-3xl border p-6 bg-white rounded-xl shadow-md space-y-6">
+      {/* Content Sections */}
+      <div className="w-full max-w-4xl space-y-6 px-4 mb-8">
 
-        {/* Section 1 */}
-        <div className="bg-green-100 p-4 rounded-lg flex gap-4 items-start">
-             <img src="/invite.jpg" alt="invite" className="w-35 h-35 " />
-        <div className="bg-green-100 p-4 rounded-lg">
-          <h2 className="font-bold text-lg mb-2">{t("section1.title")}</h2>
-          <p>友達、ベトナム的料理食べに行かない？</p>
-          <p>美味しいフォーの店、知ってますよ！</p>
+        {/* Section 1 - Inviting (Green) */}
+        <div className="bg-[#d4e8d4] rounded-2xl p-6 flex-col gap-6 items-start">
+          <h2 className="font-bold text-xl mb-3 text-gray-800">
+            {t("section1.title")}
+          </h2>
+          <div className="flex">
+            <div className="flex-shrink-0">
+              <img
+                src={instruction1}
+                alt="Inviting illustration"
+                className="w-35 h-25 object-contain"
+              />
+            </div>
+            <div className="flex-1 flex flex-col pl-10 justify-center">
+              <p className="text-gray-700 mb-2 text-xl">
+                友達、ベトナム料理食べに行かない？
+              </p>
+              <p className="text-gray-700 text-xl">
+                美味しいフォーの店、知ってますよ！
+              </p>
+            </div>
+          </div>
         </div>
+
+        {/* Section 2 - Asking Questions (Orange) */}
+        <div className="bg-[#f5d9c4] rounded-2xl p-6 flex-col gap-6 items-start">
+          <h2 className="font-bold text-xl mb-3 text-gray-800">
+            {t("section2.title")}
+          </h2>
+          <div className="flex">
+            <div className="flex-shrink-0">
+              <img
+                src={instruction2}
+                alt="Asking questions illustration"
+                className="w-35 h-25 object-contain"
+              />
+            </div>
+            <div className="flex-1 flex-col pl-10 justify-center">
+              <p className="text-gray-700 mb-2 text-xl">牛肉の、何料理？</p>
+              <p className="text-gray-700 mb-2 text-xl">パクチは好き？</p>
+              <p className="text-gray-700 text-xl">好きな家庭料理なのなに？</p>
+            </div>
+          </div>
         </div>
-        {/* Section 2 */}
-        <div className="bg-orange-100 p-4 rounded-lg flex gap-4 items-start">
-             <img src="/asking.jpg" alt="invite" className="w-35 h-35 " />
-        <div className="bg-orange-100 p-4 rounded-lg">
-          <h2 className="font-bold text-lg mb-2">{t("section2.title")}</h2>
-          <p>牛肉の、何料理？</p>
-          <p>パクチは好き？</p>
-          <p>好きな家庭料理なのなに？</p>
+
+        {/* Section 3 - Sample Dialogue (Gray) */}
+        <div className="bg-[#5e5e5e] text-white rounded-2xl p-6 flex-col gap-6 items-start">
+          <h2 className="font-bold text-xl mb-3">
+            {t("section3.title")}
+          </h2>
+          <div className="flex">
+            <div className="flex-shrink-0">
+              <img
+                src={instruction3}
+                alt="Sample dialogue illustration"
+                className="w-35 h-25 object-contain"
+              />
+            </div>
+            <div className="flex-1 flex-col pl-10 justify-center">
+              <p className="mb-2 text-xl">Aさん:「Bさん、ベトナム料理好き？」</p>
+              <p className="mb-2 text-xl">Bさん:「う、好き！ 特にフォー！」</p>
+              <p className="text-sm opacity-90 text-xl">
+                (DI)「B-san、よトナム料理ど？」「け、後一緒行う！」
+              </p>
+            </div>
+          </div>
         </div>
-        </div>
-        {/* Section 3 */}
-        {edit3 ? (
-        <div className="bg-gray-300 p-4 rounded-lg">
-        <h2 className="font-bold text-lg mb-2">{t("section3.title")}</h2>
+      </div>
 
-        <textarea 
-        className="w-full p-2 rounded" 
-        rows={4}  
-        value={text3}
-        onChange={(e) => setText3(e.target.value)}
-        />
-
-    <button 
-      onClick={() => setEdit3(false)} 
-      className="mt-2 px-4 py-2 bg-blue-500 text-white rounded"
-    >
-      {t("saveButton.title")}
-    </button>
-    </div>
-    ) : (
-    <div className="bg-gray-300 p-4 rounded-lg flex gap-4 items-start relative">
-
-    <img src="/sample.jpg" alt="sample" className="w-35 h-35" />
-
-    <div className="flex-1">
-      <h2 className="font-bold text-lg mb-2">{t("section3.title")}</h2>
-
-      {/* HIỂN THỊ NỘI DUNG ĐÃ EDIT */}
-      <pre className="whitespace-pre-wrap">{text3}</pre>
-    </div>
-   </div>
-    )}
-   <div className="text-center">
-   <button 
-      onClick={() => setEdit3(true)} 
-      className="px-6 py-3 bg-blue-500 text-white rounded-lg shadow hover:bg-blue-600"
-    >
-      {t("helpButton.title")}
-    </button>
-    </div>
-    </div>
+      {/* Action Button */}
+      <div className="text-center mt-8">
+        <button className="px-8 py-3 bg-blue-500 text-white rounded-lg shadow-md hover:bg-blue-600 transition-colors font-medium">
+          食事を観察
+        </button>
+      </div>
     </div>
   );
 }
-
