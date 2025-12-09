@@ -191,5 +191,20 @@
       "password_mismatch": "Passwords do not match",
       "failed": "Registration failed"
     }
+  },
+  "favorites": {
+    "title": "Favorites",
+    "subtitle": "Your favorite Vietnamese dishes",
+    "empty": {
+      "title": "No favorite dishes yet",
+      "description": "Click the ♡ button on dish pages to add to favorites",
+      "button": "Explore Dishes"
+    },
+    "count": "{{count}} favorites",
+    "button": {
+      "add": "Add to Favorites",
+      "remove": "Favorited"
+    },
+    "login_required": "Please login to view your favorites"
   }
 }

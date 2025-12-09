@@ -1,6 +1,7 @@
 const express = require("express");
 const authRoutes = require("./routes/authRoutes");
 const foodRoutes = require("./routes/foodRoutes");
+const favoriteRoutes = require("./routes/favoriteRoutes");
 const cors = require("cors");
 const app = express();
 app.use(
@@ -15,6 +16,7 @@ app.use(express.json());
 // Mount routes without extra prefix so path remains /food/:id
 app.use("/api", foodRoutes);
 app.use("/api", authRoutes);
+app.use("/api/favorites", favoriteRoutes);
 
 // 404 handler for unmatched routes
 app.use((req, res) => {

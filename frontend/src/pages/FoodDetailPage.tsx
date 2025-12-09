@@ -4,6 +4,7 @@ import { Star } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { getFoodById, type Food } from "@/api/food.api";
 import InteractiveStarRating from "@/components/InteractiveStarRating";
+import { FavoriteButton } from "@/components/FavoriteButton";
 
 const FoodDetailPage: React.FC = () => {
   const { id } = useParams<{ id: string }>();
@@ -11,7 +12,6 @@ const FoodDetailPage: React.FC = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  const [isFavorite, setIsFavorite] = useState(false);
   const [userRating, setUserRating] = useState(0);
 
   useEffect(() => {
@@ -98,18 +98,14 @@ const FoodDetailPage: React.FC = () => {
             </div>
 
             {/* Action Buttons */}
-            <div className="flex gap-8 mb-6">
-              <Button
-                onClick={() => setIsFavorite(!isFavorite)}
-                className={`w-full px-4 py-2 rounded-lg font-medium mb-2 transition-colors ${
-                  isFavorite
-                    ? "bg-red-500 text-white"
-                    : "bg-red-100 text-red-600 hover:bg-red-200"
-                }`}
-              >
-                お気に入り登録
-              </Button>
-              <Button className="w-full px-4 py-2 bg-blue-500 text-white rounded-lg font-medium hover:bg-blue-600 transition-colors mb-4">
+            <div className="flex gap-4 mb-6">
+              <FavoriteButton
+                foodId={parseInt(id || "0")}
+                variant="large"
+                showLabel={true}
+                className="flex-1"
+              />
+              <Button className="flex-1 px-4 py-2 bg-blue-500 text-white rounded-lg font-medium hover:bg-blue-600 transition-colors">
                 Help
               </Button>
             </div>
