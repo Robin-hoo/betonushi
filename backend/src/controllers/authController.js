@@ -54,5 +54,83 @@ async function login(req, res) {
 }
 
 module.exports = {
-    login
+    login,
+
+    register: async (req, res) => {
+        try {
+            const { first_name, last_name, email, phone, gender, dob, address, password, confirmPassword } = req.body;
+
+            // 1. Validation matches frontend
+            if (!email || !first_name || !last_name || !phone || !password || !dob || !gender) {
+                return res.status(400).json({ message: 'Missing required fields' });
+            }
+
+            // Email format
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!emailRegex.test(email)) {
+                return res.status(400).json({ message: 'Invalid email format' });
+            }
+
+            // Phone format (simple check)
+            const phoneRegex = /^0\d{9}$/;
+            if (!phoneRegex.test(phone)) {
+                return res.status(400).json({ message: 'Invalid phone number format' });
+            }
+
+            // Password complexity
+            // "At least 2 of 3 types: letters, numbers, symbols (excluding " and ')"
+            let typesCount = 0;
+            if (/[a-zA-Z]/.test(password)) typesCount++;
+            if (/\d/.test(password)) typesCount++;
+            if (/[^a-zA-Z0-9"']/.test(password)) typesCount++;
+
+            if (password.length < 8 || typesCount < 2) {
+                return res.status(400).json({ message: 'Password must be at least 8 chars and contain 2 of 3 types: letters, numbers, symbols.' });
+            }
+
+            if (password !== confirmPassword) {
+                return res.status(400).json({ message: 'Passwords do not match' });
+            }
+
+            // 2. Check existence
+            const existingUser = await userModel.findByEmail(email);
+            if (existingUser) {
+                return res.status(400).json({ message: 'Email already registered' });
+            }
+
+            // 3. Hash password
+            const saltRounds = 10;
+            const hashedPassword = await bcrypt.hash(password, saltRounds);
+
+            // 4. Create user
+            // Construct full name
+            const fullName = `${first_name} ${last_name}`;
+
+            const newUser = await userModel.create({
+                name: fullName,
+                email,
+                password: hashedPassword,
+                first_name,
+                last_name,
+                phone,
+                gender,
+                dob,
+                address
+            });
+
+            // 5. Response
+            return res.status(201).json({
+                message: 'Registration successful',
+                user: {
+                    id: newUser.id,
+                    name: newUser.name,
+                    email: newUser.email
+                }
+            });
+
+        } catch (error) {
+            console.error('Registration error:', error);
+            return res.status(500).json({ message: 'Internal server error' });
+        }
+    }
 };
