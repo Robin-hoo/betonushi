@@ -4,6 +4,7 @@ import AuthLayout from '@/layouts/AuthLayout';
 import HomePage from '@/pages/HomePage';
 import HelpfulPage from '@/pages/Helpfulpage';
 import FoodDetailPage from "./pages/FoodDetailPage";
+import LoginPage from '@/pages/LoginPage';
 
 function App() {
   return (
@@ -23,10 +24,7 @@ function App() {
           />
         </Route>
         <Route element={<AuthLayout />}>
-          <Route
-            path="/login"
-            element={<div className="text-center">Login Form Placeholder</div>}
-          />
+          <Route path="/login" element={<LoginPage />} />
           <Route
             path="/register"
             element={

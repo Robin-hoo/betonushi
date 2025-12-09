@@ -116,5 +116,26 @@
         "desc": "Yellow crispy Vietnamese pancake with shrimp, pork, and bean sprouts."
       }
     }
+  },
+  "loginPage": {
+    "title": "Login",
+    "email": {
+      "label": "Email Address",
+      "placeholder": "Enter email address"
+    },
+    "password": {
+      "label": "Password",
+      "placeholder": "Password"
+    },
+    "button": "Login",
+    "directory": {
+      "text": "Don't have an account?",
+      "link": "Click here"
+    },
+    "error": {
+      "required": "Required",
+      "invalid_email": "Invalid email format",
+      "failed": "Invalid email or password"
+    }
   }
 }
