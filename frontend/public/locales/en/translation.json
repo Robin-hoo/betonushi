@@ -4,10 +4,10 @@
   "edit_save": "Edit src/App.tsx and save to test HMR",
   "read_docs": "Click on the Vite and React logos to learn more",
   "section1": {
-    "title": "1. invite"
+    "title": "1. Invite"
   },
   "section2": {
-    "title": "2. Asking Questions"
+    "title": "2. Ask Questions"
   },
   "section3": {
     "title": "3. Sample Dialogue"
@@ -34,10 +34,10 @@
     "title": "Explore More →"
   },
   "helpButton": {
-    "title": "edit"
+    "title": "Edit"
   },
   "saveButton": {
-    "title": "save"
+    "title": "Save"
   },
   "header": {
     "nav": {
@@ -115,6 +115,27 @@
         "name": "Banh Xeo",
         "desc": "Yellow crispy Vietnamese pancake with shrimp, pork, and bean sprouts."
       }
+    }
+  },
+  "loginPage": {
+    "title": "Login",
+    "email": {
+      "label": "Email Address",
+      "placeholder": "Enter email address"
+    },
+    "password": {
+      "label": "Password",
+      "placeholder": "Password"
+    },
+    "button": "Login",
+    "directory": {
+      "text": "Don't have an account?",
+      "link": "Click here"
+    },
+    "error": {
+      "required": "Required",
+      "invalid_email": "Invalid email format",
+      "failed": "Invalid email or password"
     }
   }
 }

@@ -3,9 +3,12 @@ import foodIcon from "../assets/icon/japanese-food.svg";
 import LanguageSwitcher from "@/components/LanguageSwitcher";
 import { Button } from "@/components/ui/button";
 import { useTranslation } from "react-i18next";
+import { useAuth } from "@/context/AuthContext";
+import UserMenu from "./UserMenu";
 
 const Header = () => {
     const { t } = useTranslation();
+    const { isLoggedIn } = useAuth();
 
     const navLinks = [
         { name: t("header.nav.home"), href: "/" },
@@ -47,18 +50,26 @@ const Header = () => {
             <div className="flex items-center gap-3">
                 <LanguageSwitcher />
 
-                <Button
-                    variant="outline"
-                    className="px-5 py-2 rounded-full text-sm font-medium border-gray-300 text-gray-700 hover:bg-gray-50 transition-colors"
-                >
-                    {t("header.login")}
-                </Button>
+                {isLoggedIn ? (
+                    <UserMenu />
+                ) : (
+                    <>
+                        <Link to="/login">
+                            <Button
+                                variant="outline"
+                                className="px-5 py-2 rounded-full text-sm font-medium border-gray-300 text-gray-700 hover:bg-gray-50 transition-colors"
+                            >
+                                {t("header.login")}
+                            </Button>
+                        </Link>
 
-                <Button
-                    className="px-5 py-2 rounded-full text-sm font-medium bg-gray-800 text-white hover:bg-gray-900 transition-colors"
-                >
-                    {t("header.signup")}
-                </Button>
+                        <Button
+                            className="px-5 py-2 rounded-full text-sm font-medium bg-gray-800 text-white hover:bg-gray-900 transition-colors"
+                        >
+                            {t("header.signup")}
+                        </Button>
+                    </>
+                )}
             </div>
         </header>
     );

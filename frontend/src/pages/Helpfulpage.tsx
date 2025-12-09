@@ -3,7 +3,7 @@ import instruction2 from "@/assets/image/helpfulpage/instruction2.png";
 import instruction3 from "@/assets/image/helpfulpage/instruction3.png";
 import { useTranslation } from "react-i18next";
 
-export default function Helpfulpage() {
+export default function HelpfulPage() {
   const { t } = useTranslation()
   return (
     <div className="w-full flex flex-col items-center py-12 bg-white min-h-screen">

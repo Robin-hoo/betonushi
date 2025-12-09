@@ -116,5 +116,26 @@
         "desc": "Bánh xèo vàng giòn với nhân tôm, thịt heo và giá đỗ."
       }
     }
+  },
+  "loginPage": {
+    "title": "Đăng nhập",
+    "email": {
+      "label": "Địa chỉ Email",
+      "placeholder": "Nhập địa chỉ email"
+    },
+    "password": {
+      "label": "Mật khẩu",
+      "placeholder": "Mật khẩu"
+    },
+    "button": "Đăng nhập",
+    "directory": {
+      "text": "Chưa có tài khoản?",
+      "link": "Đăng ký ngay"
+    },
+    "error": {
+      "required": "Bắt buộc",
+      "invalid_email": "Định dạng email không hợp lệ",
+      "failed": "Email hoặc mật khẩu không đúng"
+    }
   }
 }
