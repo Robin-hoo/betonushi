@@ -4,11 +4,14 @@ import LanguageSwitcher from "@/components/LanguageSwitcher";
 import { Button } from "@/components/ui/button";
 import { useTranslation } from "react-i18next";
 import { useAuth } from "@/context/AuthContext";
+import { useFavorites } from "@/context/FavoritesContext";
 import UserMenu from "./UserMenu";
+import { Heart } from "lucide-react";
 
 const Header = () => {
     const { t } = useTranslation();
     const { isLoggedIn } = useAuth();
+    const { favorites } = useFavorites();
 
     const navLinks = [
         { name: t("header.nav.home"), href: "/" },
@@ -49,6 +52,23 @@ const Header = () => {
             {/* Actions */}
             <div className="flex items-center gap-3">
                 <LanguageSwitcher />
+
+                {isLoggedIn && (
+                    <Link to="/favorites" className="relative">
+                        <Button
+                            variant="ghost"
+                            className="p-2 rounded-full hover:bg-gray-100 transition-colors relative"
+                            aria-label="Favorites"
+                        >
+                            <Heart className="w-5 h-5 text-red-500" />
+                            {favorites.size > 0 && (
+                                <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center font-bold">
+                                    {favorites.size}
+                                </span>
+                            )}
+                        </Button>
+                    </Link>
+                )}
 
                 {isLoggedIn ? (
                     <UserMenu />

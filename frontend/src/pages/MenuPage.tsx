@@ -1,6 +1,8 @@
 import React, { useState, useMemo } from 'react';
 import { Heart } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
+import { FavoriteButton } from '@/components/FavoriteButton';
+import { Link } from 'react-router-dom';
 
 interface Food {
   id: number;
@@ -84,14 +86,6 @@ export default function MenuPage() {
       { id: 19, nameKey: 'menu.categories.items.spicy', count: 12, checked: false },
     ],
   }), []);
-
-  const handleToggleLike = (id: number) => {
-    setFoods(
-      foods.map((food) =>
-        food.id === id ? { ...food, liked: !food.liked } : food
-      )
-    );
-  };
 
   const handleCategoryChange = (categoryKey: string, index: number) => {
     // Mock implementation
@@ -193,17 +187,10 @@ export default function MenuPage() {
                     alt={t(`menu.items.${food.key}.name`)}
                     className="w-full h-full object-cover group-hover:scale-105 transition"
                   />
-                  {/* Like Button */}
-                  <button
-                    onClick={() => handleToggleLike(food.id)}
-                    aria-label="like"
-                    className="absolute top-2 right-2 z-0 bg-white rounded-full p-2 shadow-md hover:bg-gray-100 transition"
-                  >
-                    <Heart
-                      size={20}
-                      className={food.liked ? 'fill-red-500 text-red-500' : 'text-gray-400'}
-                    />
-                  </button>
+                  {/* Favorite Button */}
+                  <div className="absolute top-2 right-2 z-10">
+                    <FavoriteButton foodId={food.id} variant="default" />
+                  </div>
                 </div>
 
                 {/* Content */}
@@ -217,9 +204,11 @@ export default function MenuPage() {
 
 
                   {/* Detail Button */}
-                  <button className="w-full py-2 border-2 border-gray-300 rounded-lg text-sm font-semibold hover:border-purple-600 hover:text-purple-600 transition">
-                    {t('menu.view_details')}
-                  </button>
+                  <Link to={`/food/${food.id}`}>
+                    <button className="w-full py-2 border-2 border-gray-300 rounded-lg text-sm font-semibold hover:border-purple-600 hover:text-purple-600 transition">
+                      {t('menu.view_details')}
+                    </button>
+                  </Link>
                 </div>
               </div>
             ))}

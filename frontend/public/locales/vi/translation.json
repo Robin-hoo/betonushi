@@ -180,7 +180,7 @@
       "submit": "Đăng ký"
     },
     "footer": {
-      "text": "Đã có tài khoản?",
+      "text": "Bạn đã có tài khoản?",
       "link": "Đăng nhập"
     },
     "success": "Đăng ký thành công!",
@@ -188,8 +188,23 @@
       "invalid_email": "Định dạng email không hợp lệ",
       "invalid_phone": "Số điện thoại phải có 10 chữ số bắt đầu bằng 0",
       "weak_password": "Mật khẩu phải có ít nhất 8 ký tự và chứa 2 trong 3 loại: chữ cái, số, ký hiệu.",
-      "password_mismatch": "Xác nhận mật khẩu không khớp",
+      "password_mismatch": "Mật khẩu không khớp",
       "failed": "Đăng ký thất bại"
     }
+  },
+  "favorites": {
+    "title": "Yêu thích",
+    "subtitle": "Món ăn Việt Nam yêu thích của bạn",
+    "empty": {
+      "title": "Chưa có món ăn yêu thích",
+      "description": "Nhấn nút ♡ trên trang món ăn để thêm vào yêu thích",
+      "button": "Khám phá món ăn"
+    },
+    "count": "{{count}} món yêu thích",
+    "button": {
+      "add": "Thêm vào yêu thích",
+      "remove": "Đã yêu thích"
+    },
+    "login_required": "Vui lòng đăng nhập để xem yêu thích"
   }
 }
