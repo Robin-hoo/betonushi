@@ -49,6 +49,11 @@
     "login": "Login",
     "signup": "Sign Up"
   },
+  "common": {
+    "loading": "Loading...",
+    "error": "Error",
+    "retry": "Retry"
+  },
   "menu": {
     "view_details": "View Details",
     "search": {
@@ -190,6 +195,74 @@
       "weak_password": "Password must be at least 8 chars and contain 2 of 3 types: letters, numbers, symbols.",
       "password_mismatch": "Passwords do not match",
       "failed": "Registration failed"
+    }
+  },
+  "foodDetail": {
+    "backToFoods": "<",
+    "loading": "Loading...",
+    "error": "Failed to load food data.",
+    "notFound": "Food not found",
+    "rating": {
+      "outOf": "/5",
+      "reviews": "{{count}} reviews"
+    },
+    "buttons": {
+      "favorite": "Add to Favorites",
+      "help": "Help",
+      "cancel": "Cancel",
+      "comment": "Comment",
+      "searchRestaurant": "Search Restaurant"
+    },
+    "sections": {
+      "description": "1. Description",
+      "recipe": "2. Recipe",
+      "origin": "3. Origin Story",
+      "story": "1. Story",
+      "ingredient": "2. Main Ingredients",
+      "taste": "3. Taste Profile",
+      "style": "4. Vietnamese Style - How to Enjoy",
+      "comparison": "5. Comparison with Japanese Cuisine"
+    },
+    "reviews": {
+      "title": "Latest Reviews"
+    },
+    "language": {
+      "label": "Language",
+      "ja": "日本語",
+      "vi": "Tiếng Việt",
+      "en": "English"
+    }
+  },
+  "restaurant": {
+    "search": {
+      "placeholder": "Restaurant name",
+      "button": "Search"
+    },
+    "filters": {
+      "distance": {
+        "title": "Distance from Current Location",
+        "all": "All",
+        "300m": "Within 300m",
+        "1km": "Within 1km",
+        "3km": "Within 3km",
+        "5km": "Within 5km",
+        "10km": "Within 10km"
+      },
+      "area": {
+        "title": "Area",
+        "downtown": "Downtown",
+        "cardPayment": "Card Payment OK",
+        "smokingArea": "Smoking Area",
+        "parking": "Parking",
+        "24hours": "24 Hours",
+        "terrace": "Terrace Seating"
+      },
+      "button": "Filter"
+    },
+    "details": "Details",
+    "pagination": {
+      "prev": "Prev",
+      "next": "Next"
     }
   }
 }

@@ -1,60 +1,58 @@
-import React, { useState, useMemo } from 'react';
+import { useState, useMemo, useEffect } from 'react';
 import { Heart } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
+import { useNavigate } from 'react-router-dom';
 
 interface Food {
-  id: number;
-  key: string;
-  image: string;
+  food_id: number;
+  name: string;
+  story: string;
+  ingredient: string;
+  taste: string;
+  style: string;
+  comparison: string;
+  region_id: number;
+  view_count: number;
+  rating: number;
+  number_of_rating: number;
+  created_at: string;
+  image_url: string | null;
   liked?: boolean;
 }
 
-// Mock Data with keys instead of hardcoded text
-const MOCK_FOOD_DATA: Food[] = [
-  {
-    id: 1,
-    key: 'pho',
-    image: "/image/food/pho.jpg",
-    liked: false,
-  },
-  {
-    id: 2,
-    key: 'banhmi',
-    image: '/image/food/banhmi.png',
-    liked: false,
-  },
-  {
-    id: 3,
-    key: 'buncha',
-    image: '/image/food/buncha.jpg',
-    liked: false,
-  },
-  {
-    id: 4,
-    key: 'comtam',
-    image: '/image/food/comtam.jpg',
-    liked: false,
-  },
-  {
-    id: 5,
-    key: 'goicuon',
-    image: '/image/food/goicuon.jpg',
-    liked: false,
-  },
-  {
-    id: 6,
-    key: 'banhxeo',
-    image: '/image/food/banhxeo.jpg',
-    liked: true,
-  },
-];
+const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000/api';
 
 export default function MenuPage() {
   const { t } = useTranslation();
-  const [foods, setFoods] = useState<Food[]>(MOCK_FOOD_DATA);
+  const navigate = useNavigate();
+  const [foods, setFoods] = useState<Food[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
   const [currentPage, setCurrentPage] = useState(1);
   const [searchQuery, setSearchQuery] = useState('');
   const itemsPerPage = 6;
+
+  // Fetch foods from API
+  useEffect(() => {
+    const fetchFoods = async () => {
+      try {
+        setLoading(true);
+        setError(null);
+        const response = await fetch(`${API_BASE_URL}/foods`);
+        if (!response.ok) {
+          throw new Error('Failed to fetch foods');
+        }
+        const data = await response.json();
+        setFoods(data.map((food: Food) => ({ ...food, liked: false })));
+      } catch (err) {
+        setError(err instanceof Error ? err.message : 'An error occurred');
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchFoods();
+  }, []);
 
   // Transform categories to use translation keys
   const CATEGORIES = useMemo(() => ({
@@ -85,10 +83,10 @@ export default function MenuPage() {
     ],
   }), []);
 
-  const handleToggleLike = (id: number) => {
+  const handleToggleLike = (food_id: number) => {
     setFoods(
       foods.map((food) =>
-        food.id === id ? { ...food, liked: !food.liked } : food
+        food.food_id === food_id ? { ...food, liked: !food.liked } : food
       )
     );
   };
@@ -99,8 +97,7 @@ export default function MenuPage() {
   };
 
   const filteredFoods = foods.filter((food) => {
-    const name = t(`menu.items.${food.key}.name`);
-    return name.toLowerCase().includes(searchQuery.toLowerCase());
+    return food.name.toLowerCase().includes(searchQuery.toLowerCase());
   });
 
   const totalPages = Math.ceil(filteredFoods.length / itemsPerPage);
@@ -136,121 +133,154 @@ export default function MenuPage() {
       {/* Main Content */}
       {/* =========================== */}
       <div className="max-w-6xl mx-auto w-full px-6 py-8 flex gap-8">
-        {/* Sidebar - Categories */}
-        <div className="w-1/5 flex-shrink-0">
-          <div className="bg-[#f7f7f7] rounded-lg p-6 shadow-sm">
-            {Object.entries(CATEGORIES).map(([categoryKey, items]) => (
-              <div key={categoryKey} className="mb-6">
-                <h3 className="font-bold text-sm mb-3 text-gray-800">
-                  {t(categoryKey)}
-                </h3>
-                <ul className="space-y-2">
-                  {items.map((item, index) => (
-                    <li key={item.id} className="flex items-center gap-2">
-                      <input
-                        type="checkbox"
-                        id={`cat-${item.id}`}
-                        checked={item.checked}
-                        onChange={() =>
-                          handleCategoryChange(categoryKey, index)
-                        }
-                        className="w-4 h-4 accent-purple-600 cursor-pointer"
-                      />
-                      <label
-                        htmlFor={`cat-${item.id}`}
-                        className="text-sm cursor-pointer flex-1"
-                      >
-                        {t(item.nameKey)}
-                      </label>
-                      <span className="text-xs text-gray-500">
-                        ({item.count})
-                      </span>
-                    </li>
-                  ))}
-                </ul>
-                <hr className="my-4" />
-              </div>
-            ))}
-            <button className="w-full py-2 bg-purple-600 text-white font-semibold rounded-lg hover:bg-purple-700 transition">
-              {t('menu.filter.button')}
-            </button>
+        {/* Loading State */}
+        {loading && (
+          <div className="flex-1 flex items-center justify-center min-h-[400px]">
+            <div className="text-center">
+              <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-purple-600 mx-auto mb-4"></div>
+              <p className="text-gray-600">{t('common.loading') || 'Loading...'}</p>
+            </div>
           </div>
-        </div>
+        )}
 
-        {/* Main Content - Food Grid */}
-        <div className="flex-1">
-          {/* Grid Cards */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
-            {paginatedFoods.map((food) => (
-              <div
-                key={food.id}
-                className="bg-white rounded-lg shadow-md hover:shadow-lg transition overflow-hidden"
+        {/* Error State */}
+        {error && !loading && (
+          <div className="flex-1 flex items-center justify-center min-h-[400px]">
+            <div className="text-center">
+              <p className="text-red-600 mb-4">{t('common.error') || 'Error'}: {error}</p>
+              <button
+                onClick={() => window.location.reload()}
+                className="px-6 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition"
               >
-                {/* Image */}
-                <div className="relative w-full h-48 bg-gray-200 overflow-hidden group">
-                  <img
-                    src={food.image}
-                    alt={t(`menu.items.${food.key}.name`)}
-                    className="w-full h-full object-cover group-hover:scale-105 transition"
-                  />
-                  {/* Like Button */}
-                  <button
-                    onClick={() => handleToggleLike(food.id)}
-                    aria-label="like"
-                    className="absolute top-2 right-2 z-0 bg-white rounded-full p-2 shadow-md hover:bg-gray-100 transition"
-                  >
-                    <Heart
-                      size={20}
-                      className={food.liked ? 'fill-red-500 text-red-500' : 'text-gray-400'}
-                    />
-                  </button>
-                </div>
-
-                {/* Content */}
-                <div className="p-4">
-                  <h3 className="font-bold text-lg mb-1 text-gray-800 text-center">
-                    {t(`menu.items.${food.key}.name`)}
-                  </h3>
-                  <p className="text-sm text-gray-600 mb-3 line-clamp-2">
-                    {t(`menu.items.${food.key}.desc`)}
-                  </p>
-
-
-                  {/* Detail Button */}
-                  <button className="w-full py-2 border-2 border-gray-300 rounded-lg text-sm font-semibold hover:border-purple-600 hover:text-purple-600 transition">
-                    {t('menu.view_details')}
-                  </button>
-                </div>
-              </div>
-            ))}
+                {t('common.retry') || 'Retry'}
+              </button>
+            </div>
           </div>
+        )}
 
-          {/* =========================== */}
-          {/* Pagination */}
-          {/* =========================== */}
-          <div className="flex items-center justify-center gap-2 mb-8">
-            <button className="px-3 py-1 text-sm font-semibold text-purple-600 hover:bg-purple-100 rounded transition">
-              « {t('menu.pagination.prev')}
-            </button>
-            {Array.from({ length: totalPages }, (_, i) => i + 1).map(
-              (page) => (
-                <button
-                  key={page}
-                  onClick={() => setCurrentPage(page)}
-                  className={`px-3 py-1 text-sm font-semibold rounded transition ${page === currentPage
-                    ? 'bg-purple-600 text-white'
-                    : 'hover:bg-gray-200'
-                    }`}
-                >
-                  {page}
+        {/* Main Content - Categories and Food Grid */}
+        {!loading && !error && (
+          <>
+            {/* Sidebar - Categories */}
+            <div className="w-1/5 flex-shrink-0">
+              <div className="bg-[#f7f7f7] rounded-lg p-6 shadow-sm">
+                {Object.entries(CATEGORIES).map(([categoryKey, items]) => (
+                  <div key={categoryKey} className="mb-6">
+                    <h3 className="font-bold text-sm mb-3 text-gray-800">
+                      {t(categoryKey)}
+                    </h3>
+                    <ul className="space-y-2">
+                      {items.map((item, index) => (
+                        <li key={item.id} className="flex items-center gap-2">
+                          <input
+                            type="checkbox"
+                            id={`cat-${item.id}`}
+                            checked={item.checked}
+                            onChange={() =>
+                              handleCategoryChange(categoryKey, index)
+                            }
+                            className="w-4 h-4 accent-purple-600 cursor-pointer"
+                          />
+                          <label
+                            htmlFor={`cat-${item.id}`}
+                            className="text-sm cursor-pointer flex-1"
+                          >
+                            {t(item.nameKey)}
+                          </label>
+                          <span className="text-xs text-gray-500">
+                            ({item.count})
+                          </span>
+                        </li>
+                      ))}
+                    </ul>
+                    <hr className="my-4" />
+                  </div>
+                ))}
+                <button className="w-full py-2 bg-purple-600 text-white font-semibold rounded-lg hover:bg-purple-700 transition">
+                  {t('menu.filter.button')}
                 </button>
-              )
-            )}
-            <button className="px-3 py-1 text-sm font-semibold text-purple-600 hover:bg-purple-100 rounded transition">
-              {t('menu.pagination.next')} »
-            </button>
-          </div>
-        </div>
+              </div>
+            </div>
+
+            {/* Main Content - Food Grid */}
+            <div className="flex-1">
+              {/* Grid Cards */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
+                {paginatedFoods.map((food) => (
+                  <div
+                    key={food.food_id}
+                    className="bg-white rounded-lg shadow-md hover:shadow-lg transition overflow-hidden"
+                  >
+                    {/* Image */}
+                    <div className="relative w-full h-48 bg-gray-200 overflow-hidden group">
+                      <img
+                        src={food.image_url || '/image/placeholder.jpg'}
+                        alt={food.name}
+                        className="w-full h-full object-cover group-hover:scale-105 transition"
+                      />
+                      {/* Like Button */}
+                      <button
+                        onClick={() => handleToggleLike(food.food_id)}
+                        aria-label="like"
+                        className="absolute top-2 right-2 z-0 bg-white rounded-full p-2 shadow-md hover:bg-gray-100 transition"
+                      >
+                        <Heart
+                          size={20}
+                          className={food.liked ? 'fill-red-500 text-red-500' : 'text-gray-400'}
+                        />
+                      </button>
+                    </div>
+
+                    {/* Content */}
+                    <div className="p-4">
+                      <h3 className="font-bold text-lg mb-1 text-gray-800 text-center">
+                        {food.name}
+                      </h3>
+                      <p className="text-sm text-gray-600 mb-3 line-clamp-2">
+                        {food.story || food.ingredient || ''}
+                      </p>
+
+
+                      {/* Detail Button */}
+                      <button
+                        onClick={() => navigate(`/foods/${food.food_id}`)}
+                        className="w-full py-2 border-2 border-gray-300 rounded-lg text-sm font-semibold hover:border-purple-600 hover:text-purple-600 transition"
+                      >
+                        {t('menu.view_details')}
+                      </button>
+                    </div>
+                  </div>
+                ))}
+              </div>
+
+              {/* =========================== */}
+              {/* Pagination */}
+              {/* =========================== */}
+              <div className="flex items-center justify-center gap-2 mb-8">
+                <button className="px-3 py-1 text-sm font-semibold text-purple-600 hover:bg-purple-100 rounded transition">
+                  « {t('menu.pagination.prev')}
+                </button>
+                {Array.from({ length: totalPages }, (_, i) => i + 1).map(
+                  (page) => (
+                    <button
+                      key={page}
+                      onClick={() => setCurrentPage(page)}
+                      className={`px-3 py-1 text-sm font-semibold rounded transition ${page === currentPage
+                        ? 'bg-purple-600 text-white'
+                        : 'hover:bg-gray-200'
+                        }`}
+                    >
+                      {page}
+                    </button>
+                  )
+                )}
+                <button className="px-3 py-1 text-sm font-semibold text-purple-600 hover:bg-purple-100 rounded transition">
+                  {t('menu.pagination.next')} »
+                </button>
+              </div>
+            </div>
+          </>
+        )}
       </div>
     </div>
   );

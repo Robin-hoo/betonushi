@@ -1,12 +1,15 @@
 import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
-import { Star } from "lucide-react";
+import { Star, Globe } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { getFoodById, type Food } from "@/api/food.api";
+import { Link } from "react-router-dom";
 import InteractiveStarRating from "@/components/InteractiveStarRating";
+import { useTranslation } from "react-i18next";
 
 const FoodDetailPage: React.FC = () => {
   const { id } = useParams<{ id: string }>();
+  const { t, i18n } = useTranslation();
   const [dishData, setDishData] = useState<Food | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -39,12 +42,17 @@ const FoodDetailPage: React.FC = () => {
     console.log("User selected rating:", newRating);
   };
 
-  if (loading) return <div className="p-6">Loading...</div>;
-  if (error) return <div className="p-6 text-red-500">{error}</div>;
-  if (!dishData) return <div className="p-6">Food not found</div>;
+
+  if (loading) return <div className="p-6">{t('foodDetail.loading')}</div>;
+  if (error) return <div className="p-6 text-red-500">{t('foodDetail.error')}</div>;
+  if (!dishData) return <div className="p-6">{t('foodDetail.notFound')}</div>;
 
   return (
     <div className="min-h-screen bg-white">
+      <button className="px-8 py-2 bg-purple-600 text-white font-semibold rounded-lg hover:bg-purple-700 transition">
+        <Link to="/foods">{t('foodDetail.backToFoods')}</Link>
+      </button>
+
       <div className="max-w-7xl mx-auto p-6">
         {/* Top Section - 2 Columns */}
         <div className="grid grid-cols-12 gap-6">
@@ -87,12 +95,12 @@ const FoodDetailPage: React.FC = () => {
               <div className="flex flex-col items-center gap-1">
                 <div className="flex items-center gap-1">
                   <span className="text-lg font-bold text-gray-800">
-                    {dishData.rating}/5
+                    {dishData.rating}{t('foodDetail.rating.outOf')}
                   </span>
                   <Star className="w-5 h-5 fill-yellow-400 text-yellow-400" />
                 </div>
                 <span className="text-sm text-gray-500">
-                  ({dishData.number_of_rating}件のレビュー)
+                  ({t('foodDetail.rating.reviews', { count: dishData.number_of_rating })})
                 </span>
               </div>
             </div>
@@ -101,16 +109,15 @@ const FoodDetailPage: React.FC = () => {
             <div className="flex gap-8 mb-6">
               <Button
                 onClick={() => setIsFavorite(!isFavorite)}
-                className={`w-full px-4 py-2 rounded-lg font-medium mb-2 transition-colors ${
-                  isFavorite
-                    ? "bg-red-500 text-white"
-                    : "bg-red-100 text-red-600 hover:bg-red-200"
-                }`}
+                className={`w-full px-4 py-2 rounded-lg font-medium mb-2 transition-colors ${isFavorite
+                  ? "bg-red-500 text-white"
+                  : "bg-red-100 text-red-600 hover:bg-red-200"
+                  }`}
               >
-                お気に入り登録
+                {t('foodDetail.buttons.favorite')}
               </Button>
               <Button className="w-full px-4 py-2 bg-blue-500 text-white rounded-lg font-medium hover:bg-blue-600 transition-colors mb-4">
-                Help
+                {t('foodDetail.buttons.help')}
               </Button>
             </div>
             <div className="flex justify-center">
@@ -131,26 +138,28 @@ const FoodDetailPage: React.FC = () => {
 
             <div className="flex gap-8 mb-6 ">
               <Button className="w-full px-4 py-2 bg-orange-500 text-white rounded-lg hover:bg-orange-600 transition-colors mb-2">
-                送信する
+                {t('foodDetail.buttons.cancel')}
               </Button>
               <Button className="w-full px-4 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600 transition-colors">
-                レストラン検索
+                {t('foodDetail.buttons.comment')}
               </Button>
+            </div>
+            <div className="flex justify-center">
+              <button className="px-8 py-2 bg-purple-600 text-white font-semibold rounded-lg hover:bg-purple-700 transition">
+                <Link to="/restaurants">{t('foodDetail.buttons.searchRestaurant')}</Link>
+              </button>
             </div>
           </div>
 
           {/* Right Column - Content Sections */}
           <div className="space-y-6 col-span-7">
-            {/** Các section: story, ingredient, taste, style, comparison */}
+            {/** POT sections: story, ingredient, taste, style, comparison */}
             {[
-              { title: "1. ストーリー", content: dishData.story },
-              { title: "2. 主な使用材料", content: dishData.ingredient },
-              { title: "3. 味わいについて", content: dishData.taste },
-              {
-                title: "4. ベトナム流・美味しい食べ方",
-                content: dishData.style,
-              },
-              { title: "5. 日本料理との比較", content: dishData.comparison },
+              { title: t('foodDetail.sections.story'), content: dishData.story },
+              { title: t('foodDetail.sections.ingredient'), content: dishData.ingredient },
+              { title: t('foodDetail.sections.taste'), content: dishData.taste },
+              { title: t('foodDetail.sections.style'), content: dishData.style },
+              { title: t('foodDetail.sections.comparison'), content: dishData.comparison },
             ].map((section, i) => (
               <div key={i}>
                 <h2 className="text-xl font-bold text-red-500 mb-3">
@@ -168,12 +177,12 @@ const FoodDetailPage: React.FC = () => {
         {/* Bottom Section - Reviews */}
         <div className="bg-white rounded-lg border border-gray-200 p-6 mt-6">
           <h2 className="text-2xl font-bold text-red-500 mb-6 text-center">
-            最新レビュー
+            {t('foodDetail.reviews.title')}
           </h2>
           <div className="space-y-4">
             {dishData.reviews?.map((review) => (
               <div
-                key={review.id}
+                key={review.review_id}
                 className="border-b border-gray-200 pb-4 last:border-0"
               >
                 <div className="flex items-start gap-4">

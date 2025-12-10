@@ -49,6 +49,11 @@
     "login": "ログイン",
     "signup": "新規登録"
   },
+  "common": {
+    "loading": "読み込み中...",
+    "error": "エラー",
+    "retry": "再試行"
+  },
   "menu": {
     "view_details": "もっと詳しく見る",
     "search": {
@@ -190,6 +195,74 @@
       "weak_password": "パスワードは8文字以上で、文字、数字、記号のうち2つ以上を含む必要があります。",
       "password_mismatch": "パスワードが一致しません",
       "failed": "登録に失敗しました"
+    }
+  },
+  "foodDetail": {
+    "backToFoods": "<",
+    "loading": "読み込み中...",
+    "error": "食品データの読み込みに失敗しました。",
+    "notFound": "食品が見つかりません",
+    "rating": {
+      "outOf": "/5",
+      "reviews": "{{count}}件のレビュー"
+    },
+    "buttons": {
+      "favorite": "お気に入り登録",
+      "help": "Help",
+      "cancel": "キャンセル",
+      "comment": "コメントする",
+      "searchRestaurant": "レストラン検索"
+    },
+    "sections": {
+      "description": "1. 説明",
+      "recipe": "2. レシピ",
+      "origin": "3. 起源とストーリー",
+      "story": "1. ストーリー",
+      "ingredient": "2. 主な使用材料",
+      "taste": "3. 味わいについて",
+      "style": "4. ベトナム流・美味しい食べ方",
+      "comparison": "5. 日本料理との比較"
+    },
+    "reviews": {
+      "title": "最新レビュー"
+    },
+    "language": {
+      "label": "言語",
+      "ja": "日本語",
+      "vi": "Tiếng Việt",
+      "en": "English"
+    }
+  },
+  "restaurant": {
+    "search": {
+      "placeholder": "レストラン名",
+      "button": "検索"
+    },
+    "filters": {
+      "distance": {
+        "title": "現在地からの距離",
+        "all": "地区名し",
+        "300m": "300m以内",
+        "1km": "1km以内",
+        "3km": "3 km以内",
+        "5km": "5 km以内",
+        "10km": "10 km以内"
+      },
+      "area": {
+        "title": "エリア",
+        "downtown": "料理中心",
+        "cardPayment": "カードOK決済可",
+        "smokingArea": "授煙席あり",
+        "parking": "駐車場あり",
+        "24hours": "24時間営業",
+        "terrace": "テラス席あり"
+      },
+      "button": "絞り込み"
+    },
+    "details": "詳細",
+    "pagination": {
+      "prev": "前へ",
+      "next": "次へ"
     }
   }
 }
