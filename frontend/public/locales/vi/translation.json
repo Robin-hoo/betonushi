@@ -49,6 +49,11 @@
     "login": "Đăng nhập",
     "signup": "Đăng ký"
   },
+  "common": {
+    "loading": "Đang tải...",
+    "error": "Lỗi",
+    "retry": "Thử lại"
+  },
   "menu": {
     "view_details": "Xem chi tiết",
     "search": {
@@ -190,6 +195,74 @@
       "weak_password": "Mật khẩu phải có ít nhất 8 ký tự và chứa 2 trong 3 loại: chữ cái, số, ký hiệu.",
       "password_mismatch": "Xác nhận mật khẩu không khớp",
       "failed": "Đăng ký thất bại"
+    }
+  },
+  "foodDetail": {
+    "backToFoods": "<",
+    "loading": "Đang tải...",
+    "error": "Không thể tải dữ liệu món ăn.",
+    "notFound": "Không tìm thấy món ăn",
+    "rating": {
+      "outOf": "/5",
+      "reviews": "{{count}} đánh giá"
+    },
+    "buttons": {
+      "favorite": "Yêu thích",
+      "help": "Trợ giúp",
+      "cancel": "Hủy",
+      "comment": "Bình luận",
+      "searchRestaurant": "Tìm nhà hàng"
+    },
+    "sections": {
+      "description": "1. Mô tả",
+      "recipe": "2. Công thức",
+      "origin": "3. Nguồn gốc & Câu chuyện",
+      "story": "1. Câu chuyện",
+      "ingredient": "2. Nguyên liệu chính",
+      "taste": "3. Hương vị",
+      "style": "4. Cách ăn ngon kiểu Việt",
+      "comparison": "5. So sánh với ẩm thực Nhật"
+    },
+    "reviews": {
+      "title": "Đánh giá mới nhất"
+    },
+    "language": {
+      "label": "Ngôn ngữ",
+      "ja": "日本語",
+      "vi": "Tiếng Việt",
+      "en": "English"
+    }
+  },
+  "restaurant": {
+    "search": {
+      "placeholder": "Tên nhà hàng",
+      "button": "Tìm kiếm"
+    },
+    "filters": {
+      "distance": {
+        "title": "Khoảng cách từ vị trí hiện tại",
+        "all": "Tất cả",
+        "300m": "Trong 300m",
+        "1km": "Trong 1km",
+        "3km": "Trong 3km",
+        "5km": "Trong 5km",
+        "10km": "Trong 10km"
+      },
+      "area": {
+        "title": "Khu vực",
+        "downtown": "Trung tâm ẩm thực",
+        "cardPayment": "Chấp nhận thẻ",
+        "smokingArea": "Khu vực hút thuốc",
+        "parking": "Có bãi đỗ xe",
+        "24hours": "Mở cửa 24h",
+        "terrace": "Có khu vực sân thượng"
+      },
+      "button": "Lọc"
+    },
+    "details": "Chi tiết",
+    "pagination": {
+      "prev": "Trước",
+      "next": "Sau"
     }
   }
 }

@@ -31,13 +31,30 @@ async function getFoodDetails(foodIdParam) {
     if (err.status) {
       throw err;
     }
+    // Log the actual error for debugging
+    console.error('Database error in getFoodDetails:', err);
     // Bubble up a sanitized error for unexpected DB issues.
-    throw buildHttpError(500, 'Lỗi khi lấy dữ liệu food');
+    throw buildHttpError(500, `Lỗi khi lấy dữ liệu food: ${err.message}`);
+  }
+}
+
+/**
+ * Get all foods from the database.
+ * @returns {Promise<Array>}
+ */
+async function getAllFoods() {
+  try {
+    const foods = await FoodModel.getAllFoods();
+    return foods;
+  } catch (err) {
+    console.error('Database error in getAllFoods:', err);
+    throw buildHttpError(500, `Lỗi khi lấy danh sách món ăn: ${err.message}`);
   }
 }
 
 module.exports = {
   getFoodDetails,
+  getAllFoods,
 };
 
 
