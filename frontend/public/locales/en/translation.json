@@ -61,7 +61,8 @@
       "button": "Search"
     },
     "filter": {
-      "button": "Filter"
+      "button": "Filter",
+      "region": "Region"
     },
     "categories": {
       "main_ingredients": "Main Ingredients",
@@ -120,6 +121,11 @@
         "name": "Banh Xeo",
         "desc": "Yellow crispy Vietnamese pancake with shrimp, pork, and bean sprouts."
       }
+    },
+    "no_results": {
+      "title": "No results found",
+      "message": "Sorry, we couldn't find any food matching the keyword \"{{keyword}}\".",
+      "clear_search": "Clear search"
     }
   },
   "loginPage": {

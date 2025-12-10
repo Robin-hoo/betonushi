@@ -3,6 +3,9 @@ const FoodController = require('../controllers/foodController');
 
 const router = express.Router();
 
+// GET /filters -> list checkbox into Sidebar
+router.get('/filters', FoodController.getFilterOptions);
+
 // GET /foods -> returns all foods with primary image
 router.get('/foods', FoodController.getAllFoods);
 
