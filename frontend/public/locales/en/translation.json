@@ -37,7 +37,7 @@
     "title": "Edit"
   },
   "saveButton": {
-    "title": "Save"
+    "title": "save"
   },
   "header": {
     "nav": {
@@ -264,5 +264,11 @@
       "prev": "Prev",
       "next": "Next"
     }
+  },
+  "ScriptTitle": {
+    "title": "Dish Introduction Script"
+  },
+  "ScriptLoading": {
+    "title": "Loading..."
   }
 }

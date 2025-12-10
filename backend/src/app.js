@@ -1,8 +1,11 @@
+require("dotenv").config();
+
 const express = require("express");
+const cors = require("cors");
 const authRoutes = require("./routes/authRoutes");
+const geminiRoutes = require("./routes/gemini.js");
 const foodRoutes = require("./routes/foodRoutes");
 const restaurantRoutes = require("./routes/restaurantRoutes");
-const cors = require("cors");
 const app = express();
 app.use(
   cors({
@@ -12,8 +15,13 @@ app.use(
 );
 
 app.use(express.json());
+app.use(express.static("public"));
 
-// Mount routes without extra prefix so path remains /food/:id
+// Routes
+console.log("Mounting Gemini Routes at /api");
+app.use("/api", geminiRoutes);
+console.log("Gemini routes mounted.");
+
 app.use("/api", foodRoutes);
 app.use("/api", restaurantRoutes);
 app.use("/api", authRoutes);

@@ -116,9 +116,12 @@ const FoodDetailPage: React.FC = () => {
               >
                 {t('foodDetail.buttons.favorite')}
               </Button>
-              <Button className="w-full px-4 py-2 bg-blue-500 text-white rounded-lg font-medium hover:bg-blue-600 transition-colors mb-4">
-                {t('foodDetail.buttons.help')}
-              </Button>
+                <Link to={`/script/${id}`} className="block w-full">
+                  <Button 
+                    className="w-full px-4 py-2 bg-blue-500 text-white rounded-lg font-medium hover:bg-blue-600 transition-colors mb-4">
+                    {t('foodDetail.buttons.help')}
+                  </Button>
+                </Link>
             </div>
             <div className="flex justify-center">
               <InteractiveStarRating
