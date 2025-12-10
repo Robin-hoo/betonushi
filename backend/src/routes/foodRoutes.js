@@ -8,7 +8,7 @@ router.get('/foods', FoodController.getAllFoods);
 
 // GET /food/:id -> returns food detail with images & reviews
 router.get('/food/:id', FoodController.getFoodById);
-
+router.get('/foods', FoodController.getPopularFoods);
 module.exports = router;
 
 

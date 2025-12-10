@@ -11,7 +11,14 @@ async function getFoodById(req, res, next) {
     return next(error);
   }
 }
-
+async function getPopularFoods(req, res, next) {
+  try {
+    const foods = await FoodService.getFoods();
+    return res.json(data);
+  } catch (error) {
+    return next(error);
+  }
+}
 /**
  * Get all foods.
  */
@@ -26,6 +33,7 @@ async function getAllFoods(req, res, next) {
 
 module.exports = {
   getFoodById,
+  getPopularFoods,
   getAllFoods,
 };
 

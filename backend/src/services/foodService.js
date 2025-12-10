@@ -52,8 +52,14 @@ async function getAllFoods() {
   }
 }
 
+
+async function getFoods() {
+    return await FoodModel.getPopularFoods();
+  }
+
 module.exports = {
   getFoodDetails,
+  getFoods,
   getAllFoods,
 };
 
