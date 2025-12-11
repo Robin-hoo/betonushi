@@ -13,5 +13,5 @@ export async function generateDishScript(dish: string) {
     throw new Error(data.message || "AI API error");
   }
 
-  return data.content; 
+  return data; 
 }
