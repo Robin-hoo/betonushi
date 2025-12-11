@@ -9,7 +9,7 @@ export interface Review {
 }
 
 export interface Food {
-  food_id: number;
+  food_id : number;
   name: string;
   story: string;
   ingredient: string;
@@ -21,6 +21,7 @@ export interface Food {
   rating: number;
   number_of_rating: number;
   created_at: string;
+  image_url: string;
   images?: string[];
   reviews?: Review[];
 }

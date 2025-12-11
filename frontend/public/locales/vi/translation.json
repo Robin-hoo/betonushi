@@ -1,44 +1,47 @@
 {
-  "title": "Vite + React",
-  "count_is": "Bây giờ là {{count}}",
-  "edit_save": "Chỉnh sửa src/App.tsx và lưu để kiểm tra HMR",
-  "read_docs": "Nhấn vào logo Vite và React để tìm hiểu thêm",
-  "section1": {
-    "title": "1. Mời rủ"
-  },
-  "section2": {
-    "title": "2. Đặt câu hỏi"
-  },
-  "section3": {
-    "title": "3. Hội thoại mẫu"
-  },
-  "block1": {
-    "title": "Cẩm nang thực hành - ẩm thực Việt Nam"
-  },
-  "block2": {
-    "title": "Cụm từ tiếng Nhật hữu ích về ăn uống và mời rủ"
-  },
-  "popular_menu": {
-    "title": "Món ăn phổ biến"
-  },
-  "banner1": {
-    "title": "Thỏa mãn vị giác của bạn"
-  },
-  "banner2": {
-    "title": "Những món ăn tuyệt vời nhất"
-  },
-  "button1": {
-    "title": "🍣 Khảo sát ngay"
-  },
-  "button2": {
-    "title": "Tìm hiểu thêm →"
-  },
-  "helpButton": {
-    "title": "Chỉnh sửa"
-  },
-  "saveButton": {
-    "title": "Lưu"
-  },
+    "title": "Vite + React",
+    "count_is": "Bây giờ là {{count}}",
+    "edit_save": "Chỉnh sửa src/App.tsx và lưu để kiểm tra HMR",
+    "read_docs": "Nhấn vào logo Vite và React để tìm hiểu thêm",
+
+    "section1": {
+      "title": "1. Mời rủ"
+    },
+
+    "section2": {
+      "title": "2. Đặt câu hỏi"
+    },
+
+    "section3": {
+      "title": "3. Hội thoại mẫu"
+    },
+    "block1": {
+      "title": "Cẩm nang thực hành - ẩm thực Việt Nam"
+    },
+    "block2": {
+      "title": "Cụm từ tiếng Nhật hữu ích về ăn uống và mời rủ"
+    },
+    "popular_menu": {
+      "title": "Món ăn phổ biến"
+    },
+    "banner1": {
+      "title": "Thỏa mãn vị giác của bạn"   
+    },
+    "banner2": {
+      "title": "Những món ăn tuyệt vời nhất"   
+    },
+    "button1": {
+      "title": "Khảo sát ngay"
+    },
+    "button2": {
+      "title": "Tìm hiểu thêm →"
+    },
+    "helpButton": {
+      "title": "Chỉnh sửa"
+    },
+    "saveButton": {
+      "title": "Lưu"
+    },
   "header": {
     "nav": {
       "home": "Trang chủ",
@@ -270,5 +273,13 @@
       "prev": "Trước",
       "next": "Sau"
     }
+  },
+  "ScriptTitle": {
+    "title": "Kịch bản giới thiệu món ăn"
+  },
+  "ScriptLoading": {
+    "title": "Đang tải..."
   }
 }
+
+

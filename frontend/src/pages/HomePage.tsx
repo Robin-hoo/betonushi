@@ -1,14 +1,20 @@
 import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
+import { Card, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { useTranslation } from "react-i18next";
-import bunbohue from "@/assets/image/food/bunbo.jpeg"
-import banhmi from "@/assets/image/food/banhmi.png"
-import comtam from "@/assets/image/food/comtam.jpg"
-import pho from "@/assets/image/food/pho.jpg"
+import { useEffect, useState } from "react";
+import type { Food } from "@/api/food.api";
 
 export default function HomePage() {
   const { t } = useTranslation();
+  const [foods, setFoods] = useState<Food[]>([]);
+  useEffect(() => {
+  fetch("http://localhost:3000/api/foods")
+    .then(res => res.json())
+    .then(json => setFoods(json.slice(0, 4)))        
+    .catch(err => console.error("Fetch error:", err));
+    console.log(foods);
+}, []);
   return (
     <div className="w-full flex flex-col gap-20">
 
@@ -58,44 +64,46 @@ export default function HomePage() {
             </button>
           </div>
 
-          {/* Card Menu */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
-            {[
-              { nameKey: "menu.items.bunbohue.name", descKey: "menu.items.bunbohue.desc", img: bunbohue },
-              { nameKey: "menu.items.banhmi.name", descKey: "menu.items.banhmi.desc", img: banhmi },
-              { nameKey: "menu.items.comtam.name", descKey: "menu.items.comtam.desc", img: comtam },
-              { nameKey: "menu.items.pho.name", descKey: "menu.items.pho.desc", img: pho }
-            ].map((item, index) => (
-              <Card key={index} className="bg-[#f5e6dc] border-none shadow-md hover:shadow-xl transition-all duration-300 rounded-2xl overflow-hidden">
-                <CardHeader className="p-4 pb-3">
-                  <div className="w-full aspect-square rounded-xl overflow-hidden bg-white">
-                    <img
-                      src={item.img}
-                      alt={t(item.nameKey)}
-                      className="w-full h-full object-cover"
-                    />
-                  </div>
-                </CardHeader>
+    {/* Card Menu */}
+    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-16 justify-end">
 
-                <CardContent className="px-4 pb-3 text-center">
-                  <CardTitle className="text-lg font-bold text-gray-800 mb-2">
-                    {t(item.nameKey)}
-                  </CardTitle>
-                  <p className="text-sm text-gray-600 leading-relaxed">
-                    {t(item.descKey)}
-                  </p>
-                </CardContent>
+      {foods.map((item) => (
+              <a key={item.food_id} href={`/foods/${item.food_id}`}>
+          <Card className="rounded-xl bg-[#D6EDC5] shadow-md hover:shadow-lg transition p-3">
 
-                <CardFooter className="px-4 pb-4 flex justify-center">
-                  <button className="text-[#c44536] hover:text-[#a03628] text-sm font-medium transition-colors">
-                    {t("menu.view_details")}
-                  </button>
-                </CardFooter>
-              </Card>
-            ))}
-          </div>
-        </div>
-      </div>
+            {/* Ảnh */}
+            <img
+              src={item.image_url}
+              alt={item.name}
+              className="w-full h-44 object-cover rounded-lg"
+            />    
+
+
+            {/* Nội dung */}
+            <div className="text-center mt-4">
+              <CardTitle className="text-xl font-bold">
+                {item.name}
+              </CardTitle>
+
+              <p className="text-sm text-gray-700 mt-2 leading-relaxed truncate">
+                {item.story || "Món ăn này đang được cập nhật mô tả."}
+              </p>
+              <p className="text-gray-600 text-sm">
+                <strong>{item.taste}</strong>
+              </p>
+              <span className="mt-4 text-red-600 text-sm font-semibold">
+                もっと詳しく見る
+              </span>
+            </div>
+          </Card>
+        </a>
+      ))}
+
+    </div>
+  </div>
+</div>
+
+
 
     </div>
   );

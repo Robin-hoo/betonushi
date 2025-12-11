@@ -1,11 +1,38 @@
 const db = require('../db');
-
 /**
  * Fetch a food along with its images and reviews.
  * Keeps queries simple and easy to maintain.
  * @param {number} foodId
  * @returns {Promise<{food: object|null, images: string[], reviews: object[]}>}
  */
+async function getPopularFoods() {
+  const result = await db.query(`
+    SELECT 
+      f.food_id,
+      f.name,
+      f.story,
+      f.taste,
+      f.rating,
+      f.number_of_rating,
+      (
+        SELECT image_url
+        FROM food_images 
+        WHERE food_id = f.food_id
+        ORDER BY food_image_id ASC
+        LIMIT 1
+      ) AS image
+    FROM foods f
+    ORDER BY f.rating DESC
+    LIMIT 4
+  `);
+
+  return result.rows;
+}
+
+/**
+ * Fetch a food along with its images and reviews.
+ */
+
 async function findFoodWithRelations(foodId) {
   // Query foods table (using POT schema columns)
   const foodResult = await db.query(
@@ -114,11 +141,9 @@ async function getAllFoods(filters = {}) {
   const result = await db.query(sql, params);
   return result.rows;
 }
-
 module.exports = {
   findFoodWithRelations,
+  getPopularFoods,
   getAllFoods,
   getFilterOptions,
 };
-
-

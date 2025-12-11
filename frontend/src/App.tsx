@@ -8,7 +8,7 @@ import LoginPage from "@/pages/LoginPage";
 import RegisterPage from "@/pages/RegisterPage";
 import MenuPage from "@/pages/MenuPage";
 import RestaurantsListPage from "@/pages/RestaurantsListPage";
-
+import FoodScriptPage from "./pages/FoodScriptPage";
 function App() {
   return (
     <Router>
@@ -26,6 +26,7 @@ function App() {
           <Route path="/phrases" element={<HelpfulPage />} />
           <Route path="/login" element={<LoginPage />} />
           <Route path="/register" element={<RegisterPage />} />
+          <Route path="/script/:id" element={<FoodScriptPage />} />
         </Route>
       </Routes>
     </Router>
