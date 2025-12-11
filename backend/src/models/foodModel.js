@@ -72,35 +72,78 @@ async function findFoodWithRelations(foodId) {
   };
 }
 
-/**
- * Fetch all foods with their primary image.
- * @returns {Promise<Array>}
- */
-async function getAllFoods() {
-  const result = await db.query(
-    `SELECT 
-      f.food_id, 
-      f.name, 
-      f.story, 
-      f.ingredient, 
-      f.taste, 
-      f.style, 
-      f.comparison,
-      f.region_id, 
-      f.view_count, 
-      f.rating, 
-      f.number_of_rating, 
-      f.created_at,
-      fi.image_url
-     FROM foods f
-     LEFT JOIN food_images fi ON f.food_id = fi.food_id AND fi.is_primary = TRUE
-     ORDER BY f.food_id`
-  );
+async function getFilterOptions() {
+  const regions = await db.query('SELECT region_id as id, name FROM regions ORDER BY region_id');
+  const flavors = await db.query('SELECT flavor_id as id, name FROM flavors ORDER BY name');
+  const ingredients = await db.query('SELECT ingredient_id as id, name FROM ingredients ORDER BY name LIMIT 8'); // MAX 10 ingredient
 
+  return {
+    regions: regions.rows,
+    flavors: flavors.rows,
+    ingredients: ingredients.rows
+  };
+}
+
+/**
+ * Fetch all foods with filter
+ * @param {Object} filters - { region_ids, flavor_ids, ingredient_ids }
+ */
+async function getAllFoods(filters = {}) {
+  let sql = `
+    SELECT 
+      f.food_id, f.name, f.story, f.ingredient, f.taste, f.style, f.comparison,
+      f.region_id, f.view_count, f.rating, f.number_of_rating, f.created_at,
+      (SELECT image_url FROM food_images fi WHERE fi.food_id = f.food_id ORDER BY display_order LIMIT 1) as image_url
+    FROM foods f
+    WHERE 1=1
+  `;
+  
+  const params = [];
+  let paramIndex = 1;
+
+  if (filters.search) {
+    sql += ` AND f.name ILIKE $${paramIndex}`;
+    params.push(`%${filters.search}%`);
+    paramIndex++;
+  }
+
+  // 1. filter by region
+  if (filters.region_ids && filters.region_ids.length > 0) {
+    sql += ` AND f.region_id = ANY($${paramIndex}::int[])`;
+    params.push(filters.region_ids);
+    paramIndex++;
+  }
+
+  // 2. filter by flavor
+  if (filters.flavor_ids && filters.flavor_ids.length > 0) {
+    sql += ` AND EXISTS (
+      SELECT 1 FROM food_flavors ff 
+      WHERE ff.food_id = f.food_id 
+      AND ff.flavor_id = ANY($${paramIndex}::int[])
+    )`;
+    params.push(filters.flavor_ids);
+    paramIndex++;
+  }
+
+  // 3. filter by ingredient
+  if (filters.ingredient_ids && filters.ingredient_ids.length > 0) {
+    sql += ` AND EXISTS (
+      SELECT 1 FROM food_ingredients fi 
+      WHERE fi.food_id = f.food_id 
+      AND fi.ingredient_id = ANY($${paramIndex}::int[])
+    )`;
+    params.push(filters.ingredient_ids);
+    paramIndex++;
+  }
+
+  sql += ` ORDER BY f.created_at DESC`;
+
+  const result = await db.query(sql, params);
   return result.rows;
 }
 module.exports = {
   findFoodWithRelations,
   getPopularFoods,
   getAllFoods,
+  getFilterOptions,
 };

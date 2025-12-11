@@ -61,7 +61,8 @@
       "button": "検索"
     },
     "filter": {
-      "button": "絞り込み"
+      "button": "絞り込み",
+      "region": "地域"
     },
     "categories": {
       "main_ingredients": "主な食材",
@@ -120,6 +121,11 @@
         "name": "バインセオ",
         "desc": "エビと豚肉、もやし入りの、黄色くパリパリしたベトナム風のお好み焼き。"
       }
+    },
+    "no_results": {
+      "title": "検索結果が見つかりません",
+      "message": "キーワード「{{keyword}}」に一致する料理は見つかりませんでした。",
+      "clear_search": "検索をクリア"
     }
   },
   "loginPage": {

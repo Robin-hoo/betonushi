@@ -39,16 +39,29 @@ async function getFoodDetails(foodIdParam) {
 }
 
 /**
- * Get all foods from the database.
- * @returns {Promise<Array>}
+ * list foods
+ * @param {Object} filters - { region_ids, flavor_ids, ingredient_ids }
  */
-async function getAllFoods() {
+async function getAllFoods(filters) {
   try {
-    const foods = await FoodModel.getAllFoods();
+    const foods = await FoodModel.getAllFoods(filters);
     return foods;
   } catch (err) {
     console.error('Database error in getAllFoods:', err);
-    throw buildHttpError(500, `Lỗi khi lấy danh sách món ăn: ${err.message}`);
+    throw buildHttpError(500, `Lỗi khi lấy danh sách food: ${err.message}`);
+  }
+}
+
+/**
+ * list sidebar filter options
+ */
+async function getFilterOptions() {
+  try {
+    const options = await FoodModel.getFilterOptions();
+    return options;
+  } catch (err) {
+    console.error('Database error in getFilterOptions:', err);
+    throw buildHttpError(500, `Lỗi khi lấy filter options: ${err.message}`);
   }
 }
 
@@ -61,6 +74,7 @@ module.exports = {
   getFoodDetails,
   getFoods,
   getAllFoods,
+  getFilterOptions,
 };
 
 
