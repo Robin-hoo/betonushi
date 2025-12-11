@@ -8,6 +8,7 @@ import LoginPage from "@/pages/LoginPage";
 import RegisterPage from "@/pages/RegisterPage";
 import MenuPage from "@/pages/MenuPage";
 import RestaurantsListPage from "@/pages/RestaurantsListPage";
+import RestaurantDetailPage from "@/pages/RestaurantDetailPage";
 import FoodScriptPage from "./pages/FoodScriptPage";
 function App() {
   return (
@@ -23,6 +24,7 @@ function App() {
           <Route path="/foods" element={<MenuPage />} />
           <Route path="/foods/:id" element={<FoodDetailPage />} />
           <Route path="/restaurants" element={<RestaurantsListPage />} />
+          <Route path="/restaurants/:id" element={<RestaurantDetailPage />} />
           <Route path="/phrases" element={<HelpfulPage />} />
           <Route path="/login" element={<LoginPage />} />
           <Route path="/register" element={<RegisterPage />} />
