@@ -2,8 +2,7 @@ const express = require("express");
 const router = express.Router();
 const { GoogleGenerativeAI } = require("@google/generative-ai");
 
-const genAI = new GoogleGenerativeAI({
-  apiKey: process.env.GEMINI_API_KEY,});
+const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
 
 // POST /api/generate
 router.post("/generate", async (req, res, next) => {
