@@ -12,6 +12,19 @@ async function getAllRestaurants(req, res, next) {
     }
 }
 
+/**
+ * Get restaurant by ID
+ */
+async function getRestaurantById(req, res, next) {
+    try {
+        const data = await RestaurantService.getRestaurantDetails(req.params.id);
+        return res.json(data);
+    } catch (error) {
+        return next(error);
+    }
+}
+
 module.exports = {
     getAllRestaurants,
+    getRestaurantById,
 };

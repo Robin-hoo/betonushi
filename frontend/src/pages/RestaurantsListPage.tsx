@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Heart } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
+import { useNavigate } from 'react-router-dom';
 import defaultRestaurantImage from '@/assets/default.jpg';
 
 interface Restaurant {
@@ -20,6 +21,7 @@ import { api } from '@/api/client';
 
 export default function RestaurantsListPage() {
     const { t } = useTranslation();
+    const navigate = useNavigate();
     const [restaurants, setRestaurants] = useState<Restaurant[]>([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
@@ -171,7 +173,7 @@ export default function RestaurantsListPage() {
                 {!loading && !error && (
                     <>
                         {/* Sidebar - Filters */}
-                        <div className="w-1/5 flex-shrink-0">
+                        <div className="w-1/5 shrink-0">
                             <div className="bg-[#f7f7f7] rounded-lg p-6 shadow-sm">
                                 {/* Distance Filter */}
                                 <div className="mb-6">
@@ -273,7 +275,10 @@ export default function RestaurantsListPage() {
                                             </p>
 
                                             {/* Detail Button */}
-                                            <button className="w-full py-2 border-2 border-gray-300 rounded-lg text-sm font-semibold hover:border-purple-600 hover:text-purple-600 transition">
+                                            <button
+                                                onClick={() => navigate(`/restaurants/${restaurant.restaurant_id}`)}
+                                                className="w-full py-2 border-2 border-gray-300 rounded-lg text-sm font-semibold hover:border-purple-600 hover:text-purple-600 transition"
+                                            >
                                                 {t('restaurant.details')}
                                             </button>
                                         </div>
