@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { useTranslation } from "react-i18next";
 import { useAuth } from "@/context/AuthContext";
 import UserMenu from "./UserMenu";
+import { Heart } from "lucide-react";
 
 const Header = () => {
     const { t } = useTranslation();

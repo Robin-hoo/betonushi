@@ -6,6 +6,7 @@ const authRoutes = require("./routes/authRoutes");
 const geminiRoutes = require("./routes/gemini.js");
 const foodRoutes = require("./routes/foodRoutes");
 const restaurantRoutes = require("./routes/restaurantRoutes");
+const favoriteRoutes = require("./routes/favoriteRoutes");
 const app = express();
 app.use(
   cors({
@@ -24,6 +25,7 @@ console.log("Gemini routes mounted.");
 
 app.use("/api", foodRoutes);
 app.use("/api", restaurantRoutes);
+app.use("/api/favorites", favoriteRoutes);
 app.use("/api", authRoutes);
 
 // 404 handler for unmatched routes

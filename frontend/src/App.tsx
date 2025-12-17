@@ -10,6 +10,7 @@ import MenuPage from "@/pages/MenuPage";
 import RestaurantsListPage from "@/pages/RestaurantsListPage";
 import RestaurantDetailPage from "@/pages/RestaurantDetailPage";
 import FoodScriptPage from "./pages/FoodScriptPage";
+import FavoritesPage from "./pages/FavoritesPage";
 function App() {
   return (
     <Router>
@@ -29,6 +30,7 @@ function App() {
           <Route path="/login" element={<LoginPage />} />
           <Route path="/register" element={<RegisterPage />} />
           <Route path="/script/:id" element={<FoodScriptPage />} />
+          <Route path="/favorites" element={<FavoritesPage />} />
         </Route>
       </Routes>
     </Router>

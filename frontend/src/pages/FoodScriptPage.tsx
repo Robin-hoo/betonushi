@@ -11,7 +11,7 @@ const FoodScriptPage: React.FC = () => {
 
   const [loading, setLoading] = useState(true);
   const [dishName, setDishName] = useState("");
-  const [script, setScript] = useState("");
+  const [script, setScript] = useState<any>(null);
 
   useEffect(() => {
     if (!id) return;
@@ -23,11 +23,11 @@ const FoodScriptPage: React.FC = () => {
         const food = await getFoodById(id);
         setDishName(food.name);
 
-        const aiText = await generateDishScript(food.name);
-        setScript(aiText);
+        const aiData = await generateDishScript(food.name);
+        setScript(aiData);  // << nhận JSON
       } catch (err) {
         console.error(err);
-        setScript("Lỗi khi sinh kịch bản từ AI.");
+        setScript(null);
       } finally {
         setLoading(false);
       }
@@ -44,12 +44,12 @@ const FoodScriptPage: React.FC = () => {
 
       {/* Nút X */}
       <button
-              onClick={() => navigate(-1)}
-              className="absolute top-2 right-2 w-10 h-10 flex items-center justify-center 
-                    border border-gray-400 rounded-full 
-                    text-gray-600 hover:text-red-500 hover:border-red-500 
-                    transition-all"
-        >
+        onClick={() => navigate(-1)}
+        className="absolute top-2 right-2 w-10 h-10 flex items-center justify-center 
+                   border border-gray-400 rounded-full 
+                   text-gray-600 hover:text-red-500 hover:border-red-500 
+                   transition-all"
+      >
         X
       </button>
 
@@ -59,8 +59,34 @@ const FoodScriptPage: React.FC = () => {
         </p>
       </h1>
 
-      <div className="bg-white shadow-lg rounded-lg p-6 whitespace-pre-wrap leading-relaxed text-gray-800">
-        {script}
+      {/* SCRIPT HIỂN THỊ THEO FORMAT */}
+      <div className="bg-white shadow-lg rounded-lg p-6 leading-relaxed text-gray-800 space-y-6">
+
+        <div>
+          <h2 className="text-xl font-bold text-red-500 mb-2">1. 導入</h2>
+          <p>{script?.introduction}</p>
+        </div>
+
+        <div>
+          <h2 className="text-xl font-bold text-red-500 mb-2">2. 歴史と背景</h2>
+          <p>{script?.history_background}</p>
+        </div>
+
+        <div>
+          <h2 className="text-xl font-bold text-red-500 mb-2">3. 主な構成要素と特徴</h2>
+          <p>{script?.components_features}</p>
+        </div>
+
+        <div>
+          <h2 className="text-xl font-bold text-red-500 mb-2">4. 日本料理との比較による理解</h2>
+          <p>{script?.comparison_with_japanese}</p>
+        </div>
+
+        <div>
+          <h2 className="text-xl font-bold text-red-500 mb-2">5. 食事へのお誘い</h2>
+          <p>{script?.invitation}</p>
+        </div>
+
       </div>
     </div>
   );

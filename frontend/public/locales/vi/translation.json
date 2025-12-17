@@ -64,7 +64,8 @@
       "button": "Tìm kiếm"
     },
     "filter": {
-      "button": "Lọc"
+      "button": "Lọc",
+      "region": "Vùng miền"  
     },
     "categories": {
       "main_ingredients": "Nguyên liệu chính",
@@ -123,7 +124,12 @@
         "name": "Bánh xèo",
         "desc": "Bánh xèo vàng giòn với nhân tôm, thịt heo và giá đỗ."
       }
-    }
+    },
+    "no_results": {
+      "title": "Không tìm thấy kết quả nào",
+      "message": "Rất tiếc, chúng tôi không tìm thấy món ăn nào phù hợp với từ khóa \"{{keyword}}\".",
+      "clear_search": "Xóa tìm kiếm"
+    }  
   },
   "loginPage": {
     "title": "Đăng nhập",

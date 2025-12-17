@@ -90,11 +90,11 @@ export default function HelpfulPage() {
       </div>
 
       {/* Action Button */}
-      <div className="text-center mt-8">
+      {/* <div className="text-center mt-8">
         <button className="px-8 py-3 bg-blue-500 text-white rounded-lg shadow-md hover:bg-blue-600 transition-colors font-medium">
           食事を観察
         </button>
-      </div>
+      </div> */}
     </div>
   );
 }

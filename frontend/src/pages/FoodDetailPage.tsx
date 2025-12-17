@@ -5,11 +5,14 @@ import { Button } from "@/components/ui/button";
 import { getFoodById, type Food } from "@/api/food.api";
 import { Link } from "react-router-dom";
 import InteractiveStarRating from "@/components/InteractiveStarRating";
+import { favoritesApi } from "@/api/favorites.api";
+import { useAuth } from "@/context/AuthContext";
 import { useTranslation } from "react-i18next";
 
 const FoodDetailPage: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const { t, i18n } = useTranslation();
+  const { isLoggedIn } = useAuth();
   const [dishData, setDishData] = useState<Food | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -26,6 +29,11 @@ const FoodDetailPage: React.FC = () => {
       try {
         const data = await getFoodById(id);
         setDishData(data);
+
+        if (isLoggedIn) {
+          const status = await favoritesApi.checkStatus(Number(id), 'food');
+          setIsFavorite(status.isFavorited);
+        }
       } catch (err) {
         console.error(err);
         setError("Failed to load food data.");
@@ -35,7 +43,7 @@ const FoodDetailPage: React.FC = () => {
     };
 
     fetchFood();
-  }, [id]);
+  }, [id, isLoggedIn]);
 
   const handleRatingChange = (newRating: number) => {
     setUserRating(newRating);
@@ -108,20 +116,31 @@ const FoodDetailPage: React.FC = () => {
             {/* Action Buttons */}
             <div className="flex gap-8 mb-6">
               <Button
-                onClick={() => setIsFavorite(!isFavorite)}
+                onClick={async () => {
+                  if (!isLoggedIn) return; // Or show login modal
+                  const prev = isFavorite;
+                  setIsFavorite(!prev);
+                  try {
+                    await favoritesApi.toggleFavorite(Number(id), 'food');
+                  } catch (e) {
+                    setIsFavorite(prev);
+                    console.error(e);
+                  }
+                }}
                 className={`w-full px-4 py-2 rounded-lg font-medium mb-2 transition-colors ${isFavorite
                   ? "bg-red-500 text-white"
                   : "bg-red-100 text-red-600 hover:bg-red-200"
-                  }`}
+                  } ${!isLoggedIn ? "opacity-50 cursor-not-allowed" : ""}`}
+                disabled={!isLoggedIn}
               >
                 {t('foodDetail.buttons.favorite')}
               </Button>
-                <Link to={`/script/${id}`} className="block w-full">
-                  <Button 
-                    className="w-full px-4 py-2 bg-blue-500 text-white rounded-lg font-medium hover:bg-blue-600 transition-colors mb-4">
-                    {t('foodDetail.buttons.help')}
-                  </Button>
-                </Link>
+              <Link to={`/script/${id}`} className="block w-full">
+                <Button
+                  className="w-full px-4 py-2 bg-blue-500 text-white rounded-lg font-medium hover:bg-blue-600 transition-colors mb-4">
+                  {t('foodDetail.buttons.help')}
+                </Button>
+              </Link>
             </div>
             <div className="flex justify-center">
               <InteractiveStarRating
