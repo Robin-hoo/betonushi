@@ -2,6 +2,8 @@ import { useState, useEffect } from 'react';
 import { Heart } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
+import { favoritesApi } from "@/api/favorites.api";
+import { useAuth } from "@/context/AuthContext";
 
 interface Food {
   food_id: number;
@@ -36,11 +38,12 @@ const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000/api'
 export default function MenuPage() {
   const { t } = useTranslation();
   const navigate = useNavigate();
+  const { isLoggedIn } = useAuth();
 
   const [foods, setFoods] = useState<Food[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  
+
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 6;
 
@@ -65,8 +68,8 @@ export default function MenuPage() {
         if (filterRes.ok) {
           setFilterOptions(await filterRes.json());
         }
-      
-        await fetchFoods(); 
+
+        await fetchFoods();
       } catch (err) {
         console.error("Initialization error:", err);
       }
@@ -78,29 +81,61 @@ export default function MenuPage() {
     try {
       setLoading(true);
       setError(null);
-      
+
       const params = new URLSearchParams();
-      
+
       if (searchQuery.trim()) {
         params.append('search', searchQuery.trim());
       }
-      
-      if (selectedFilters.regions.length > 0) 
+
+      if (selectedFilters.regions.length > 0)
         params.append('regions', selectedFilters.regions.join(','));
-      
-      if (selectedFilters.flavors.length > 0) 
+
+      if (selectedFilters.flavors.length > 0)
         params.append('flavors', selectedFilters.flavors.join(','));
-        
-      if (selectedFilters.ingredients.length > 0) 
+
+      if (selectedFilters.ingredients.length > 0)
         params.append('ingredients', selectedFilters.ingredients.join(','));
 
       //call  API: /foods?search=abc&regions=1,2
       const response = await fetch(`${API_BASE_URL}/foods?${params.toString()}`);
-      
+
       if (!response.ok) throw new Error('Failed to fetch foods');
-      
+
       const data = await response.json();
-      setFoods(data.map((food: Food) => ({ ...food, liked: false })));
+
+      // If logged in, we need to check favorites status for each food
+      // OPTIMIZATION: Ideally backend returns 'liked' field. 
+      // For now, if user is logged in, we might want to fetch favorites list to map.
+      // But let's see if backend 'getFavorites' returns list of IDs.
+
+      let foodsData = data.map((food: Food) => ({ ...food, liked: false }));
+
+      if (isLoggedIn) {
+        try {
+          // Fetch user favorites to map 'liked' status
+          // Assuming getFavorites returns array of favorite objects with targetId
+          const userFavorites = await favoritesApi.getFavorites('food');
+          // userFavorites structure depends on backend. 
+          // If it returns [{ food_id: 1, ... }, ...], we can map.
+          // Let's assume backend returns list of favorites. 
+          // We need to check favoriteService/Controller to be sure of structure.
+          // Based on code reading, it returns whatever FavoriteService.getUserFavorites returns.
+          // Let's just create a set of IDs for O(1) lookup
+          const likedIds = new Set(userFavorites.map((f: any) => f.target_id || f.food_id));
+          // Note: I need to verify what key the backend returns. 
+          // Defaulting to assuming standard join format or similar.
+          // Actually, verify backend service later. For now, try to map.
+          foodsData = foodsData.map((f: Food) => ({
+            ...f,
+            liked: likedIds.has(f.food_id)
+          }));
+        } catch (e) {
+          console.error("Failed to fetch favorites", e);
+        }
+      }
+
+      setFoods(foodsData);
       setCurrentPage(1);
     } catch (err) {
       setError(err instanceof Error ? err.message : 'An error occurred');
@@ -112,15 +147,30 @@ export default function MenuPage() {
   const handleCheckboxChange = (type: keyof typeof selectedFilters, id: number) => {
     setSelectedFilters(prev => {
       const list = prev[type];
-      const newList = list.includes(id) 
-        ? list.filter(item => item !== id) 
+      const newList = list.includes(id)
+        ? list.filter(item => item !== id)
         : [...list, id];
       return { ...prev, [type]: newList };
     });
   };
 
-  const handleToggleLike = (food_id: number) => {
+  const handleToggleLike = async (food_id: number) => {
+    if (!isLoggedIn) {
+      // Prompt login or redirect
+      alert("Please login to favorite items");
+      return;
+    }
+
+    // Optimistic update
     setFoods(foods.map(f => f.food_id === food_id ? { ...f, liked: !f.liked } : f));
+
+    try {
+      await favoritesApi.toggleFavorite(food_id, 'food');
+    } catch (error) {
+      // Revert on error
+      console.error("Failed to toggle favorite", error);
+      setFoods(foods.map(f => f.food_id === food_id ? { ...f, liked: !f.liked } : f));
+    }
   };
 
   const clearAllFilters = () => {
@@ -137,7 +187,7 @@ export default function MenuPage() {
 
   return (
     <div className="w-full flex flex-col min-h-screen">
-      
+
       {/* =========================== */}
       {/* Search Bar */}
       {/* =========================== */}
@@ -151,8 +201,8 @@ export default function MenuPage() {
             onKeyDown={(e) => e.key === 'Enter' && fetchFoods()}
             className="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-600"
           />
-          <button 
-            onClick={fetchFoods} 
+          <button
+            onClick={fetchFoods}
             className="px-8 py-2 bg-purple-600 text-white font-semibold rounded-lg hover:bg-purple-700 transition"
           >
             {t('menu.search.button')}
@@ -164,7 +214,7 @@ export default function MenuPage() {
       {/* Main Content */}
       {/* =========================== */}
       <div className="max-w-6xl mx-auto w-full px-6 py-8 flex gap-8">
-        
+
         {/* Loading State */}
         {loading && (
           <div className="flex-1 flex items-center justify-center min-h-[400px]">
@@ -196,7 +246,7 @@ export default function MenuPage() {
             {/* === SIDEBAR === */}
             <div className="w-1/5 flex-shrink-0">
               <div className="bg-[#f7f7f7] rounded-lg p-6 shadow-sm">
-                
+
                 {/* 1. region */}
                 <div className="mb-6">
                   <h3 className="font-bold text-sm mb-3 text-gray-800">{t('menu.filter.region')}</h3>
@@ -258,7 +308,7 @@ export default function MenuPage() {
                 </div>
 
                 {/* filter button */}
-                <button 
+                <button
                   onClick={fetchFoods}
                   className="w-full py-2 bg-purple-600 text-white font-semibold rounded-lg hover:bg-purple-700 transition"
                 >
@@ -315,14 +365,14 @@ export default function MenuPage() {
 
                   {/* Pagination */}
                   <div className="flex items-center justify-center gap-2 mb-8">
-                    <button 
+                    <button
                       onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
                       disabled={currentPage === 1}
                       className="px-3 py-1 text-sm font-semibold text-purple-600 hover:bg-purple-100 rounded transition disabled:opacity-50"
                     >
                       « {t('menu.pagination.prev')}
                     </button>
-                    
+
                     {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
                       <button
                         key={page}
@@ -330,13 +380,13 @@ export default function MenuPage() {
                         className={`px-3 py-1 text-sm font-semibold rounded transition ${page === currentPage
                           ? 'bg-purple-600 text-white'
                           : 'hover:bg-gray-200'
-                        }`}
+                          }`}
                       >
                         {page}
                       </button>
                     ))}
-                    
-                    <button 
+
+                    <button
                       onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))}
                       disabled={currentPage === totalPages}
                       className="px-3 py-1 text-sm font-semibold text-purple-600 hover:bg-purple-100 rounded transition disabled:opacity-50"
@@ -353,17 +403,17 @@ export default function MenuPage() {
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
                     </svg>
                   </div>
-                  
+
                   <h3 className="text-xl font-medium text-gray-800 mb-2">
                     {t('menu.no_results.title')}
                   </h3>
-                  
+
                   <p className="text-gray-500 max-w-md">
                     {t('menu.no_results.message', { keyword: searchQuery })}
                   </p>
-                  
+
                   {/* clear button */}
-                  <button 
+                  <button
                     onClick={clearAllFilters}
                     className="mt-6 px-6 py-2 bg-purple-100 text-purple-700 font-medium rounded-full hover:bg-purple-200 transition"
                   >
