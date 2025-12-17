@@ -16,7 +16,7 @@ interface Restaurant {
     liked?: boolean;
 }
 
-const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000/api';
+import { api } from '@/api/client';
 
 export default function RestaurantsListPage() {
     const { t } = useTranslation();
@@ -53,12 +53,8 @@ export default function RestaurantsListPage() {
             try {
                 setLoading(true);
                 setError(null);
-                const response = await fetch(`${API_BASE_URL}/restaurants`);
-                if (!response.ok) {
-                    throw new Error('Failed to fetch restaurants');
-                }
-                const data = await response.json();
-                setRestaurants(data.map((restaurant: Restaurant) => ({ ...restaurant, liked: false })));
+                const response = await api.get('/restaurants');
+                setRestaurants(response.data.map((restaurant: Restaurant) => ({ ...restaurant, liked: false })));
             } catch (err) {
                 setError(err instanceof Error ? err.message : 'An error occurred');
             } finally {

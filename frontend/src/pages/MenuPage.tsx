@@ -33,7 +33,7 @@ interface FilterData {
   ingredients: FilterOption[];
 }
 
-const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000/api';
+import { api } from "@/api/client";
 
 export default function MenuPage() {
   const { t } = useTranslation();
@@ -64,9 +64,9 @@ export default function MenuPage() {
   useEffect(() => {
     const initPage = async () => {
       try {
-        const filterRes = await fetch(`${API_BASE_URL}/filters`);
-        if (filterRes.ok) {
-          setFilterOptions(await filterRes.json());
+        const filterRes = await api.get('/filters');
+        if (filterRes.status === 200) {
+          setFilterOptions(filterRes.data);
         }
 
         await fetchFoods();
@@ -98,11 +98,9 @@ export default function MenuPage() {
         params.append('ingredients', selectedFilters.ingredients.join(','));
 
       //call  API: /foods?search=abc&regions=1,2
-      const response = await fetch(`${API_BASE_URL}/foods?${params.toString()}`);
+      const response = await api.get(`/foods?${params.toString()}`);
 
-      if (!response.ok) throw new Error('Failed to fetch foods');
-
-      const data = await response.json();
+      const data = response.data;
 
       // If logged in, we need to check favorites status for each food
       // OPTIMIZATION: Ideally backend returns 'liked' field. 
