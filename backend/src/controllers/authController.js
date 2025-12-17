@@ -25,14 +25,14 @@ async function login(req, res) {
         // IMPORTANT: In a real app setup, we must ensure users are inserted with hashed passwords.
         // I will include a helper to create a user if needed for testing, but for Login, we just verify.
 
-        const isMatch = await bcrypt.compare(password, user.password);
+        const isMatch = await bcrypt.compare(password, user.password_hash);
         if (!isMatch) {
             return res.status(401).json({ message: 'Invalid email or password' });
         }
 
         // Create Token
         const token = jwt.sign(
-            { userId: user.id, email: user.email },
+            { userId: user.user_id, email: user.email },
             JWT_SECRET,
             { expiresIn: '1h' }
         );
@@ -41,8 +41,8 @@ async function login(req, res) {
             message: 'Login successful',
             token,
             user: {
-                id: user.id,
-                name: user.name,
+                user_id: user.user_id,
+                full_name: user.full_name,
                 email: user.email
             }
         });
@@ -107,23 +107,18 @@ module.exports = {
             const fullName = `${first_name} ${last_name}`;
 
             const newUser = await userModel.create({
-                name: fullName,
+                full_name: fullName,
                 email,
-                password: hashedPassword,
-                first_name,
-                last_name,
-                phone,
-                gender,
-                dob,
-                address
+                password_hash: hashedPassword,
+                birth_date: dob
             });
 
             // 5. Response
             return res.status(201).json({
                 message: 'Registration successful',
                 user: {
-                    id: newUser.id,
-                    name: newUser.name,
+                    user_id: newUser.user_id,
+                    full_name: newUser.full_name,
                     email: newUser.email
                 }
             });
