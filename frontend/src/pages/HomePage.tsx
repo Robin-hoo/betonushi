@@ -4,15 +4,15 @@ import { Badge } from "@/components/ui/badge"
 import { useTranslation } from "react-i18next";
 import { useEffect, useState } from "react";
 import type { Food } from "@/api/food.api";
+import { api } from "@/api/client";
 import { HeartButton } from "@/components/HeartButton";
 
 export default function HomePage() {
   const { t } = useTranslation();
   const [foods, setFoods] = useState<Food[]>([]);
   useEffect(() => {
-    fetch("http://localhost:3000/api/foods")
-      .then(res => res.json())
-      .then(json => setFoods(json.slice(0, 4)))
+    api.get("/foods")
+      .then(res => setFoods(res.data.slice(0, 4)))
       .catch(err => console.error("Fetch error:", err));
     console.log(foods);
   }, []);
