@@ -1,0 +1,44 @@
+name: betomeshi
+
+services:
+  # Database Service
+  db:
+    image: postgres:15-alpine
+    restart: always
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: ITSS1234
+      POSTGRES_DB: betomeshi
+    volumes:
+      - postgres:/var/lib/postgresql/data
+
+  # Backend Service
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    restart: always
+    environment:
+      NODE_ENV: production
+      PORT: 3000
+      DB_HOST: db
+      DB_PORT: 5432
+      DB_USER: postgres
+      DB_PASSWORD: ITSS1234
+      DB_NAME: betomeshi
+    depends_on:
+      - db
+
+  # Frontend Service (Nginx)
+  frontend:
+    build:
+      context: .
+      dockerfile: frontend/Dockerfile
+    restart: always
+    ports:
+      - "7200:80"
+    depends_on:
+      - backend
+
+volumes:
+  postgres:
