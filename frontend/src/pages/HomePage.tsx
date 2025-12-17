@@ -4,17 +4,18 @@ import { Badge } from "@/components/ui/badge"
 import { useTranslation } from "react-i18next";
 import { useEffect, useState } from "react";
 import type { Food } from "@/api/food.api";
+import { HeartButton } from "@/components/HeartButton";
 
 export default function HomePage() {
   const { t } = useTranslation();
   const [foods, setFoods] = useState<Food[]>([]);
   useEffect(() => {
-  fetch("http://localhost:3000/api/foods")
-    .then(res => res.json())
-    .then(json => setFoods(json.slice(0, 4)))        
-    .catch(err => console.error("Fetch error:", err));
+    fetch("http://localhost:3000/api/foods")
+      .then(res => res.json())
+      .then(json => setFoods(json.slice(0, 4)))
+      .catch(err => console.error("Fetch error:", err));
     console.log(foods);
-}, []);
+  }, []);
   return (
     <div className="w-full flex flex-col gap-20">
 
@@ -64,44 +65,47 @@ export default function HomePage() {
             </button>
           </div>
 
-    {/* Card Menu */}
-    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-16 justify-end">
+          {/* Card Menu */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-16 justify-end">
 
-      {foods.map((item) => (
+            {foods.map((item) => (
               <a key={item.food_id} href={`/foods/${item.food_id}`}>
-          <Card className="rounded-xl bg-[#D6EDC5] shadow-md hover:shadow-lg transition p-3">
+                <Card className="rounded-xl bg-[#D6EDC5] shadow-md hover:shadow-lg transition p-3 relative">
 
-            {/* Ảnh */}
-            <img
-              src={item.image_url}
-              alt={item.name}
-              className="w-full h-44 object-cover rounded-lg"
-            />    
+                  {/* Ảnh */}
+                  <img
+                    src={item.image_url}
+                    alt={item.name}
+                    className="w-full h-44 object-cover rounded-lg"
+                  />
+                  <div className="absolute top-4 right-4 z-10">
+                    <HeartButton targetId={item.food_id} type="food" className="bg-white/80 p-2 rounded-full shadow-sm hover:bg-white" />
+                  </div>
 
 
-            {/* Nội dung */}
-            <div className="text-center mt-4">
-              <CardTitle className="text-xl font-bold">
-                {item.name}
-              </CardTitle>
+                  {/* Nội dung */}
+                  <div className="text-center mt-4">
+                    <CardTitle className="text-xl font-bold">
+                      {item.name}
+                    </CardTitle>
 
-              <p className="text-sm text-gray-700 mt-2 leading-relaxed truncate">
-                {item.story || "Món ăn này đang được cập nhật mô tả."}
-              </p>
-              <p className="text-gray-600 text-sm">
-                <strong>{item.taste}</strong>
-              </p>
-              <span className="mt-4 text-red-600 text-sm font-semibold">
-                もっと詳しく見る
-              </span>
-            </div>
-          </Card>
-        </a>
-      ))}
+                    <p className="text-sm text-gray-700 mt-2 leading-relaxed truncate">
+                      {item.story || "Món ăn này đang được cập nhật mô tả."}
+                    </p>
+                    <p className="text-gray-600 text-sm">
+                      <strong>{item.taste}</strong>
+                    </p>
+                    <span className="mt-4 text-red-600 text-sm font-semibold">
+                      もっと詳しく見る
+                    </span>
+                  </div>
+                </Card>
+              </a>
+            ))}
 
-    </div>
-  </div>
-</div>
+          </div>
+        </div>
+      </div>
 
 
 
