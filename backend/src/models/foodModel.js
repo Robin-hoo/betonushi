@@ -180,7 +180,7 @@ async function getAllFoods(filters = {}) {
          WHERE fi.food_id = f.food_id 
          ORDER BY display_order 
          LIMIT 1) AS image_url
-      FROM foods f
+      FROM foods f, food_translations ft
       WHERE 1=1
     `;
   } else {
@@ -214,7 +214,7 @@ async function getAllFoods(filters = {}) {
   }
 
   if (filters.search) {
-    sql += ` AND f.name ILIKE $${paramIndex}`;
+    sql += ` AND f.name ILIKE $${paramIndex} OR ft.name ILIKE $${paramIndex}`;
     params.push(`%${filters.search}%`);
     paramIndex++;
   }

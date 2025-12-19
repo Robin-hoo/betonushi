@@ -13,7 +13,7 @@ export default function HomePage() {
   const { i18n } = useTranslation();
 
   useEffect(() => {
-    api.get(`/foods?lang=${encodeURIComponent(i18n.language)}`)
+    api.get(`/favorite_foods?lang=${encodeURIComponent(i18n.language)}`)
       .then(res => setFoods(res.data.slice(0, 4)))
       .catch(err => console.error("Fetch error:", err));
   }, [i18n.language]);

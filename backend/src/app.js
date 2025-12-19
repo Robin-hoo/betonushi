@@ -3,7 +3,7 @@ require("dotenv").config();
 const express = require("express");
 const cors = require("cors");
 const authRoutes = require("./routes/authRoutes");
-const geminiRoutes = require("./routes/gemini.js");
+const geminiRoutes = require("./routes/scriptRoutes");
 const foodRoutes = require("./routes/foodRoutes");
 const restaurantRoutes = require("./routes/restaurantRoutes");
 const favoriteRoutes = require("./routes/favoriteRoutes");

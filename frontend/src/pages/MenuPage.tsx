@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import { Heart } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
@@ -77,7 +77,7 @@ export default function MenuPage() {
     initPage();
   }, [i18n.language]);
 
-  const fetchFoods = async () => {
+  const fetchFoods = useCallback(async () => {
     try {
       setLoading(true);
       setError(null);
@@ -143,7 +143,22 @@ export default function MenuPage() {
     } finally {
       setLoading(false);
     }
-  };
+  }, [searchQuery, JSON.stringify(selectedFilters), i18n.language, isLoggedIn]);
+
+  // Debounce search input so typing doesn't make a request on every keystroke
+  const didMountRef = useRef(false);
+  useEffect(() => {
+    if (!didMountRef.current) {
+      didMountRef.current = true;
+      return;
+    }
+
+    const handler = setTimeout(() => {
+      fetchFoods();
+    }, 500);
+
+    return () => clearTimeout(handler);
+  }, [searchQuery, fetchFoods]);
 
   const handleCheckboxChange = (type: keyof typeof selectedFilters, id: number) => {
     setSelectedFilters(prev => {

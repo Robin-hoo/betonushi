@@ -47,6 +47,8 @@ async function getAllFoods(req, res, next) {
       lang
     };
 
+    console.log('[DEBUG] Food filters:', filters);
+
     const foods = await FoodService.getAllFoods(filters);
     return res.json(foods);
   } catch (error) {
