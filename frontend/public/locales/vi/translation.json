@@ -55,7 +55,8 @@
   "common": {
     "loading": "Đang tải...",
     "error": "Lỗi",
-    "retry": "Thử lại"
+    "retry": "Thử lại",
+    "see_more": "Xem thêm"
   },
   "menu": {
     "view_details": "Xem chi tiết",
@@ -272,7 +273,8 @@
     "pagination": {
       "prev": "Trước",
       "next": "Sau"
-    }
+    },
+    "back_to_list": "Quay lại danh sách nhà hàng"
   },
   "ScriptTitle": {
     "title": "Kịch bản giới thiệu món ăn"

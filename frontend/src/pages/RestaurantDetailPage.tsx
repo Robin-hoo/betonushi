@@ -6,6 +6,7 @@ import { getRestaurantById, type Restaurant } from "@/api/restaurant.api";
 import { Button } from "@/components/ui/button";
 import defaultRestaurantImage from "@/assets/default.jpg";
 import defaultFoodImage from "@/assets/default.jpg";
+import { t } from "i18next";
 
 const RestaurantDetailPage: React.FC = () => {
   const { id } = useParams<{ id: string }>();
@@ -28,7 +29,7 @@ const RestaurantDetailPage: React.FC = () => {
         setRestaurant(data);
       } catch (err) {
         console.error(err);
-        setError("Không thể tải thông tin nhà hàng.");
+        setError("Can't fetch restaurant details. Please try again later.");
       } finally {
         setLoading(false);
       }
@@ -50,7 +51,7 @@ const RestaurantDetailPage: React.FC = () => {
       <div className="min-h-screen flex items-center justify-center">
         <div className="text-center">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-orange-500 mx-auto mb-4"></div>
-          <p className="text-gray-600">Đang tải thông tin nhà hàng...</p>
+          <p className="text-gray-600">{t("common.loading")}</p>
         </div>
       </div>
     );
@@ -60,7 +61,7 @@ const RestaurantDetailPage: React.FC = () => {
       <div className="min-h-screen flex items-center justify-center">
         <div className="text-center">
           <p className="text-red-500 mb-4">{error || "Nhà hàng không tồn tại"}</p>
-          <Button onClick={() => navigate("/restaurants")}>Quay lại danh sách</Button>
+          <Button onClick={() => navigate("/restaurants")}>{t("restaurant.back_to_list")}</Button>
         </div>
       </div>
     );
@@ -85,7 +86,7 @@ const RestaurantDetailPage: React.FC = () => {
             className="flex items-center gap-2 text-gray-600 hover:text-gray-900"
           >
             <ArrowLeft className="w-4 h-4" />
-            Quay lại danh sách
+            {t("restaurant.back_to_list")}
           </Button>
         </div>
       </div>

@@ -52,7 +52,8 @@
   "common": {
     "loading": "読み込み中...",
     "error": "エラー",
-    "retry": "再試行"
+    "retry": "再試行",
+    "see_more": "もっと詳しく見る"
   },
   "menu": {
     "view_details": "もっと詳しく見る",
@@ -269,7 +270,8 @@
     "pagination": {
       "prev": "前へ",
       "next": "次へ"
-    }
+    },
+    "back_to_list": "レストラン一覧に戻る"
   },
   "ScriptTitle": {
     "title": "料理紹介スクリプト"

@@ -48,12 +48,10 @@ export default function RestaurantsListPage() {
     });
 
     const itemsPerPage = 6;
-
+    const { i18n } = useTranslation();
     // Fetch restaurants from API
     useEffect(() => {
-        const { i18n } = useTranslation();
-
-    const fetchRestaurants = async () => {
+        const fetchRestaurants = async () => {
             try {
                 setLoading(true);
                 setError(null);
@@ -245,46 +243,47 @@ export default function RestaurantsListPage() {
                                 {paginatedRestaurants.map((restaurant) => (
                                     <div
                                         key={restaurant.restaurant_id}
-                                        className="bg-white rounded-lg shadow-md hover:shadow-lg transition overflow-hidden"
-                                    >
+                                        className="bg-white rounded-lg shadow-md hover:shadow-lg transition overflow-hidden flex flex-col"
+                                        >
                                         {/* Image */}
                                         <div className="relative w-full h-48 bg-gray-200 overflow-hidden group">
                                             <img
-                                                src={defaultRestaurantImage}
-                                                alt={restaurant.name}
-                                                className="w-full h-full object-cover group-hover:scale-105 transition"
+                                            src={defaultRestaurantImage}
+                                            alt={restaurant.name}
+                                            className="w-full h-full object-cover group-hover:scale-105 transition"
                                             />
                                             {/* Like Button */}
                                             <button
-                                                onClick={() => handleToggleLike(restaurant.restaurant_id)}
-                                                aria-label="like"
-                                                className="absolute top-2 right-2 z-10 bg-white rounded-full p-2 shadow-md hover:bg-gray-100 transition"
+                                            onClick={() => handleToggleLike(restaurant.restaurant_id)}
+                                            aria-label="like"
+                                            className="absolute top-2 right-2 z-10 bg-white rounded-full p-2 shadow-md hover:bg-gray-100 transition"
                                             >
-                                                <Heart
-                                                    size={20}
-                                                    className={restaurant.liked ? 'fill-red-500 text-red-500' : 'text-gray-400'}
-                                                />
+                                            <Heart
+                                                size={20}
+                                                className={restaurant.liked ? 'fill-red-500 text-red-500' : 'text-gray-400'}
+                                            />
                                             </button>
                                         </div>
 
                                         {/* Content */}
-                                        <div className="p-4">
+                                        <div className="p-4 flex flex-col flex-1">
                                             <h3 className="font-bold text-lg mb-2 text-gray-800 text-center">
-                                                {restaurant.name}
+                                            {restaurant.name}
                                             </h3>
+
                                             <p className="text-sm text-gray-600 mb-3 line-clamp-2 text-center">
-                                                {restaurant.address || 'Địa chỉ không có sẵn'}
+                                            {restaurant.address || 'Địa chỉ không có sẵn'}
                                             </p>
 
                                             {/* Detail Button */}
                                             <button
-                                                onClick={() => navigate(`/restaurants/${restaurant.restaurant_id}`)}
-                                                className="w-full py-2 border-2 border-gray-300 rounded-lg text-sm font-semibold hover:border-purple-600 hover:text-purple-600 transition"
+                                            onClick={() => navigate(`/restaurants/${restaurant.restaurant_id}`)}
+                                            className="mt-auto w-full py-2 border-2 border-gray-300 rounded-lg text-sm font-semibold hover:border-purple-600 hover:text-purple-600 transition"
                                             >
-                                                {t('restaurant.details')}
+                                            {t('restaurant.details')}
                                             </button>
                                         </div>
-                                    </div>
+                                        </div>
                                 ))}
                             </div>
 

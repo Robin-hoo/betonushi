@@ -52,7 +52,8 @@
   "common": {
     "loading": "Loading...",
     "error": "Error",
-    "retry": "Retry"
+    "retry": "Retry",
+    "see_more": "See More"
   },
   "menu": {
     "view_details": "View Details",
@@ -269,7 +270,8 @@
     "pagination": {
       "prev": "Prev",
       "next": "Next"
-    }
+    },
+    "back_to_list": "Back to Restaurant List"
   },
   "ScriptTitle": {
     "title": "Dish Introduction Script"

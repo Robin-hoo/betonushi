@@ -36,7 +36,7 @@ interface FilterData {
 import { api } from "@/api/client";
 
 export default function MenuPage() {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const navigate = useNavigate();
   const { isLoggedIn } = useAuth();
 
@@ -64,7 +64,7 @@ export default function MenuPage() {
   useEffect(() => {
     const initPage = async () => {
       try {
-        const filterRes = await api.get('/filters');
+        const filterRes = await api.get(`/filters?lang=${encodeURIComponent(i18n.language)}`);
         if (filterRes.status === 200) {
           setFilterOptions(filterRes.data);
         }
@@ -75,7 +75,7 @@ export default function MenuPage() {
       }
     };
     initPage();
-  }, []);
+  }, [i18n.language]);
 
   const fetchFoods = async () => {
     try {
@@ -97,7 +97,10 @@ export default function MenuPage() {
       if (selectedFilters.ingredients.length > 0)
         params.append('ingredients', selectedFilters.ingredients.join(','));
 
-      //call  API: /foods?search=abc&regions=1,2
+      // include language so backend returns localized labels
+      params.append('lang', i18n.language);
+
+      //call  API: /foods?search=abc&regions=1,2&lang=ja
       const response = await api.get(`/foods?${params.toString()}`);
 
       const data = response.data;
@@ -324,7 +327,7 @@ export default function MenuPage() {
                     {paginatedFoods.map((food) => (
                       <div
                         key={food.food_id}
-                        className="bg-white rounded-lg shadow-md hover:shadow-lg transition overflow-hidden"
+                        className="bg-white rounded-lg shadow-md hover:shadow-lg transition overflow-hidden flex flex-col"
                       >
                         <div className="relative w-full h-48 bg-gray-200 overflow-hidden group">
                           <img
@@ -343,16 +346,18 @@ export default function MenuPage() {
                           </button>
                         </div>
 
-                        <div className="p-4">
+                        <div className="p-4 flex flex-col flex-1">
                           <h3 className="font-bold text-lg mb-1 text-gray-800 text-center">
                             {food.name}
                           </h3>
+
                           <p className="text-sm text-gray-600 mb-3 line-clamp-2">
                             {food.story || food.ingredient || ''}
                           </p>
+
                           <button
                             onClick={() => navigate(`/foods/${food.food_id}`)}
-                            className="w-full py-2 border-2 border-gray-300 rounded-lg text-sm font-semibold hover:border-purple-600 hover:text-purple-600 transition"
+                            className="mt-auto w-full py-2 border-2 border-gray-300 rounded-lg text-sm font-semibold hover:border-purple-600 hover:text-purple-600 transition"
                           >
                             {t('menu.view_details')}
                           </button>

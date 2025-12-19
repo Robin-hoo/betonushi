@@ -61,7 +61,18 @@ export default function HomePage() {
               {t("popular_menu.title")}
             </Badge>
 
-            <button className="absolute right-0 text-gray-700 hover:text-gray-900 text-sm flex items-center gap-1">
+            <button
+              onClick={() => window.location.href = "/foods"}
+              className="
+                absolute right-0
+                text-gray-700 hover:text-gray-900
+                text-sm flex items-center gap-1
+                underline-offset-4
+                decoration-gray-400
+                hover:font-semibold hover:underline
+                decoration-1
+              "
+            >
               {t("button2.title")}
             </button>
           </div>
@@ -71,33 +82,34 @@ export default function HomePage() {
 
             {foods.map((item) => (
               <a key={item.food_id} href={`/foods/${item.food_id}`}>
-                <Card className="rounded-xl bg-[#D6EDC5] shadow-md hover:shadow-lg transition p-5 relative">
+                <Card className="rounded-xl bg-[#F7E8E0] shadow-md hover:shadow-lg transition p-4 relative overflow-hidden">
 
-                  {/* Ảnh */}
-                  <img
-                    src={item.image_url}
-                    alt={item.name}
-                    className="w-full h-44 object-cover rounded-lg"
-                  />
-                  <div className="absolute top-4 right-4 z-10">
-                    <HeartButton targetId={item.food_id} type="food" className="bg-white/80 p-2 rounded-full shadow-sm hover:bg-white" />
+                  {/* Image frame */}
+                  <div className="rounded-md overflow-hidden bg-white/70">
+                    <img
+                      src={item.image_url}
+                      alt={item.name}
+                      className="w-full h-44 object-cover"
+                    />
                   </div>
 
+                  <div className="absolute top-3 right-3 z-10">
+                    <HeartButton targetId={item.food_id} type="food" className="bg-white p-2 rounded-full shadow-sm hover:bg-white" />
+                  </div>
 
-                  {/* Nội dung */}
-                  <div className="text-center mt-4">
-                    <CardTitle className="text-xl font-bold">
+                  {/* Content */}
+                  <div className="text-center mt-4 px-2">
+                    <CardTitle className="text-lg font-semibold text-gray-800">
                       {item.name}
                     </CardTitle>
 
-                    <p className="text-sm text-gray-700 mt-2 leading-relaxed truncate">
+                    <p className="text-sm text-gray-600 mt-1 leading-snug line-clamp-2">
                       {item.story || "Món ăn này đang được cập nhật mô tả."}
                     </p>
-                    <p className="text-gray-600 text-sm">
-                      <strong>{item.taste}</strong>
-                    </p>
-                    <span className="mt-4 text-red-600 text-sm font-semibold">
-                      もっと詳しく見る
+
+
+                    <span className="mt-4 text-red-600 text-sm font-semibold block">
+                      {t("common.see_more")}
                     </span>
                   </div>
                 </Card>
