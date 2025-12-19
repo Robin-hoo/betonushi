@@ -47,7 +47,10 @@
       "phrases": "会話フレーズ"
     },
     "login": "ログイン",
-    "signup": "新規登録"
+    "signup": "新規登録",
+    "profile": "プロフィール",
+    "log-out": "ログアウト",
+    "favorites": "お気に入り"
   },
   "common": {
     "loading": "読み込み中...",

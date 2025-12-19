@@ -43,31 +43,58 @@ async function checkFavorite(userId, targetId, type) {
  * Get all favorites for a user by type.
  * Joins with existing tables (foods/restaurants) to get details.
  */
-async function getFavoritesByUser(userId, type) {
+async function getFavoritesByUser(userId, type, lang = 'jp') {
   if (type === 'food') {
-    const result = await db.query(
-      `SELECT 
-         f.food_id,
-         f.name,
-         f.story,
-         f.taste,
-         f.rating,
-         f.number_of_rating,
-         (
-            SELECT image_url
-            FROM food_images
-            WHERE food_id = f.food_id
-            ORDER BY food_image_id ASC
-            LIMIT 1
-         ) AS image_url,
-         fav.created_at as favorited_at
-       FROM favorites fav
-       JOIN foods f ON fav.target_id = f.food_id
-       WHERE fav.user_id = $1 AND fav.type = 'food'
-       ORDER BY fav.created_at DESC`,
-      [userId]
-    );
-    return result.rows;
+    if (lang === 'jp') {
+      const result = await db.query(
+        `SELECT 
+          f.food_id,
+          f.name,
+          f.story,
+          f.taste,
+          f.rating,
+          f.number_of_rating,
+          (
+              SELECT image_url
+              FROM food_images
+              WHERE food_id = f.food_id
+              ORDER BY food_image_id ASC
+              LIMIT 1
+          ) AS image_url,
+          fav.created_at as favorited_at
+        FROM favorites fav
+        JOIN foods f ON fav.target_id = f.food_id
+        WHERE fav.user_id = $1 AND fav.type = 'food'
+        ORDER BY fav.created_at DESC`,
+        [userId]
+      );
+      return result.rows;
+    } else {
+      const result = await db.query(
+        `SELECT
+          f.food_id,
+          COALESCE(ft.name, f.name) AS name,
+          COALESCE(ft.story, f.story) AS story,
+          COALESCE(ft.taste, f.taste) AS taste,
+          f.rating,
+          f.number_of_rating,
+          (
+              SELECT image_url
+              FROM food_images
+              WHERE food_id = f.food_id
+              ORDER BY food_image_id ASC
+              LIMIT 1
+          ) AS image_url,
+          fav.created_at as favorited_at
+        FROM favorites fav
+        JOIN foods f ON fav.target_id = f.food_id
+        LEFT JOIN food_translations ft ON ft.food_id = f.food_id AND ft.lang = $2
+        WHERE fav.user_id = $1 AND fav.type = 'food'
+        ORDER BY fav.created_at DESC`,
+        [userId, lang]
+      );
+      return result.rows;
+    }
   }
 
   if (type === 'restaurant') {

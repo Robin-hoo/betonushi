@@ -47,7 +47,10 @@
       "phrases": "Phrases"
     },
     "login": "Login",
-    "signup": "Sign Up"
+    "signup": "Sign Up",
+    "profile": "Profile",
+    "log-out": "Log Out",
+    "favorites": "Favorites"
   },
   "common": {
     "loading": "Loading...",

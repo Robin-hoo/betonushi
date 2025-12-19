@@ -50,7 +50,10 @@
       "phrases": "Cụm từ hội thoại"
     },
     "login": "Đăng nhập",
-    "signup": "Đăng ký"
+    "signup": "Đăng ký",
+    "profile": "Hồ sơ",
+    "log-out": "Đăng xuất",
+    "favorites": "Yêu thích"
   },
   "common": {
     "loading": "Đang tải...",

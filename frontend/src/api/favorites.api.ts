@@ -14,8 +14,10 @@ export const favoritesApi = {
         return response.data;
     },
 
-    getFavorites: async (type: 'food' | 'restaurant' = 'food') => {
-        const response = await api.get('/favorites', { params: { type } });
+    getFavorites: async (type: 'food' | 'restaurant' = 'food', lang?: string) => {
+        const params: any = { type };
+        if (lang) params.lang = lang;
+        const response = await api.get('/favorites', { params });
         return response.data;
     },
     

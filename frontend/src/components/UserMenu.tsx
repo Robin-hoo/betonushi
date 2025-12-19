@@ -2,12 +2,13 @@ import { useState, useRef, useEffect } from 'react';
 import { useAuth } from '@/context/AuthContext';
 import { User as UserIcon, LogOut, Heart } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 
 const UserMenu = () => {
     const { user, logout } = useAuth();
     const [isOpen, setIsOpen] = useState(false);
     const dropdownRef = useRef<HTMLDivElement>(null);
-
+    const { t } = useTranslation();
     // Close dropdown when clicking outside
     useEffect(() => {
         const handleClickOutside = (event: MouseEvent) => {
@@ -50,7 +51,7 @@ const UserMenu = () => {
                         onClick={() => setIsOpen(false)}
                     >
                         <UserIcon className="w-4 h-4" />
-                        Profile
+                        {t("header.profile")}
                     </button>
                     <Link to="/favorites">
                         <button
@@ -58,7 +59,7 @@ const UserMenu = () => {
                             onClick={() => setIsOpen(false)}
                         >
                             <Heart className="w-4 h-4" />
-                            Favorite
+                            {t("header.favorites")}
 
                         </button>
                     </Link>
@@ -71,7 +72,7 @@ const UserMenu = () => {
                         }}
                     >
                         <LogOut className="w-4 h-4" />
-                        Logout
+                        {t("header.log-out")}
                     </button>
                 </div>
             )}

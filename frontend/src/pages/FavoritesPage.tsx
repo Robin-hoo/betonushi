@@ -1,10 +1,8 @@
 import { useEffect, useState } from "react";
-import { Card, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { useTranslation } from "react-i18next";
 import { Heart } from 'lucide-react';
 import { favoritesApi } from "@/api/favorites.api";
-import { HeartButton } from "@/components/HeartButton";
 import { useAuth } from "@/context/AuthContext";
 import { useNavigate } from "react-router-dom";
 
@@ -20,34 +18,27 @@ interface Food {
 }
 
 export default function FavoritesPage() {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const { isLoggedIn } = useAuth();
   const navigate = useNavigate();
   const [favorites, setFavorites] = useState<Food[]>([]);
   const [loading, setLoading] = useState(true);
-
   useEffect(() => {
     if (!isLoggedIn) {
       navigate('/login');
       return;
     }
 
-    favoritesApi.getFavorites('food')
+    favoritesApi.getFavorites('food', i18n.language)
       .then((data: any) => {
         setFavorites(data);
       })
       .catch(err => console.error("Failed to load favorites", err))
       .finally(() => setLoading(false));
-  }, [isLoggedIn, navigate]);
+  }, [isLoggedIn, navigate, i18n.language]);
 
   const [loadingIds, setLoadingIds] = useState<number[]>([]);
 
-  const handleToggle = (id: number, added: boolean) => {
-    if (!added) {
-      // Remove from list if removed (called when server confirms)
-      setFavorites(prev => prev.filter(f => f.food_id !== id));
-    }
-  };
 
   const handleOptimisticToggle = async (e: React.MouseEvent<HTMLButtonElement>, id: number) => {
     e.preventDefault();

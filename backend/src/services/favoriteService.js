@@ -36,11 +36,11 @@ async function toggleFavorite(userId, targetId, type) {
 /**
  * Get user favorites
  */
-async function getUserFavorites(userId, type) {
+async function getUserFavorites(userId, type, lang) {
   if (!['food', 'restaurant'].includes(type)) {
     throw buildHttpError(400, 'Invalid type');
   }
-  return await FavoriteModel.getFavoritesByUser(userId, type);
+  return await FavoriteModel.getFavoritesByUser(userId, type, lang);
 }
 
 /**
