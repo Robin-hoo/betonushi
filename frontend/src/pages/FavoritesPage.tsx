@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { Card, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { useTranslation } from "react-i18next";
+import { Heart } from 'lucide-react';
 import { favoritesApi } from "@/api/favorites.api";
 import { HeartButton } from "@/components/HeartButton";
 import { useAuth } from "@/context/AuthContext";
@@ -39,10 +40,41 @@ export default function FavoritesPage() {
       .finally(() => setLoading(false));
   }, [isLoggedIn, navigate]);
 
+  const [loadingIds, setLoadingIds] = useState<number[]>([]);
+
   const handleToggle = (id: number, added: boolean) => {
     if (!added) {
-      // Remove from list if removed
+      // Remove from list if removed (called when server confirms)
       setFavorites(prev => prev.filter(f => f.food_id !== id));
+    }
+  };
+
+  const handleOptimisticToggle = async (e: React.MouseEvent<HTMLButtonElement>, id: number) => {
+    e.preventDefault();
+    e.stopPropagation();
+
+    if (!isLoggedIn) {
+      navigate('/login');
+      return;
+    }
+
+    const removedItem = favorites.find(f => f.food_id === id);
+    // Optimistically remove from UI
+    setFavorites(prev => prev.filter(f => f.food_id !== id));
+    setLoadingIds(prev => [...prev, id]);
+
+    try {
+      const res = await favoritesApi.toggleFavorite(id, 'food');
+      // If server reports it's still favorited, restore
+      if (res.added && removedItem) {
+        setFavorites(prev => [removedItem, ...prev]);
+      }
+    } catch (err) {
+      console.error('Failed to toggle favorite', err);
+      // Revert on error
+      if (removedItem) setFavorites(prev => [removedItem, ...prev]);
+    } finally {
+      setLoadingIds(prev => prev.filter(i => i !== id));
     }
   };
 
@@ -67,40 +99,41 @@ export default function FavoritesPage() {
         ) : (
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-16 justify-end">
             {favorites.map((item) => (
-              <div key={item.food_id} className="relative group">
-                <a href={`/foods/${item.food_id}`}>
-                  <Card className="rounded-xl bg-[#D6EDC5] shadow-md hover:shadow-lg transition p-3 h-full flex flex-col">
-                    {/* Image */}
-                    <img
-                      src={item.image_url || '/placeholder.jpg'}
-                      alt={item.name}
-                      className="w-full h-44 object-cover rounded-lg"
-                    />
-
-                    {/* Content */}
-                    <div className="text-center mt-4 flex-grow">
-                      <CardTitle className="text-xl font-bold">
-                        {item.name}
-                      </CardTitle>
-
-                      <p className="text-sm text-gray-700 mt-2 leading-relaxed line-clamp-2">
-                        {item.story || "No description available."}
-                      </p>
-                      <p className="text-gray-600 text-sm mt-1">
-                        <strong>{item.taste}</strong>
-                      </p>
-                    </div>
-                  </Card>
-                </a>
-                {/* Heart Button Absolute */}
-                <div className="absolute top-5 right-5 z-10">
-                  <HeartButton
-                    targetId={item.food_id}
-                    type="food"
-                    initialFavorited={true}
-                    onToggle={(added) => handleToggle(item.food_id, added)}
-                    className="bg-white/80 p-2 rounded-full shadow-sm hover:bg-white"
+              <div key={item.food_id} className="bg-white rounded-lg shadow-md hover:shadow-lg transition overflow-hidden flex flex-col">
+                <div className="relative w-full h-48 bg-gray-200 overflow-hidden group">
+                  <img
+                    src={item.image_url || '/image/placeholder.jpg'}
+                    alt={item.name}
+                    className="w-full h-full object-cover group-hover:scale-105 transition"
                   />
+
+                  <button
+                    onClick={(e) => handleOptimisticToggle(e, item.food_id)}
+                    disabled={loadingIds.includes(item.food_id)}
+                    className="absolute top-2 right-2 z-10 bg-white rounded-full p-2 shadow-md hover:bg-gray-100 transition"
+                  >
+                    <Heart
+                      size={20}
+                      className="fill-red-500 text-red-500"
+                    />
+                  </button>
+                </div>
+
+                <div className="p-4 flex flex-col flex-1">
+                  <h3 className="font-bold text-lg mb-1 text-gray-800 text-center">
+                    {item.name}
+                  </h3>
+
+                  <p className="text-sm text-gray-600 mb-3 line-clamp-2">
+                    {item.story || ''}
+                  </p>
+
+                  <button
+                    onClick={() => navigate(`/foods/${item.food_id}`)}
+                    className="mt-auto w-full py-2 border-2 border-gray-300 rounded-lg text-sm font-semibold hover:border-purple-600 hover:text-purple-600 transition"
+                  >
+                    {t('menu.view_details')}
+                  </button>
                 </div>
               </div>
             ))}

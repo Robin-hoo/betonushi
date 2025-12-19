@@ -53,12 +53,12 @@ async function getAllFoods(filters) {
 }
 
 
-async function getFoods(lang = 'jp') {
+async function getPopularFoods(limit, lang = 'jp') {
   try {
-    const foods = await FoodModel.getPopularFoods(lang);
+    const foods = await FoodModel.getPopularFoods(limit, lang);
     return foods;
   } catch (err) {
-    console.error('Database error in getFoods:', err);
+    console.error('Database error in getPopularFoods:', err);
     throw buildHttpError(500, `Error when fetching popular foods: ${err.message}`);
   }
 }
@@ -80,7 +80,7 @@ async function getFilterOptions() {
 
 module.exports = {
   getFoodDetails,
-  getFoods,
+  getPopularFoods,
   getAllFoods,
   getFilterOptions,
 };

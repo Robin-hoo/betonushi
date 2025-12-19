@@ -25,7 +25,9 @@ async function getFilterOptions(req, res, next) {
 async function getPopularFoods(req, res, next) {
   try {
     const lang = (req.query.lang || (req.headers['accept-language'] || '').split(',')[0] || 'jp').slice(0,2);
-    const foods = await FoodService.getFoods(lang);
+    const limit = req.query.limit || 4;
+
+    const foods = await FoodService.getPopularFoods(limit, lang);
     return res.json(foods);
   } catch (error) {
     return next(error);

@@ -5,7 +5,7 @@ const db = require('../db');
  * @param {number} foodId
  * @returns {Promise<{food: object|null, images: string[], reviews: object[]}>}
  */
-async function getPopularFoods(lang = 'jp') {
+async function getPopularFoods(limit = "4", lang = 'jp') {
   if (lang == 'jp') {
     const result = await db.query(`
     SELECT
@@ -20,11 +20,11 @@ async function getPopularFoods(lang = 'jp') {
         WHERE food_id = f.food_id
         ORDER BY food_image_id ASC
         LIMIT 1
-      ) AS image
+      ) AS image_url
     FROM foods f
     ORDER BY f.rating DESC
-    LIMIT 4
-  `);
+    LIMIT $1
+  `, [limit]);
     return result.rows;
   }
 
@@ -42,12 +42,12 @@ async function getPopularFoods(lang = 'jp') {
         WHERE food_id = f.food_id
         ORDER BY food_image_id ASC
         LIMIT 1
-      ) AS image
+      ) AS image_url
     FROM foods f
     LEFT JOIN food_translations ft ON ft.food_id = f.food_id AND ft.lang = $1
     ORDER BY f.rating DESC
-    LIMIT 4
-  `, [lang]);
+    LIMIT $2
+  `, [lang, limit]);
 
   return result.rows;
 }
