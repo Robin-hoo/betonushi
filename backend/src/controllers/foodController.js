@@ -38,14 +38,14 @@ async function getPopularFoods(req, res, next) {
  */
 async function getAllFoods(req, res, next) {
   try {
-    const { search, regions, flavors, ingredients } = req.query;
+    const { search, flavors, ingredients, types } = req.query;
     const lang = (req.query.lang || (req.headers['accept-language'] || '').split(',')[0] || 'jp').slice(0,2);
 
     const filters = {
       search: search || '',
-      region_ids: regions ? regions.split(',').map(Number) : [],
       flavor_ids: flavors ? flavors.split(',').map(Number) : [],
       ingredient_ids: ingredients ? ingredients.split(',').map(Number) : [],
+      food_type_ids: types ? types.split(',').map(Number) : [],
       lang
     };
 

@@ -19,26 +19,26 @@
     "title": "食事や招待に関する役立つ日本語フレーズ"
   },
   "popular_menu": {
-    "title": "おすすめメニュー"
-  }
-    ,"banner1": {
-        "title": "あなたの味覚を満たす"   
-    },
-    "banner2": {
-        "title": "ベストフード"   
-    },
-    "button1": {
-        "title": "味のアンケート"
-    },
-    "button2": {
-        "title": "他のカテゴリを見る →"
-    },
-    "helpButton": {
-        "title": "食事を観察"
-    },
-    "saveButton": {
-        "title": "保存"
-    },
+    "title": "人気メニュー"
+  },
+  "banner1": {
+      "title": "あなたの味覚を満たす"   
+  },
+  "banner2": {
+      "title": "ベストフード"   
+  },
+  "button1": {
+      "title": "味のアンケート"
+  },
+  "button2": {
+      "title": "他の似た料理を見る →"
+  },
+  "helpButton": {
+      "title": "食事を観察"
+  },
+  "saveButton": {
+      "title": "保存"
+  },
   "header": {
     "nav": {
       "home": "ホーム",

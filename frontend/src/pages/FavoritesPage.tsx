@@ -38,7 +38,14 @@ export default function FavoritesPage() {
   }, [isLoggedIn, navigate, i18n.language]);
 
   const [loadingIds, setLoadingIds] = useState<number[]>([]);
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 8;
 
+  // When favorites change, ensure current page is valid
+  useEffect(() => {
+    const totalPages = Math.max(1, Math.ceil(favorites.length / itemsPerPage));
+    if (currentPage > totalPages) setCurrentPage(totalPages);
+  }, [favorites.length]);
 
   const handleOptimisticToggle = async (e: React.MouseEvent<HTMLButtonElement>, id: number) => {
     e.preventDefault();
@@ -88,47 +95,83 @@ export default function FavoritesPage() {
             <a href="/" className="text-orange-500 hover:underline mt-4 block">{t("FavoritesPage.browse_menu")}</a>
           </div>
         ) : (
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-16 justify-end">
-            {favorites.map((item) => (
-              <div key={item.food_id} className="bg-white rounded-lg shadow-md hover:shadow-lg transition overflow-hidden flex flex-col">
-                <div className="relative w-full h-48 bg-gray-200 overflow-hidden group">
-                  <img
-                    src={item.image_url || '/image/placeholder.jpg'}
-                    alt={item.name}
-                    className="w-full h-full object-cover group-hover:scale-105 transition"
-                  />
-
-                  <button
-                    onClick={(e) => handleOptimisticToggle(e, item.food_id)}
-                    disabled={loadingIds.includes(item.food_id)}
-                    className="absolute top-2 right-2 z-10 bg-white rounded-full p-2 shadow-md hover:bg-gray-100 transition"
-                  >
-                    <Heart
-                      size={20}
-                      className="fill-red-500 text-red-500"
+          <>
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-16 justify-end">
+              { (favorites.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage)).map((item) => (
+                <div key={item.food_id} className="bg-white rounded-lg shadow-md hover:shadow-lg transition overflow-hidden flex flex-col">
+                  <div className="relative w-full h-48 bg-gray-200 overflow-hidden group">
+                    <img
+                      src={item.image_url || '/image/placeholder.jpg'}
+                      alt={item.name}
+                      className="w-full h-full object-cover group-hover:scale-105 transition"
                     />
-                  </button>
+
+                    <button
+                      onClick={(e) => handleOptimisticToggle(e, item.food_id)}
+                      disabled={loadingIds.includes(item.food_id)}
+                      className="absolute top-2 right-2 z-10 bg-white rounded-full p-2 shadow-md hover:bg-gray-100 transition"
+                    >
+                      <Heart
+                        size={20}
+                        className="fill-red-500 text-red-500"
+                      />
+                    </button>
+                  </div>
+
+                  <div className="p-4 flex flex-col flex-1">
+                    <h3 className="font-bold text-lg mb-1 text-gray-800 text-center">
+                      {item.name}
+                    </h3>
+
+                    <p className="text-sm text-gray-600 mb-3 line-clamp-2">
+                      {item.story || ''}
+                    </p>
+
+                    <button
+                      onClick={() => navigate(`/foods/${item.food_id}`)}
+                      className="mt-auto w-full py-2 border-2 border-gray-300 rounded-lg text-sm font-semibold hover:border-purple-600 hover:text-purple-600 transition"
+                    >
+                      {t('menu.view_details')}
+                    </button>
+                  </div>
                 </div>
+              ))}
+            </div>
 
-                <div className="p-4 flex flex-col flex-1">
-                  <h3 className="font-bold text-lg mb-1 text-gray-800 text-center">
-                    {item.name}
-                  </h3>
+            {/* Pagination (only show if more than 1 page) */}
+            {Math.ceil(favorites.length / itemsPerPage) > 1 && (
+              <div className="flex items-center justify-center gap-2 mt-8">
+                <button
+                  onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
+                  disabled={currentPage === 1}
+                  className="px-3 py-1 text-sm font-semibold text-purple-600 hover:bg-purple-100 rounded transition disabled:opacity-50"
+                >
+                  « {t('menu.pagination.prev')}
+                </button>
 
-                  <p className="text-sm text-gray-600 mb-3 line-clamp-2">
-                    {item.story || ''}
-                  </p>
-
+                {Array.from({ length: Math.ceil(favorites.length / itemsPerPage) }, (_, i) => i + 1).map((page) => (
                   <button
-                    onClick={() => navigate(`/foods/${item.food_id}`)}
-                    className="mt-auto w-full py-2 border-2 border-gray-300 rounded-lg text-sm font-semibold hover:border-purple-600 hover:text-purple-600 transition"
+                    key={page}
+                    onClick={() => setCurrentPage(page)}
+                    className={`px-3 py-1 text-sm font-semibold rounded transition ${page === currentPage
+                      ? 'bg-purple-600 text-white'
+                      : 'hover:bg-gray-200'
+                      }`}
                   >
-                    {t('menu.view_details')}
+                    {page}
                   </button>
-                </div>
+                ))}
+
+                <button
+                  onClick={() => setCurrentPage(p => Math.min(Math.ceil(favorites.length / itemsPerPage), p + 1))}
+                  disabled={currentPage === Math.ceil(favorites.length / itemsPerPage)}
+                  className="px-3 py-1 text-sm font-semibold text-purple-600 hover:bg-purple-100 rounded transition disabled:opacity-50"
+                >
+                  {t('menu.pagination.next')} »
+                </button>
               </div>
-            ))}
-          </div>
+            )}
+          </>
         )}
       </div>
     </div>

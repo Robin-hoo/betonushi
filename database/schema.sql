@@ -11,7 +11,9 @@ DROP TABLE IF EXISTS restaurant_foods CASCADE;
 DROP TABLE IF EXISTS food_images CASCADE;
 DROP TABLE IF EXISTS food_ingredients CASCADE;
 DROP TABLE IF EXISTS food_flavors CASCADE;
-DROP TABLE IF EXISTS user_preferences CASCADE;
+DROP TABLE IF EXISTS food_food_types CASCADE;
+DROP TABLE IF EXISTS food_types CASCADE;
+DROP TABLE IF EXISTS user_preferences CASCADE; 
 DROP TABLE IF EXISTS restaurants CASCADE;
 DROP TABLE IF EXISTS foods CASCADE;
 DROP TABLE IF EXISTS ingredients CASCADE;
@@ -98,6 +100,19 @@ CREATE TABLE food_ingredients (
     food_id INTEGER NOT NULL REFERENCES foods(food_id) ON DELETE CASCADE,
     ingredient_id INTEGER NOT NULL REFERENCES ingredients(ingredient_id) ON DELETE CASCADE,
     PRIMARY KEY (food_id, ingredient_id)
+);
+
+-- Food types (e.g., 麺料理, ご飯もの, パン料理, 惣菜物, サラダ, 鍋料理)
+CREATE TABLE food_types (
+    food_type_id SERIAL PRIMARY KEY,
+    name VARCHAR(255) NOT NULL
+);
+
+-- Mapping table between foods and types (many-to-many)
+CREATE TABLE food_food_types (
+    food_id INTEGER NOT NULL REFERENCES foods(food_id) ON DELETE CASCADE,
+    food_type_id INTEGER NOT NULL REFERENCES food_types(food_type_id) ON DELETE CASCADE,
+    PRIMARY KEY (food_id, food_type_id)
 );
 
 -- Food images (one-to-many)

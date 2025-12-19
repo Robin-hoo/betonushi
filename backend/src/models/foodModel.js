@@ -137,12 +137,14 @@ async function findFoodWithRelations(foodId, lang = 'jp') {
 }
 
 async function getFilterOptions() {
-  const regions = await db.query('SELECT region_id as id, name FROM regions ORDER BY region_id');
+  const regions = await db.query('SELECT region_id as id, name FROM regions ORDER BY name');
+  const foodTypes = await db.query('SELECT food_type_id as id, name FROM food_types ORDER BY name');
   const flavors = await db.query('SELECT flavor_id as id, name FROM flavors ORDER BY name');
-  const ingredients = await db.query('SELECT ingredient_id as id, name FROM ingredients ORDER BY name LIMIT 8'); // MAX 10 ingredient
-
+  const ingredients = await db.query('SELECT ingredient_id as id, name FROM ingredients ORDER BY name LIMIT 8'); // MAX 8 ingredients
+  
   return {
     regions: regions.rows,
+    food_types: foodTypes.rows,
     flavors: flavors.rows,
     ingredients: ingredients.rows
   };
@@ -246,6 +248,18 @@ async function getAllFoods(filters = {}) {
       )
     `;
     params.push(filters.ingredient_ids);
+    paramIndex++;
+  }
+
+  if (filters.food_type_ids?.length) {
+    sql += `
+      AND EXISTS (
+        SELECT 1 FROM food_food_types fft
+        WHERE fft.food_id = f.food_id
+          AND fft.food_type_id = ANY($${paramIndex}::int[])
+      )
+    `;
+    params.push(filters.food_type_ids);
     paramIndex++;
   }
 

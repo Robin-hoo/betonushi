@@ -10,6 +10,8 @@ TRUNCATE TABLE restaurant_foods CASCADE;
 TRUNCATE TABLE food_images CASCADE;
 TRUNCATE TABLE food_ingredients CASCADE;
 TRUNCATE TABLE food_flavors CASCADE;
+TRUNCATE TABLE food_food_types CASCADE;
+TRUNCATE TABLE food_types CASCADE;
 TRUNCATE TABLE user_preferences CASCADE;
 TRUNCATE TABLE restaurants CASCADE;
 TRUNCATE TABLE foods CASCADE;
@@ -28,6 +30,7 @@ ALTER SEQUENCE ingredients_ingredient_id_seq RESTART WITH 1;
 ALTER SEQUENCE foods_food_id_seq RESTART WITH 1;
 ALTER SEQUENCE food_images_food_image_id_seq RESTART WITH 1;
 ALTER SEQUENCE restaurants_restaurant_id_seq RESTART WITH 1;
+ALTER SEQUENCE food_types_food_type_id_seq RESTART WITH 1;
 ALTER SEQUENCE reviews_review_id_seq RESTART WITH 1;
 ALTER SEQUENCE favorites_favorite_id_seq RESTART WITH 1;
 ALTER SEQUENCE conversation_phrases_phrase_id_seq RESTART WITH 1;
@@ -44,66 +47,25 @@ INSERT INTO regions (name) VALUES
 
 -- ====================================
 -- Insert Flavors
+-- (ensure preference filters: sour, sweet, herb, light, spicy)
 -- ====================================
 INSERT INTO flavors (name) VALUES 
     ('Sweet'),
     ('Sour'),
-    ('Spicy'),
-    ('Salty'),
-    ('Umami'),
-    ('Bitter'),
-    ('Herbal');
+    ('Herb & Spices'),
+    ('Light'),
+    ('Spicy');
 
 -- ====================================
 -- Insert Ingredients
+-- (pruned to only those used in UI filters)
 -- ====================================
 INSERT INTO ingredients (name) VALUES 
-    ('Rice Noodles'),
     ('Beef'),
     ('Pork'),
     ('Chicken'),
-    ('Shrimp'),
-    ('Fish Sauce'),
-    ('Lime'),
-    ('Chili'),
-    ('Herbs'),
-    ('Bean Sprouts'),
-    ('Onion'),
-    ('Garlic'),
-    ('Lemongrass'),
-    ('Coconut Milk'),
-    ('Rice Paper'),
-    ('Lettuce'),
-    ('Mint'),
-    ('Cilantro'),
-    ('Basil'),
-    ('Fish'),
-    ('Egg'),
-    ('Tomato'),
-    ('Cucumber'),
-    ('Carrot'),
-    ('Pickled Vegetables'),
-    ('Rice'),
-    ('Broken Rice'),
-    ('Tofu'),
-    ('Mushroom'),
-    ('Ginger'),
-    ('Star Anise'),
-    ('Cinnamon'),
-    ('Vermicelli'),
-    ('Baguette'),
-    ('Pate'),
-    ('Soy Sauce'),
-    ('Sugar'),
-    ('Vinegar'),
-    ('Peanuts'),
-    ('Sesame'),
-    ('Spring Roll Wrapper'),
-    ('Tapioca Flour'),
-    ('Turmeric'),
-    ('Pork Skin'),
-    ('Chinese Sausage'),
-    ('Green Onion');
+    ('Seafood'),
+    ('Vegetable / Vegetarian');
 
 -- ====================================
 -- Insert Users
@@ -123,8 +85,23 @@ INSERT INTO users (email, password_hash, full_name, birth_date, avatar_url, role
     ('user4@example.com', '$2a$10$N9qo8uLOickgx2ZMRZoMyeIjNejKqH7KPG7KPG7KPG7KPG7KPG7KP', 'Phạm Thị D', '1993-11-30', '/avatars/user4.jpg', 'user');
 
 -- ====================================
+-- Insert Food Types (used for sidebar filters)
+-- (names aligned to UI filter keys: noodle, rice, bread, side_dish, salad, hotpot)
+-- ====================================
+INSERT INTO food_types (name) VALUES
+    ('Noodle Dish'),
+    ('Rice Dish'),
+    ('Bread Dish'),
+    ('Side Dish'),
+    ('Salad'),
+    ('Hotpot');
+
+-- Map some foods to types will be inserted after the foods are created to satisfy FK constraints.
+
+-- ====================================
 -- Insert Foods (Japanese base; translations for vi/en are inserted separately below)
 -- ====================================
+-- Note: '巻き物' entries were converted to '惣菜物' in the `food_types` seeds; mapping commented labels updated accordingly.
 INSERT INTO foods (name, story, ingredient, taste, style, comparison, region_id, view_count, rating, number_of_rating) VALUES 
     ('フォー', '20世紀初頭に北ベトナムで発祥しました。', 'ライスヌードル、牛肉、ヌクマム（魚醤）、ハーブ、もやし、玉ねぎ、八角、シナモン', '塩味、うま味、ハーブ風味', 'ハーブ、ライム、チリと一緒にいただきます。ホイシンやチリソースはお好みで。', 'ラーメンより軽く、米の麺を使います。', 1, 1250, 4.8, 0),
     ('バインミー', '植民地時代にフランスとベトナムの食文化が融合して生まれました。', 'バゲット、パテ、豚肉、なます、きゅうり、パクチー', '酸味、塩味、甘味', '軽食として最適。パンはカリッと新鮮なものが一番。', 'フランスのサンドイッチに似ていますが、具材はベトナム風です。', NULL, 980, 4.7, 0),
@@ -149,48 +126,72 @@ INSERT INTO foods (name, story, ingredient, taste, style, comparison, region_id,
 
 -- ====================================
 -- Insert Food Flavors
+-- (pruned to use only flavors: Sweet(1), Sour(2), Herb & Spices(3), Light(4), Spicy(5))
 -- ====================================
 INSERT INTO food_flavors (food_id, flavor_id, intensity_level) VALUES 
-    -- Phở
-    (1, 4, 3), (1, 5, 5), (1, 7, 3),
-    -- Bánh Mì
-    (2, 1, 2), (2, 2, 3), (2, 4, 4),
-    -- Bún Chả
-    (3, 1, 3), (3, 2, 3), (3, 4, 4), (3, 5, 4),
-    -- Cơm Tấm
-    (4, 1, 3), (4, 4, 4), (4, 5, 3),
-    -- Gỏi Cuốn
-    (5, 2, 2), (5, 7, 4),
-    -- Bánh Xèo
-    (6, 4, 3), (6, 5, 4), (6, 7, 2),
-    -- Bún Bò Huế
-    (7, 3, 5), (7, 4, 4), (7, 5, 5), (7, 7, 3),
-    -- Cao Lầu
-    (8, 4, 3), (8, 5, 4),
-    -- Mì Quảng
-    (9, 4, 3), (9, 5, 3), (9, 7, 2),
-    -- Bánh Cuốn
-    (10, 4, 2), (10, 5, 3),
-    -- Chả Cá
-    (11, 4, 3), (11, 5, 4), (11, 7, 5),
-    -- Hủ Tiếu
-    (12, 1, 2), (12, 4, 3), (12, 5, 4),
-    -- Bánh Bột Lọc
-    (13, 4, 3), (13, 5, 3),
-    -- Nem Rán
-    (14, 4, 3), (14, 5, 3),
-    -- Cá Kho Tộ
-    (15, 1, 4), (15, 4, 5), (15, 5, 4),
-    -- Thịt Kho Tàu
-    (16, 1, 4), (16, 4, 5),
-    -- Bánh Khọt
-    (17, 4, 3), (17, 5, 3),
-    -- Bò Lúc Lắc
-    (18, 4, 3), (18, 5, 4),
-    -- Gà Nướng
-    (19, 4, 3), (19, 7, 4),
-    -- Lẩu
-    (20, 1, 2), (20, 3, 3), (20, 4, 4), (20, 5, 5);
+    -- Flavor 1: Sweet
+    (2, 1, 2),
+    (3, 1, 3),
+    (4, 1, 3),
+    (12, 1, 2),
+    (15, 1, 4),
+    (16, 1, 4),
+    (20, 1, 2),
+
+    -- Flavor 2: Sour
+    (2, 2, 3),
+    (3, 2, 3),
+    (5, 2, 2),
+
+    -- Flavor 3: Herb & Spices
+    (7, 3, 5),
+    (20, 3, 3),
+
+    -- Flavor 4: Light
+    (1, 4, 3),
+    (5, 4, 4),
+    (6, 4, 2),
+    (7, 4, 3),
+    (9, 4, 2),
+    (11, 4, 3),
+    (19, 4, 4),
+
+    -- Flavor 5: Spicy
+    (1, 5, 4),
+    (8, 5, 3),
+    (10, 5, 3),
+    (13, 5, 3),
+    (14, 5, 3),
+    (17, 5, 3),
+    (18, 5, 3);
+
+-- After foods and flavors are inserted, map foods to types (food_id, food_type_id)
+INSERT INTO food_food_types (food_id, food_type_id) VALUES
+    -- Type 1: Noodle Dish
+    (1, 1),
+    (3, 1),
+    (7, 1),
+    (8, 1),
+    (9, 1),
+    (11, 1),
+    (12, 1),
+
+    -- Type 2: Rice Dish
+    (4, 2),
+
+
+    -- Type 3: Bread Dish
+    (2, 3),
+    (17, 3),
+
+    -- Type 4: Side Dish
+    (5, 4),
+    (10, 4),
+    (14, 4),
+    (13, 4),
+
+    -- Type 6: Hotpot
+    (20, 6);
 
 -- ====================================
 -- Insert Food Images (4-5 images per food)
@@ -326,49 +327,24 @@ INSERT INTO food_images (food_id, image_url, display_order, is_primary) VALUES
     (20, 'data:image/jpeg;base64,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', 5, FALSE);
 
 -- ====================================
--- Insert Food Ingredients
+-- Insert Food Ingredients (pruned to UI filter ingredients)
+-- Ingredient IDs: 1 Beef, 2 Pork, 3 Chicken, 4 Seafood, 5 Vegetable
 -- ====================================
 INSERT INTO food_ingredients (food_id, ingredient_id) VALUES 
-    -- Phở
-    (1, 1), (1, 2), (1, 6), (1, 9), (1, 10), (1, 11), (1, 31), (1, 32),
-    -- Bánh Mì
-    (2, 3), (2, 23), (2, 24), (2, 25), (2, 34), (2, 35),
-    -- Bún Chả
-    (3, 3), (3, 6), (3, 7), (3, 9), (3, 33),
-    -- Cơm Tấm
-    (4, 3), (4, 21), (4, 25), (4, 27),
-    -- Gỏi Cuốn
-    (5, 3), (5, 5), (5, 9), (5, 15), (5, 16), (5, 17), (5, 33),
-    -- Bánh Xèo
-    (6, 3), (6, 5), (6, 10), (6, 42), (6, 43),
-    -- Bún Bò Huế
-    (7, 1), (7, 2), (7, 3), (7, 8), (7, 13),
-    -- Cao Lầu
-    (8, 1), (8, 3), (8, 9), (8, 16),
-    -- Mì Quảng
-    (9, 1), (9, 2), (9, 5), (9, 21), (9, 39), (9, 43),
-    -- Bánh Cuốn
-    (10, 3), (10, 26), (10, 29),
-    -- Chả Cá
-    (11, 1), (11, 20), (11, 43), (11, 46),
-    -- Hủ Tiếu
-    (12, 1), (12, 3), (12, 5), (12, 10),
-    -- Bánh Bột Lọc
-    (13, 3), (13, 5), (13, 42),
-    -- Nem Rán
-    (14, 3), (14, 5), (14, 24), (14, 29), (14, 41),
-    -- Cá Kho Tộ
-    (15, 6), (15, 20), (15, 37), (15, 38),
-    -- Thịt Kho Tàu
-    (16, 3), (16, 14), (16, 21), (16, 37),
-    -- Bánh Khọt
-    (17, 5), (17, 26), (17, 42),
-    -- Bò Lúc Lắc
-    (18, 2), (18, 11), (18, 16), (18, 22),
-    -- Gà Nướng
-    (19, 4), (19, 13), (19, 8),
-    -- Lẩu
-    (20, 2), (20, 4), (20, 5), (20, 9), (20, 16), (20, 28), (20, 29);
+    -- Ingredient 1: Beef
+    (1, 1), (7, 1), (9, 1), (18, 1), (20, 1),
+
+    -- Ingredient 2: Pork
+    (2, 2), (3, 2), (4, 2), (5, 2), (6, 2), (8, 2), (10, 2), (12, 2), (13, 2), (14, 2), (16, 2),
+
+    -- Ingredient 3: Chicken
+    (19, 3), (20, 3),
+
+    -- Ingredient 4: Seafood
+    (5, 4), (6, 4), (9, 4), (11, 4), (12, 4), (13, 4), (14, 4), (15, 4), (17, 4), (20, 4),
+
+    -- Ingredient 5: Vegetable
+    (1, 5), (2, 5), (4, 5), (5, 5), (6, 5), (8, 5), (10, 5), (11, 5), (14, 5), (20, 5);
 
 -- ====================================
 -- Insert Restaurants

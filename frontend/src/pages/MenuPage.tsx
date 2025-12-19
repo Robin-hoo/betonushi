@@ -28,7 +28,7 @@ interface FilterOption {
 }
 
 interface FilterData {
-  regions: FilterOption[];
+  types: FilterOption[];
   flavors: FilterOption[];
   ingredients: FilterOption[];
 }
@@ -42,6 +42,7 @@ export default function MenuPage() {
 
   const [foods, setFoods] = useState<Food[]>([]);
   const [loading, setLoading] = useState(true);
+  const [contentLoading, setContentLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
   const [currentPage, setCurrentPage] = useState(1);
@@ -50,36 +51,60 @@ export default function MenuPage() {
   const [searchQuery, setSearchQuery] = useState('');
 
   const [filterOptions, setFilterOptions] = useState<FilterData>({
-    regions: [],
+    types: [],
     flavors: [],
     ingredients: []
   });
 
   const [selectedFilters, setSelectedFilters] = useState({
-    regions: [] as number[],
+    types: [] as number[],
     flavors: [] as number[],
     ingredients: [] as number[]
   });
 
   useEffect(() => {
-    const initPage = async () => {
-      try {
-        const filterRes = await api.get(`/filters?lang=${encodeURIComponent(i18n.language)}`);
-        if (filterRes.status === 200) {
-          setFilterOptions(filterRes.data);
-        }
+    // Build UI filter lists from i18n so they change with current locale
+    setFilterOptions({
+      types: [
+        { id: 0, name: t('menu.categories.items.all') },
+        { id: 1, name: t('menu.categories.items.noodle') },
+        { id: 2, name: t('menu.categories.items.rice') },
+        { id: 3, name: t('menu.categories.items.bread') },
+        { id: 4, name: t('menu.categories.items.side_dish') },
+        { id: 5, name: t('menu.categories.items.salad') },
+        { id: 6, name: t('menu.categories.items.hotpot') },
+      ],
+      flavors: [
+        { id: 0, name: t('menu.categories.items.all') },
+        { id: 1, name: t('menu.categories.items.sour') },
+        { id: 2, name: t('menu.categories.items.sweet') },
+        { id: 3, name: t('menu.categories.items.herb') },
+        { id: 4, name: t('menu.categories.items.light') },
+        { id: 5, name: t('menu.categories.items.spicy') },
+      ],
+      ingredients: [
+        { id: 0, name: t('menu.categories.items.all') },
+        { id: 1, name: t('menu.categories.items.beef') },
+        { id: 2, name: t('menu.categories.items.pork') },
+        { id: 3, name: t('menu.categories.items.chicken') },
+        { id: 4, name: t('menu.categories.items.seafood') },
+        { id: 5, name: t('menu.categories.items.vegetable') },
+      ],
+    });
 
-        await fetchFoods();
-      } catch (err) {
-        console.error("Initialization error:", err);
-      }
-    };
-    initPage();
+    // fetch initial foods (full page loading on first load)
+    fetchFoods({ full: true });
   }, [i18n.language]);
 
-  const fetchFoods = useCallback(async () => {
+  const fetchFoods = useCallback(async (opts?: { full?: boolean }) => {
     try {
-      setLoading(true);
+      // full=true means initial/full-page load (show full-screen spinner). Otherwise show inline spinner in content area.
+      if (opts?.full) {
+        setLoading(true);
+      } else {
+        setContentLoading(true);
+      }
+
       setError(null);
 
       const params = new URLSearchParams();
@@ -88,8 +113,8 @@ export default function MenuPage() {
         params.append('search', searchQuery.trim());
       }
 
-      if (selectedFilters.regions.length > 0)
-        params.append('regions', selectedFilters.regions.join(','));
+      if (selectedFilters.types.length > 0)
+        params.append('types', selectedFilters.types.join(','));
 
       if (selectedFilters.flavors.length > 0)
         params.append('flavors', selectedFilters.flavors.join(','));
@@ -105,28 +130,12 @@ export default function MenuPage() {
 
       const data = response.data;
 
-      // If logged in, we need to check favorites status for each food
-      // OPTIMIZATION: Ideally backend returns 'liked' field. 
-      // For now, if user is logged in, we might want to fetch favorites list to map.
-      // But let's see if backend 'getFavorites' returns list of IDs.
-
       let foodsData = data.map((food: Food) => ({ ...food, liked: false }));
 
       if (isLoggedIn) {
         try {
-          // Fetch user favorites to map 'liked' status
-          // Assuming getFavorites returns array of favorite objects with targetId
           const userFavorites = await favoritesApi.getFavorites('food');
-          // userFavorites structure depends on backend. 
-          // If it returns [{ food_id: 1, ... }, ...], we can map.
-          // Let's assume backend returns list of favorites. 
-          // We need to check favoriteService/Controller to be sure of structure.
-          // Based on code reading, it returns whatever FavoriteService.getUserFavorites returns.
-          // Let's just create a set of IDs for O(1) lookup
           const likedIds = new Set(userFavorites.map((f: any) => f.target_id || f.food_id));
-          // Note: I need to verify what key the backend returns. 
-          // Defaulting to assuming standard join format or similar.
-          // Actually, verify backend service later. For now, try to map.
           foodsData = foodsData.map((f: Food) => ({
             ...f,
             liked: likedIds.has(f.food_id)
@@ -141,15 +150,20 @@ export default function MenuPage() {
     } catch (err) {
       setError(err instanceof Error ? err.message : 'An error occurred');
     } finally {
-      setLoading(false);
+      if (opts?.full) {
+        setLoading(false);
+      } else {
+        setContentLoading(false);
+      }
     }
   }, [searchQuery, JSON.stringify(selectedFilters), i18n.language, isLoggedIn]);
 
-  // Debounce search input so typing doesn't make a request on every keystroke
-  const didMountRef = useRef(false);
+  // Debounced search: trigger a content fetch 500ms after typing stops.
+  // Filters remain manual — they only run when the Filter button is clicked.
+  const searchDidMountRef = useRef(false);
   useEffect(() => {
-    if (!didMountRef.current) {
-      didMountRef.current = true;
+    if (!searchDidMountRef.current) {
+      searchDidMountRef.current = true;
       return;
     }
 
@@ -158,14 +172,24 @@ export default function MenuPage() {
     }, 500);
 
     return () => clearTimeout(handler);
-  }, [searchQuery, fetchFoods]);
+  }, [searchQuery]);
 
   const handleCheckboxChange = (type: keyof typeof selectedFilters, id: number) => {
     setSelectedFilters(prev => {
       const list = prev[type];
+
+      // If user clicks "全部" (id === 0), clear selections for that category
+      if (id === 0) {
+        // If already empty (already '全部'), do nothing
+        if (list.length === 0) return prev;
+        return { ...prev, [type]: [] };
+      }
+
+      // Toggle specific id; selecting any item removes the implicit '全部' state
       const newList = list.includes(id)
         ? list.filter(item => item !== id)
         : [...list, id];
+
       return { ...prev, [type]: newList };
     });
   };
@@ -189,10 +213,10 @@ export default function MenuPage() {
     }
   };
 
-  const clearAllFilters = () => {
+  const clearAllFilters = async () => {
     setSearchQuery('');
-    setSelectedFilters({ regions: [], flavors: [], ingredients: [] });
-    window.location.reload();
+    setSelectedFilters({ types: [], flavors: [], ingredients: [] });
+    await fetchFoods();
   };
 
   const totalPages = Math.ceil(foods.length / itemsPerPage);
@@ -218,7 +242,7 @@ export default function MenuPage() {
             className="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-600"
           />
           <button
-            onClick={fetchFoods}
+            onClick={() => fetchFoods()}
             className="px-8 py-2 bg-purple-600 text-white font-semibold rounded-lg hover:bg-purple-700 transition"
           >
             {t('menu.search.button')}
@@ -263,47 +287,7 @@ export default function MenuPage() {
             <div className="w-1/5 flex-shrink-0">
               <div className="bg-[#f7f7f7] rounded-lg p-6 shadow-sm">
 
-                {/* 1. region */}
-                <div className="mb-6">
-                  <h3 className="font-bold text-sm mb-3 text-gray-800">{t('menu.filter.region')}</h3>
-                  <ul className="space-y-2">
-                    {filterOptions.regions.map(opt => (
-                      <li key={opt.id} className="flex items-center gap-2">
-                        <input
-                          type="checkbox"
-                          id={`reg-${opt.id}`}
-                          checked={selectedFilters.regions.includes(opt.id)}
-                          onChange={() => handleCheckboxChange('regions', opt.id)}
-                          className="w-4 h-4 accent-purple-600 cursor-pointer"
-                        />
-                        <label htmlFor={`reg-${opt.id}`} className="text-sm cursor-pointer flex-1">{opt.name}</label>
-                      </li>
-                    ))}
-                  </ul>
-                  <hr className="my-4" />
-                </div>
-
-                {/* 2. flavor */}
-                <div className="mb-6">
-                  <h3 className="font-bold text-sm mb-3 text-gray-800">{t('menu.categories.preference')}</h3>
-                  <ul className="space-y-2">
-                    {filterOptions.flavors.map(opt => (
-                      <li key={opt.id} className="flex items-center gap-2">
-                        <input
-                          type="checkbox"
-                          id={`flav-${opt.id}`}
-                          checked={selectedFilters.flavors.includes(opt.id)}
-                          onChange={() => handleCheckboxChange('flavors', opt.id)}
-                          className="w-4 h-4 accent-purple-600 cursor-pointer"
-                        />
-                        <label htmlFor={`flav-${opt.id}`} className="text-sm cursor-pointer flex-1">{opt.name}</label>
-                      </li>
-                    ))}
-                  </ul>
-                  <hr className="my-4" />
-                </div>
-
-                {/* 3. ingredient */}
+                {/* 主な食材別 */}
                 <div className="mb-6">
                   <h3 className="font-bold text-sm mb-3 text-gray-800">{t('menu.categories.main_ingredients')}</h3>
                   <ul className="space-y-2 max-h-60 overflow-y-auto">
@@ -312,7 +296,7 @@ export default function MenuPage() {
                         <input
                           type="checkbox"
                           id={`ing-${opt.id}`}
-                          checked={selectedFilters.ingredients.includes(opt.id)}
+                          checked={opt.id === 0 ? selectedFilters.ingredients.length === 0 : selectedFilters.ingredients.includes(opt.id)}
                           onChange={() => handleCheckboxChange('ingredients', opt.id)}
                           className="w-4 h-4 accent-purple-600 cursor-pointer"
                         />
@@ -323,9 +307,49 @@ export default function MenuPage() {
                   <hr className="my-4" />
                 </div>
 
+                {/* 料理の種類別 */}
+                <div className="mb-6">
+                  <h3 className="font-bold text-sm mb-3 text-gray-800">{t('menu.categories.dish_type')}</h3>
+                  <ul className="space-y-2">
+                    {filterOptions.types.map(opt => (
+                      <li key={opt.id} className="flex items-center gap-2">
+                        <input
+                          type="checkbox"
+                          id={`type-${opt.id}`}
+                          checked={opt.id === 0 ? selectedFilters.types.length === 0 : selectedFilters.types.includes(opt.id)}
+                          onChange={() => handleCheckboxChange('types', opt.id)}
+                          className="w-4 h-4 accent-purple-600 cursor-pointer"
+                        />
+                        <label htmlFor={`type-${opt.id}`} className="text-sm cursor-pointer flex-1">{opt.name}</label>
+                      </li>
+                    ))}
+                  </ul>
+                  <hr className="my-4" />
+                </div>
+
+                {/* 特徴的な味 */}
+                <div className="mb-6">
+                  <h3 className="font-bold text-sm mb-3 text-gray-800">{t('menu.categories.preference')}</h3>
+                  <ul className="space-y-2">
+                    {filterOptions.flavors.map(opt => (
+                      <li key={opt.id} className="flex items-center gap-2">
+                        <input
+                          type="checkbox"
+                          id={`flav-${opt.id}`}
+                          checked={opt.id === 0 ? selectedFilters.flavors.length === 0 : selectedFilters.flavors.includes(opt.id)}
+                          onChange={() => handleCheckboxChange('flavors', opt.id)}
+                          className="w-4 h-4 accent-purple-600 cursor-pointer"
+                        />
+                        <label htmlFor={`flav-${opt.id}`} className="text-sm cursor-pointer flex-1">{opt.name}</label>
+                      </li>
+                    ))}
+                  </ul>
+                  <hr className="my-4" />
+                </div>
+
                 {/* filter button */}
                 <button
-                  onClick={fetchFoods}
+                  onClick={() => fetchFoods()}
                   className="w-full py-2 bg-purple-600 text-white font-semibold rounded-lg hover:bg-purple-700 transition"
                 >
                   {t('menu.filter.button') || 'Lọc kết quả'}
@@ -335,7 +359,14 @@ export default function MenuPage() {
 
             {/* === LIST === */}
             <div className="flex-1">
-              {foods.length > 0 ? (
+              {contentLoading ? (
+                <div className="flex-1 flex items-center justify-center min-h-[200px]">
+                  <div className="text-center">
+                    <div className="animate-spin rounded-full h-10 w-10 border-b-2 border-purple-600 mx-auto mb-2"></div>
+                    <p className="text-gray-600">{t('common.loading') || 'Loading...'}</p>
+                  </div>
+                </div>
+              ) : foods.length > 0 ? (
                 <>
                   {/* Grid Cards */}
                   <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
