@@ -77,15 +77,15 @@ export default function FavoritesPage() {
     <div className="w-full flex flex-col gap-10 py-10">
       <div className="max-w-6xl mx-auto px-4 w-full">
         <div className="flex items-center justify-center mb-8 relative">
-          <Badge className="text-lg px-8 py-3 bg-red-100 text-red-600 rounded-full shadow-sm font-medium">
-            Favorites List
-          </Badge>
+          <span className="text-6xl font-bold">
+            {t("FavoritesPage.title") /* e.g. "Favorites" */}
+          </span>
         </div>
 
         {favorites.length === 0 ? (
           <div className="text-center text-gray-500 py-20">
-            <p className="text-xl">You have no favorite dishes yet.</p>
-            <a href="/" className="text-orange-500 hover:underline mt-4 block">Explore Menu</a>
+            <p className="text-xl">{t("FavoritesPage.no_favorites")}</p>
+            <a href="/" className="text-orange-500 hover:underline mt-4 block">{t("FavoritesPage.browse_menu")}</a>
           </div>
         ) : (
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-16 justify-end">

@@ -283,5 +283,10 @@
   },
   "ScriptLoading": {
     "title": "Loading..."
+  }, 
+  "FavoritesPage": {
+    "title": "Favorite Foods",
+    "no_favorites": "You have no favorite dishes yet.",
+    "browse_menu": "Browse Menu"
   }
 }

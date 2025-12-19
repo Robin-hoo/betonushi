@@ -286,6 +286,11 @@
   },
   "ScriptLoading": {
     "title": "Đang tải..."
+  },
+  "FavoritesPage": {
+    "title": "Món ăn yêu thích",
+    "no_favorites": "Bạn chưa có món ăn yêu thích nào.",
+    "browse_menu": "Duyệt thực đơn"
   }
 }
 
