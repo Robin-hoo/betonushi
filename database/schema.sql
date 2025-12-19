@@ -126,6 +126,29 @@ CREATE TABLE restaurants (
     phone_number VARCHAR(20)
 );
 
+-- Translateable content tables for Foods and Restaurants
+CREATE TABLE IF NOT EXISTS food_translations (
+    translation_id SERIAL PRIMARY KEY,
+    food_id INTEGER NOT NULL REFERENCES foods(food_id) ON DELETE CASCADE,
+    lang VARCHAR(5) NOT NULL,
+    name VARCHAR(255),
+    story TEXT,
+    ingredient TEXT,
+    taste TEXT,
+    style TEXT,
+    comparison TEXT,
+    UNIQUE(food_id, lang)
+);
+
+CREATE TABLE IF NOT EXISTS restaurant_translations (
+    translation_id SERIAL PRIMARY KEY,
+    restaurant_id INTEGER NOT NULL REFERENCES restaurants(restaurant_id) ON DELETE CASCADE,
+    lang VARCHAR(5) NOT NULL,
+    name VARCHAR(255),
+    address TEXT,
+    UNIQUE(restaurant_id, lang)
+);
+
 -- Restaurant foods (many-to-many)
 CREATE TABLE restaurant_foods (
     restaurant_id INTEGER NOT NULL REFERENCES restaurants(restaurant_id) ON DELETE CASCADE,
@@ -282,18 +305,21 @@ $$ LANGUAGE plpgsql;
 -- ============================
 
 -- AFTER INSERT
+DROP TRIGGER IF EXISTS review_after_insert ON reviews;
 CREATE TRIGGER review_after_insert
 AFTER INSERT ON reviews
 FOR EACH ROW
 EXECUTE FUNCTION trigger_update_food_rating();
 
 -- AFTER UPDATE
+DROP TRIGGER IF EXISTS review_after_update ON reviews;
 CREATE TRIGGER review_after_update
 AFTER UPDATE ON reviews
 FOR EACH ROW
 EXECUTE FUNCTION trigger_update_food_rating();
 
 -- AFTER DELETE
+DROP TRIGGER IF EXISTS review_after_delete ON reviews;
 CREATE TRIGGER review_after_delete
 AFTER DELETE ON reviews
 FOR EACH ROW

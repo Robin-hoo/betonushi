@@ -5,7 +5,8 @@ const FoodService = require('../services/foodService');
  */
 async function getFoodById(req, res, next) {
   try {
-    const data = await FoodService.getFoodDetails(req.params.id);
+    const lang = (req.query.lang || (req.headers['accept-language'] || '').split(',')[0] || 'jp').slice(0,2);
+    const data = await FoodService.getFoodDetails(req.params.id, lang);
     return res.json(data);
   } catch (error) {
     return next(error);
@@ -23,8 +24,9 @@ async function getFilterOptions(req, res, next) {
 
 async function getPopularFoods(req, res, next) {
   try {
-    const foods = await FoodService.getFoods();
-    return res.json(data);
+    const lang = (req.query.lang || (req.headers['accept-language'] || '').split(',')[0] || 'jp').slice(0,2);
+    const foods = await FoodService.getFoods(lang);
+    return res.json(foods);
   } catch (error) {
     return next(error);
   }
@@ -35,12 +37,14 @@ async function getPopularFoods(req, res, next) {
 async function getAllFoods(req, res, next) {
   try {
     const { search, regions, flavors, ingredients } = req.query;
+    const lang = (req.query.lang || (req.headers['accept-language'] || '').split(',')[0] || 'jp').slice(0,2);
 
     const filters = {
       search: search || '',
       region_ids: regions ? regions.split(',').map(Number) : [],
       flavor_ids: flavors ? flavors.split(',').map(Number) : [],
-      ingredient_ids: ingredients ? ingredients.split(',').map(Number) : []
+      ingredient_ids: ingredients ? ingredients.split(',').map(Number) : [],
+      lang
     };
 
     const foods = await FoodService.getAllFoods(filters);

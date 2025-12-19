@@ -36,8 +36,9 @@ export interface Restaurant {
   reviews: Review[];
 }
 
-export async function getRestaurantById(id: string) {
-  const res = await api.get<Restaurant>(`/restaurants/${id}`);
+export async function getRestaurantById(id: string, lang?: string) {
+  const url = lang ? `/restaurants/${id}?lang=${encodeURIComponent(lang)}` : `/restaurants/${id}`;
+  const res = await api.get<Restaurant>(url);
   return res.data;
 }
 

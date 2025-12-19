@@ -4,20 +4,22 @@ const db = require('../db');
  * Fetch all restaurants from the database
  * @returns {Promise<Array>}
  */
-async function getAllRestaurants() {
+async function getAllRestaurants(lang = 'jp') {
     const result = await db.query(
         `SELECT 
-      restaurant_id,
-      name,
-      address,
-      latitude,
-      longitude,
-      open_time,
-      close_time,
-      price_range,
-      phone_number
-     FROM restaurants
-     ORDER BY restaurant_id`
+      r.restaurant_id,
+      COALESCE(rt.name, r.name) AS name,
+      COALESCE(rt.address, r.address) AS address,
+      r.latitude,
+      r.longitude,
+      r.open_time,
+      r.close_time,
+      r.price_range,
+      r.phone_number
+     FROM restaurants r
+     LEFT JOIN restaurant_translations rt ON rt.restaurant_id = r.restaurant_id AND rt.lang = $1
+     ORDER BY r.restaurant_id`,
+        [lang]
     );
 
     return result.rows;
@@ -28,22 +30,23 @@ async function getAllRestaurants() {
  * @param {number} restaurantId
  * @returns {Promise<{restaurant: object|null, foods: Array, facilities: Array, reviews: Array}>}
  */
-async function findRestaurantWithRelations(restaurantId) {
-    // Query restaurant basic info
+async function findRestaurantWithRelations(restaurantId, lang = 'jp') {
+    // Query restaurant basic info with translations
     const restaurantResult = await db.query(
         `SELECT 
-            restaurant_id,
-            name,
-            address,
-            latitude,
-            longitude,
-            open_time,
-            close_time,
-            price_range,
-            phone_number
-        FROM restaurants
-        WHERE restaurant_id = $1`,
-        [restaurantId]
+            r.restaurant_id,
+            COALESCE(rt.name, r.name) AS name,
+            COALESCE(rt.address, r.address) AS address,
+            r.latitude,
+            r.longitude,
+            r.open_time,
+            r.close_time,
+            r.price_range,
+            r.phone_number
+        FROM restaurants r
+        LEFT JOIN restaurant_translations rt ON rt.restaurant_id = r.restaurant_id AND rt.lang = $1
+        WHERE r.restaurant_id = $2`,
+        [lang, restaurantId]
     );
 
     if (restaurantResult.rowCount === 0) {
@@ -54,8 +57,8 @@ async function findRestaurantWithRelations(restaurantId) {
     const foodsResult = await db.query(
         `SELECT 
             f.food_id,
-            f.name,
-            f.story,
+            COALESCE(ft.name, f.name) AS name,
+            COALESCE(ft.story, f.story) AS story,
             rf.price,
             rf.is_recommended,
             (
@@ -67,9 +70,10 @@ async function findRestaurantWithRelations(restaurantId) {
             ) AS image_url
         FROM restaurant_foods rf
         INNER JOIN foods f ON rf.food_id = f.food_id
-        WHERE rf.restaurant_id = $1
-        ORDER BY rf.is_recommended DESC, f.name`,
-        [restaurantId]
+        LEFT JOIN food_translations ft ON ft.food_id = f.food_id AND ft.lang = $1
+        WHERE rf.restaurant_id = $2
+        ORDER BY rf.is_recommended DESC, COALESCE(ft.name, f.name)`,
+        [lang, restaurantId]
     );
 
     // Query restaurant facilities

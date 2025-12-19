@@ -26,7 +26,14 @@ export interface Food {
   reviews?: Review[];
 }
 
-export async function getFoodById(id: string) {
-  const res = await api.get<Food>(`/food/${id}`);
+export async function getFoodById(id: string, lang?: string) {
+  const url = lang ? `/foods/${id}?lang=${encodeURIComponent(lang)}` : `/food/${id}`;
+  const res = await api.get<Food>(url);
+  return res.data;
+}
+
+export async function getFoods(lang?: string) {
+  const url = lang ? `/foods?lang=${encodeURIComponent(lang)}` : `/foods`;
+  const res = await api.get<Food[]>(url);
   return res.data;
 }

@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { useTranslation } from "react-i18next";
 import { useParams, useNavigate, Link } from "react-router-dom";
 import { Star, MapPin, Clock, Phone, DollarSign, ArrowLeft } from "lucide-react";
 import { getRestaurantById, type Restaurant } from "@/api/restaurant.api";
@@ -14,6 +15,8 @@ const RestaurantDetailPage: React.FC = () => {
   const [error, setError] = useState<string | null>(null);
   const [selectedImageIndex, setSelectedImageIndex] = useState(0);
 
+  const { i18n } = useTranslation();
+
   useEffect(() => {
     if (!id) return;
 
@@ -21,7 +24,7 @@ const RestaurantDetailPage: React.FC = () => {
       setLoading(true);
       setError(null);
       try {
-        const data = await getRestaurantById(id);
+        const data = await getRestaurantById(id, i18n.language);
         setRestaurant(data);
       } catch (err) {
         console.error(err);
@@ -32,7 +35,7 @@ const RestaurantDetailPage: React.FC = () => {
     };
 
     fetchRestaurant();
-  }, [id]);
+  }, [id, i18n.language]);
 
   // Mock images for restaurant (you can add restaurant_images table later)
   const restaurantImages = [

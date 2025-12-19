@@ -72,18 +72,21 @@ END;
 $$ LANGUAGE plpgsql;
 
 -- AFTER INSERT
+DROP TRIGGER IF EXISTS review_after_insert ON review;
 CREATE TRIGGER review_after_insert
 AFTER INSERT ON review
 FOR EACH ROW
 EXECUTE FUNCTION trigger_update_food_rating();
 
 -- AFTER UPDATE
+DROP TRIGGER IF EXISTS review_after_update ON review;
 CREATE TRIGGER review_after_update
 AFTER UPDATE ON review
 FOR EACH ROW
 EXECUTE FUNCTION trigger_update_food_rating();
 
 -- AFTER DELETE
+DROP TRIGGER IF EXISTS review_after_delete ON review;
 CREATE TRIGGER review_after_delete
 AFTER DELETE ON review
 FOR EACH ROW

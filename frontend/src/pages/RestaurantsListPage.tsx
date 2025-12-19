@@ -51,11 +51,13 @@ export default function RestaurantsListPage() {
 
     // Fetch restaurants from API
     useEffect(() => {
-        const fetchRestaurants = async () => {
+        const { i18n } = useTranslation();
+
+    const fetchRestaurants = async () => {
             try {
                 setLoading(true);
                 setError(null);
-                const response = await api.get('/restaurants');
+                const response = await api.get(`/restaurants?lang=${encodeURIComponent(i18n.language)}`);
                 setRestaurants(response.data.map((restaurant: Restaurant) => ({ ...restaurant, liked: false })));
             } catch (err) {
                 setError(err instanceof Error ? err.message : 'An error occurred');
@@ -65,7 +67,7 @@ export default function RestaurantsListPage() {
         };
 
         fetchRestaurants();
-    }, []);
+    }, [i18n.language]);
 
     const handleToggleLike = (restaurant_id: number) => {
         setRestaurants(

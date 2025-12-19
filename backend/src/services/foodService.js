@@ -10,16 +10,16 @@ function buildHttpError(status, message) {
  * Business logic wrapper that validates input before hitting the DB.
  * @param {string} foodIdParam
  */
-async function getFoodDetails(foodIdParam) {
+async function getFoodDetails(foodIdParam, lang = 'jp') {
   const foodId = Number.parseInt(foodIdParam, 10);
   if (Number.isNaN(foodId) || foodId <= 0) {
-    throw buildHttpError(400, 'foodId phải là số nguyên dương');
+    throw buildHttpError(400, 'foodId must be a positive integer');
   }
 
   try {
-    const result = await FoodModel.findFoodWithRelations(foodId);
+    const result = await FoodModel.findFoodWithRelations(foodId, lang);
     if (!result.food) {
-      throw buildHttpError(404, 'Food không tồn tại');
+      throw buildHttpError(404, 'Food does not exist');
     }
 
     return {
@@ -34,7 +34,7 @@ async function getFoodDetails(foodIdParam) {
     // Log the actual error for debugging
     console.error('Database error in getFoodDetails:', err);
     // Bubble up a sanitized error for unexpected DB issues.
-    throw buildHttpError(500, `Lỗi khi lấy dữ liệu food: ${err.message}`);
+    throw buildHttpError(500, `Error when fetching food details: ${err.message}`);
   }
 }
 
@@ -48,7 +48,18 @@ async function getAllFoods(filters) {
     return foods;
   } catch (err) {
     console.error('Database error in getAllFoods:', err);
-    throw buildHttpError(500, `Lỗi khi lấy danh sách food: ${err.message}`);
+    throw buildHttpError(500, `Error when fetching food list: ${err.message}`);
+  }
+}
+
+
+async function getFoods(lang = 'jp') {
+  try {
+    const foods = await FoodModel.getPopularFoods(lang);
+    return foods;
+  } catch (err) {
+    console.error('Database error in getFoods:', err);
+    throw buildHttpError(500, `Error when fetching popular foods: ${err.message}`);
   }
 }
 
@@ -61,14 +72,11 @@ async function getFilterOptions() {
     return options;
   } catch (err) {
     console.error('Database error in getFilterOptions:', err);
-    throw buildHttpError(500, `Lỗi khi lấy filter options: ${err.message}`);
+    throw buildHttpError(500, `Error when fetching filter options: ${err.message}`);
   }
 }
 
 
-async function getFoods() {
-    return await FoodModel.getPopularFoods();
-  }
 
 module.exports = {
   getFoodDetails,

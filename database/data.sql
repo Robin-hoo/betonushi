@@ -123,29 +123,29 @@ INSERT INTO users (email, password_hash, full_name, birth_date, avatar_url, role
     ('user4@example.com', '$2a$10$N9qo8uLOickgx2ZMRZoMyeIjNejKqH7KPG7KPG7KPG7KPG7KPG7KP', 'Phạm Thị D', '1993-11-30', '/avatars/user4.jpg', 'user');
 
 -- ====================================
--- Insert Foods (Vietnamese Food)
+-- Insert Foods (Japanese base; translations for vi/en are inserted separately below)
 -- ====================================
 INSERT INTO foods (name, story, ingredient, taste, style, comparison, region_id, view_count, rating, number_of_rating) VALUES 
-    ('Phở', 'Originated in Northern Vietnam in the early 20th century', 'Rice Noodles, Beef, Fish Sauce, Herbs, Bean Sprouts, Onion, Star Anise, Cinnamon', 'Salty, Umami, Herbal', 'Eat with fresh herbs, lime, and chili. Add hoisin sauce and sriracha to taste.', 'Similar to Japanese ramen but lighter broth. Uses rice noodles instead of wheat noodles.', 1, 1250, 4.8, 0),
-    ('Bánh Mì', 'A fusion of French and Vietnamese cuisine during colonial period', 'French Baguette, Pate, Pork, Pickled Vegetables, Cucumber, Cilantro', 'Sour, Salty, Sweet', 'Eat as a quick meal or snack. Best when the bread is crispy and fresh.', 'Like a French baguette sandwich but with Vietnamese ingredients and flavors.', NULL, 980, 4.7, 0),
-    ('Bún Chả', 'A traditional Hanoi specialty dish', 'Pork, Fish Sauce, Lime, Herbs, Vermicelli', 'Sweet, Sour, Salty, Umami', 'Dip grilled pork and vermicelli in the sweet fish sauce. Add herbs and vegetables.', 'Similar to Japanese yakitori but served with noodles and dipping sauce.', 1, 850, 4.9, 0),
-    ('Cơm Tấm', 'Popular street food in Southern Vietnam', 'Broken Rice, Pork, Egg, Pickled Vegetables', 'Sweet, Salty, Umami', 'Mix all ingredients together. Pour fish sauce over the rice.', 'Like Japanese donburi but uses broken rice and grilled pork chop.', 3, 920, 4.6, 0),
-    ('Gỏi Cuốn', 'A healthy Vietnamese appetizer', 'Shrimp, Pork, Rice Paper, Lettuce, Mint, Cilantro, Vermicelli', 'Herbal', 'Dip in peanut sauce or fish sauce. Eat fresh and cold.', 'Similar to Japanese hand rolls but uses rice paper and fresh ingredients.', NULL, 750, 4.5, 0),
-    ('Bánh Xèo', 'Popular in Central and Southern Vietnam', 'Rice Flour, Shrimp, Pork, Bean Sprouts, Turmeric', 'Salty, Umami, Herbal', 'Wrap in lettuce with herbs. Dip in fish sauce.', 'Like Japanese okonomiyaki but thinner and crispier.', 2, 680, 4.7, 0),
-    ('Bún Bò Huế', 'Royal city specialty from Central Vietnam', 'Rice Noodles, Beef, Pork, Lemongrass, Chili', 'Spicy, Salty, Umami, Herbal', 'Eat with fresh herbs and lime. Add chili oil for extra spice.', 'Spicier version of pho with lemongrass flavor. Similar to spicy ramen.', 2, 920, 4.8, 0),
-    ('Cao Lầu', 'Exclusive to Hoi An ancient town', 'Rice Noodles, Pork, Herbs, Lettuce', 'Salty, Umami', 'Mix noodles with toppings. Eat with the small amount of broth.', 'Unique to Vietnam, no direct Japanese equivalent. Texture similar to udon.', 2, 540, 4.6, 0),
-    ('Mì Quảng', 'Traditional dish from Quang Nam province', 'Rice Nood les, Beef, Shrimp, Egg, Peanuts, Turmeric', 'Salty, Umami, Herbal', 'Mix all ingredients together. Add peanuts and sesame crackers.', 'Like Japanese mazesoba (mixed noodles) with less broth.', 2, 620, 4.7, 0),
-    ('Bánh Cuốn', 'Northern Vietnamese breakfast favorite', 'Pork, Rice, Mushroom', 'Salty, Umami', 'Eat with fish sauce and fried shallots. Best when hot.', 'Similar to Japanese rice crepes but steamed instead of grilled.', 1, 580, 4.5, 0),
-    ('Chả Cá', 'Famous Hanoi dish from Cha Ca La Vong restaurant', 'Rice Noodles, Fish, Turmeric, Green Onion', 'Salty, Umami, Herbal', 'Cook fish at the table with dill. Mix with vermicelli and peanuts.', 'Similar to Japanese fish hot pot but with turmeric and dill.', 1, 490, 4.8, 0),
-    ('Hủ Tiếu', 'Southern Vietnamese breakfast staple', 'Rice Noodles, Pork, Shrimp, Bean Sprouts', 'Sweet, Salty, Umami', 'Eat with lime and chili. Can be served dry or with broth.', 'Like Japanese ramen but with clearer, sweeter broth.', 3, 710, 4.6, 0),
-    ('Bánh Bột Lọc', 'Traditional Hue delicacy', 'Pork, Shrimp, Tapioca Flour', 'Salty, Umami', 'Dip in fish sauce. Eat while hot.', 'Similar to Japanese gyoza but with translucent wrapper.', 2, 420, 4.4, 0),
-    ('Nem Rán/Chả Giò', 'Popular Vietnamese appetizer nationwide', 'Pork, Shrimp, Carrot, Mushroom, Spring Roll Wrapper', 'Salty, Umami', 'Wrap in lettuce with herbs. Dip in fish sauce.', 'Like Japanese spring rolls but fried until very crispy.', NULL, 890, 4.7, 0),
-    ('Cá Kho Tộ', 'Southern Vietnamese home-cooked meal', 'Fish, Fish Sauce, Sugar, Vinegar', 'Sweet, Salty, Umami', 'Eat with white rice. The sauce is perfect for soaking rice.', 'Similar to Japanese teriyaki fish but with caramelized sauce.', 3, 520, 4.5, 0),
-    ('Thịt Kho Tàu', 'Vietnamese Lunar New Year traditional dish', 'Pork, Coconut Milk, Egg, Sugar', 'Sweet, Salty', 'Eat with white rice and pickled vegetables. A traditional Tet dish.', 'Like Japanese kakuni (braised pork belly) but sweeter with coconut.', 3, 610, 4.6, 0),
-    ('Bánh Khọt', 'Vung Tau specialty dish', 'Shrimp, Rice, Tapioca Flour', 'Salty, Umami', 'Eat hot and crispy. Dip in fish sauce with vegetables.', 'Like mini takoyaki but with shrimp and rice flour.', 3, 380, 4.5, 0),
-    ('Bò Lúc Lắc', 'Vietnamese-French fusion dish', 'Beef, Onion, Lettuce, Tomato', 'Salty, Umami', 'Eat with rice or French fries. Dip beef in salt, pepper, and lime.', 'Like Japanese teppanyaki beef but with Vietnamese seasonings.', 3, 720, 4.7, 0),
-    ('Gà Nướng', 'Popular Vietnamese street food', 'Chicken, Lemongrass, Chili', 'Salty, Umami, Herbal', 'Eat with rice or vermicelli. Add lime and chili sauce.', 'Similar to Japanese yakitori but with lemongrass marinade.', NULL, 660, 4.6, 0),
-    ('Lẩu', 'Communal Vietnamese dining experience', 'Beef, Chicken, Shrimp, Herbs, Tofu, Mushroom', 'Sweet, Spicy, Salty, Umami', 'Cook ingredients in hot broth at the table. Dip in various sauces.', 'Very similar to Japanese shabu-shabu or nabemono.', NULL, 950, 4.8, 0);
+    ('フォー', '20世紀初頭に北ベトナムで発祥しました。', 'ライスヌードル、牛肉、ヌクマム（魚醤）、ハーブ、もやし、玉ねぎ、八角、シナモン', '塩味、うま味、ハーブ風味', 'ハーブ、ライム、チリと一緒にいただきます。ホイシンやチリソースはお好みで。', 'ラーメンより軽く、米の麺を使います。', 1, 1250, 4.8, 0),
+    ('バインミー', '植民地時代にフランスとベトナムの食文化が融合して生まれました。', 'バゲット、パテ、豚肉、なます、きゅうり、パクチー', '酸味、塩味、甘味', '軽食として最適。パンはカリッと新鮮なものが一番。', 'フランスのサンドイッチに似ていますが、具材はベトナム風です。', NULL, 980, 4.7, 0),
+    ('ブンチャー', 'ハノイの伝統料理で、炭火焼きの豚と甘酸っぱいタレでいただきます。', '豚肉、魚醤、ライム、ハーブ、ビーフン（ヴェルミチェッリ）', '甘味、酸味、塩味、うま味', 'グリルした豚とビーフンを甘酸っぱいタレに浸して食べます。ハーブや野菜を添えて。', '焼き鳥に似ていますが、麺やつけダレと一緒に出されます。', 1, 850, 4.9, 0),
+    ('コムタム', '南部で人気の屋台料理です。', '壊れた米（コムタム）、豚、卵、なます', '甘味、塩味、うま味', '全ての具材を混ぜて、魚醤をかけていただきます。', 'ドンブリのようですが、壊れた米と豚のグリルを使います。', 3, 920, 4.6, 0),
+    ('ゴイクン', 'ヘルシーなベトナムの前菜で、新鮮な材料をライスペーパーで巻きます。', 'エビ、豚肉、米の皮、レタス、ミント、パクチー、ビーフン', 'ハーバル（爽やか）', 'ピーナッツソースや魚醤につけて、冷たく新鮮に食べます。', '日本の手巻きに似ていますが、ライスペーパーを使用します。', NULL, 750, 4.5, 0),
+    ('バインセオ', '中部および南部で人気の料理です。', '米粉、エビ、豚肉、もやし、ターメリック', '塩味、うま味、ハーバル', 'レタスとハーブで包んで、魚醤につけて食べます。', 'お好み焼きに似ていますが、薄くてカリッとしています。', 2, 680, 4.7, 0),
+    ('ブンボーフェ', '中央ベトナムの王宮料理が起源の辛いスープ麺です。', 'ライスヌードル、牛、豚、レモングラス、チリ', '辛味、塩味、うま味、ハーバル', 'ハーブとライムを添えて。辛さは好みで調整します。', 'レモングラスの風味がある辛いフォーのようです。', 2, 920, 4.8, 0),
+    ('カオラウ', 'ホイアンの名物で、少量のスープで食べる麺料理です。', '米麺、豚肉、ハーブ、レタス', '塩味、うま味', '具と一緒に混ぜて少量のスープで食べます。', '独特の食感で、うどんに近い部分があります。', 2, 540, 4.6, 0),
+    ('ミークアン', 'クアンナム省の伝統料理で、ピーナッツやせんべいを添えることが多いです。', '米麺、牛肉、エビ、卵、ピーナッツ、ターメリック', '塩味、うま味、ハーバル', '全ての具を混ぜて食べます。ピーナッツを加えるのが特徴です。', 'マゼソバのようですが、スープは少なめです。', 2, 620, 4.7, 0),
+    ('バインクオン', '北部の朝食の定番で、蒸して提供されます。', '豚肉、米、きのこ', '塩味、うま味', '魚醤と揚げネギを添えて。', '熱いうちに食べるのが一番。', 1, 580, 4.5, 0),
+    ('チャーカー', 'ハノイの名物料理で、ターメリックとディルで味付けした魚を使用します。', 'ビーフン、魚、ターメリック、青ねぎ', '塩味、うま味、ハーバル', 'テーブルで魚を調理して、ビーフンとピーナッツを混ぜて食べます。', '魚の鍋料理に似ていますが、ターメリックとディルが特徴です。', 1, 490, 4.8, 0),
+    ('フーティウ', '南部の朝食の定番で、澄んだ甘めのスープが特徴です。', 'ライスヌードル、豚肉、エビ、もやし', '甘味、塩味、うま味', 'ライムとチリを添えて。', '汁あり・汁なしどちらでも食べられます。', 3, 710, 4.6, 0),
+    ('バインボットロック', 'フエの伝統的な料理で、透き通った皮が特徴です。', '豚肉、エビ、タピオカ粉', '塩味、うま味', '', '魚醤につけて熱いうちに食べます。', 2, 420, 4.4, 0),
+    ('ネムラン／チャーヨー', 'ベトナム全国で人気の前菜です。', '豚肉、エビ、にんじん、きのこ、ライスペーパー', '塩味、うま味', 'レタスとハーブで包んで、魚醤につけて食べます。', '', NULL, 890, 4.7, 0),
+    ('カーカー', '南部の家庭料理で、魚を甘辛く煮込んだものです。', '魚、魚醤、砂糖、酢', '甘味、塩味、うま味', '白飯と一緒に食べます。', 'ソースはご飯にぴったりです。', 3, 520, 4.5, 0),
+    ('ティットホー', '旧正月に食べられる伝統料理で、豚の角煮と卵を使います。', '豚肉、ココナッツミルク、卵、砂糖', '甘味、塩味', '白飯と一緒に食べ、なますを添えるのが伝統です。', '', 3, 610, 4.6, 0),
+    ('バインコット', 'ヴンタウの名物で、小さなココナッツ風味の揚げパンです。', 'エビ、米、タピオカ粉', '塩味、うま味', '熱いうちにカリッと食べます。', '野菜と一緒に魚醤で食べます。', 3, 380, 4.5, 0),
+    ('ボールックラック', 'ベトナム・フランスの融合料理で、香ばしく炒めた牛肉が特徴です。', '牛肉、玉ねぎ、レタス、トマト', '塩味、うま味', '白飯やフライドポテトと一緒に。', '塩こしょうとライムで味を調えます。', 3, 720, 4.7, 0),
+    ('ガーヌォン', '馴染み深いベトナムの屋台料理で、レモングラスでマリネした鶏が特徴です。', '鶏肉、レモングラス、チリ', '塩味、うま味、ハーバル', '白飯やビーフンと一緒に。', 'ライムとチリソースを添えます。', NULL, 660, 4.6, 0),
+    ('ラウ', 'みんなで囲んで食べる鍋料理で、具材やスープのバリエーションが豊富です。', '牛肉、鶏肉、エビ、ハーブ、豆腐、きのこ', '甘味、辛味、塩味、うま味', 'テーブルで材料を煮て、各種ソースでいただきます。', '', NULL, 950, 4.8, 0);
 
 -- ====================================
 -- Insert Food Flavors
@@ -374,29 +374,119 @@ INSERT INTO food_ingredients (food_id, ingredient_id) VALUES
 -- Insert Restaurants
 -- ====================================
 INSERT INTO restaurants (name, address, latitude, longitude, open_time, close_time, price_range, phone_number) VALUES 
-    -- TP.HCM Restaurants (1-10)
-    ('Phở Hà Nội', '123 Nguyễn Huệ, Quận 1, TP.HCM', 10.77346000, 106.70217000, '06:00:00', '22:00:00', '30,000 - 80,000 VND', '0901234567'),
-    ('Bánh Mì Huỳnh Hoa', '26 Lê Thị Riêng, Quận 1, TP.HCM', 10.76839000, 106.69244000, '15:00:00', '23:30:00', '20,000 - 50,000 VND', '0902345678'),
-    ('Bún Chả Hà Nội', '456 Trần Hưng Đạo, Quận 5, TP.HCM', 10.75523000, 106.67248000, '10:00:00', '21:00:00', '40,000 - 90,000 VND', '0903456789'),
-    ('Cơm Tấm Sướn Nướng', '789 Hai Bà Trưng, Quận 3, TP.HCM', 10.78251000, 106.68876000, '06:30:00', '20:00:00', '35,000 - 70,000 VND', '0904567890'),
-    ('Quán Ốc Oanh', '234 Võ Văn Tần, Quận 3, TP.HCM', 10.77943000, 106.69110000, '16:00:00', '02:00:00', '50,000 - 200,000 VND', '0905678901'),
-    ('Bánh Xèo 46A', '46A Đinh Công Tráng, Quận 1, TP.HCM', 10.77234000, 106.69567000, '11:00:00', '21:30:00', '40,000 - 100,000 VND', '0906789012'),
-    ('Bún Bò Huế Xuân Trường', '321 Lê Văn Sỹ, Quận 3, TP.HCM', 10.78456000, 106.67893000, '06:00:00', '22:00:00', '35,000 - 75,000 VND', '0907890123'),
-    ('Hủ Tiếu Nam Vang', '567 Nguyễn Trãi, Quận 5, TP.HCM', 10.75678000, 106.66543000, '05:30:00', '14:00:00', '30,000 - 60,000 VND', '0908901234'),
-    ('Gỏi Cuốn Sài Gòn', '890 Pasteur, Quận 1, TP.HCM', 10.77890000, 106.69876000, '10:00:00', '22:00:00', '25,000 - 80,000 VND', '0909012345'),
-    ('Lẩu Thái Hải Sản', '111 Nguyễn Đình Chiểu, Quận 3, TP.HCM', 10.77654000, 106.68765000, '11:00:00', '23:00:00', '150,000 - 500,000 VND', '0910123456'),
+    -- TP.HCM Restaurants (1-10) - base names in Japanese
+    ('ハノイのフォー', '123 Nguyễn Huệ, 第1区, ホーチミン市', 10.77346000, 106.70217000, '06:00:00', '22:00:00', '30,000 - 80,000 VND', '0901234567'),
+    ('フインホアのバインミー', '26 Lê Thị Riêng, 第1区, ホーチミン市', 10.76839000, 106.69244000, '15:00:00', '23:30:00', '20,000 - 50,000 VND', '0902345678'),
+    ('ブンチャー・ハノイ', '456 Trần Hưng Đạo, 第5区, ホーチミン市', 10.75523000, 106.67248000, '10:00:00', '21:00:00', '40,000 - 90,000 VND', '0903456789'),
+    ('コムタム・スーンヌオン', '789 Hai Bà Trưng, 第3区, ホーチミン市', 10.78251000, 106.68876000, '06:30:00', '20:00:00', '35,000 - 70,000 VND', '0904567890'),
+    ('クアンオック・オアン', '234 Võ Văn Tần, 第3区, ホーチミン市', 10.77943000, 106.69110000, '16:00:00', '02:00:00', '50,000 - 200,000 VND', '0905678901'),
+    ('バインセオ46A', '46A Đinh Công Tráng, 第1区, ホーチミン市', 10.77234000, 106.69567000, '11:00:00', '21:30:00', '40,000 - 100,000 VND', '0906789012'),
+    ('ブンボーフェ・スアンチュオン', '321 Lê Văn Sỹ, 第3区, ホーチミン市', 10.78456000, 106.67893000, '06:00:00', '22:00:00', '35,000 - 75,000 VND', '0907890123'),
+    ('フーティウ・ナムバン', '567 Nguyễn Trãi, 第5区, ホーチミン市', 10.75678000, 106.66543000, '05:30:00', '14:00:00', '30,000 - 60,000 VND', '0908901234'),
+    ('ゴイクン・サイゴン', '890 Pasteur, 第1区, ホーチミン市', 10.77890000, 106.69876000, '10:00:00', '22:00:00', '25,000 - 80,000 VND', '0909012345'),
+    ('ラウ・タイ海鮮', '111 Nguyễn Đình Chiểu, 第3区, ホーチミン市', 10.77654000, 106.68765000, '11:00:00', '23:00:00', '150,000 - 500,000 VND', '0910123456'),
     
-    -- Hà Nội Restaurants (11-20)
-    ('Phở Thìn Bờ Hồ', '13 Lò Đúc, Hai Bà Trưng, Hà Nội', 21.01796000, 105.84817000, '06:00:00', '21:30:00', '40,000 - 80,000 VND', '0911234567'),
-    ('Bún Chả Đắc Kim', '1 Hàng Mành, Hoàn Kiếm, Hà Nội', 21.03508000, 105.85243000, '10:00:00', '21:00:00', '50,000 - 100,000 VND', '0912345678'),
-    ('Chả Cá Lã Vọng', '14 Chả Cá, Hoàn Kiếm, Hà Nội', 21.02946000, 105.85175000, '11:00:00', '21:00:00', '80,000 - 150,000 VND', '0913456789'),
-    ('Bánh Cuốn Bà Xuân', '14 Hàng Gà, Hoàn Kiếm, Hà Nội', 21.03255000, 105.84987000, '06:00:00', '20:00:00', '30,000 - 60,000 VND', '0914567890'),
-    ('Phở Gia Truyền Bát Đàn', '49 Bát Đàn, Hoàn Kiếm, Hà Nội', 21.03068000, 105.84729000, '06:00:00', '22:00:00', '35,000 - 70,000 VND', '0915678901'),
-    ('Bún Bò Nam Bộ', '67 Hàng Điếu, Hoàn Kiếm, Hà Nội', 21.03421000, 105.85326000, '09:00:00', '22:00:00', '40,000 - 80,000 VND', '0916789012'),
-    ('Nem Phùng', '26 Hàng Bạc, Hoàn Kiếm, Hà Nội', 21.03387000, 105.85124000, '11:00:00', '22:00:00', '50,000 - 120,000 VND', '0917890123'),
-    ('Bánh Mì 25', '25 Hàng Cá, Hoàn Kiếm, Hà Nội', 21.03299000, 105.84892000, '06:30:00', '22:00:00', '15,000 - 40,000 VND', '0918901234'),
-    ('Bò Tùng Xéo', '34 Cầu Gỗ, Hoàn Kiếm, Hà Nội', 21.02835000, 105.85243000, '15:00:00', '23:00:00', '60,000 - 150,000 VND', '0919012345'),
-    ('Gà Tần Đồng Xuân', '33 Hàng Giấy, Hoàn Kiếm, Hà Nội', 21.03654000, 105.85012000, '10:00:00', '22:00:00', '70,000 - 180,000 VND', '0920123456');
+    -- Hà Nội Restaurants (11-20) - base names in Japanese
+    ('フォー・ティン', '13 Lò Đúc, ハイバーチュン区, ハノイ市', 21.01796000, 105.84817000, '06:00:00', '21:30:00', '40,000 - 80,000 VND', '0911234567'),
+    ('ブンチャー・ダックキム', '1 Hàng Mành, ホアンキエム区, ハノイ市', 21.03508000, 105.85243000, '10:00:00', '21:00:00', '50,000 - 100,000 VND', '0912345678'),
+    ('チャーカー・ラーボン', '14 Chả Cá, ホアンキエム区, ハノイ市', 21.02946000, 105.85175000, '11:00:00', '21:00:00', '80,000 - 150,000 VND', '0913456789'),
+    ('バインクオン・バーシュアン', '14 Hàng Gà, ホアンキエム区, ハノイ市', 21.03255000, 105.84987000, '06:00:00', '20:00:00', '30,000 - 60,000 VND', '0914567890'),
+    ('フォー・バットダン', '49 Bát Đàn, ホアンキエム区, ハノイ市', 21.03068000, 105.84729000, '06:00:00', '22:00:00', '35,000 - 70,000 VND', '0915678901'),
+    ('ブンボー・ナムボー', '67 Hàng Điếu, ホアンキエム区, ハノイ市', 21.03421000, 105.85326000, '09:00:00', '22:00:00', '40,000 - 80,000 VND', '0916789012'),
+    ('ネム・フング', '26 Hàng Bạc, ホアンキエム区, ハノイ市', 21.03387000, 105.85124000, '11:00:00', '22:00:00', '50,000 - 120,000 VND', '0917890123'),
+    ('バインミー25', '25 Hàng Cá, ホアンキエム区, ハノイ市', 21.03299000, 105.84892000, '06:30:00', '22:00:00', '15,000 - 40,000 VND', '0918901234'),
+    ('ボー・トゥングセオ', '34 Cầu Gỗ, ホアンキエム区, ハノイ市', 21.02835000, 105.85243000, '15:00:00', '23:00:00', '60,000 - 150,000 VND', '0919012345'),
+    ('ガータン・ドンシュアン', '33 Hàng Giấy, ホアンキエム区, ハノイ市', 21.03654000, 105.85012000, '10:00:00', '22:00:00', '70,000 - 180,000 VND', '0920123456');
+
+-- ====================================
+-- Insert Food Translations (vi & en)
+-- ====================================
+INSERT INTO food_translations (food_id, lang, name, story, ingredient, taste, style, comparison) VALUES
+    (1, 'vi', 'Phở', 'Xuất phát từ Bắc Việt Nam vào đầu thế kỷ 20', 'Bánh phở, Thịt bò, Nước mắm, Rau thơm, Giá đỗ, Hành, Hoa hồi, Quế', 'Mặn, Umami, Hương thảo', 'Ăn kèm rau sống, chanh và ớt. Thêm tương hoisin và tương ớt nếu thích.', 'Nhẹ hơn ramen, dùng bún gạo.'),
+    (1, 'en', 'Pho', 'Originated in Northern Vietnam in the early 20th century', 'Rice noodles, beef, fish sauce, herbs, bean sprouts, onion, star anise, cinnamon', 'Salty, Umami, Herbal', 'Serve with fresh herbs, lime and chili. Add hoisin sauce and sriracha to taste.', 'Lighter than ramen, uses rice noodles.'),
+    (2, 'vi', 'Bánh Mì', 'Sự pha trộn giữa ẩm thực Pháp và Việt trong thời kỳ thuộc địa.', 'Bánh mì, Pâté, Thịt heo, Rau muối chua, Dưa leo, Ngò', 'Chua, Mặn, Ngọt', 'Ăn như bữa ăn nhanh hoặc ăn vặt. Bánh mì nên giòn và mới.', 'Giống như bánh mì kẹp Pháp nhưng với nhân Việt Nam.'),
+    (2, 'en', 'Banh Mi', 'A fusion of French and Vietnamese cuisine during colonial period', 'Baguette, pate, pork, pickled vegetables, cucumber, cilantro', 'Sour, Salty, Sweet', 'Eat as a quick meal or snack. Best when the bread is crispy and fresh.', 'Like a French sandwich but with Vietnamese fillings.'),
+    (3, 'vi', 'Bún Chả', 'Món đặc sản truyền thống của Hà Nội', 'Thịt heo, Nước mắm, Chanh, Rau thơm, Bún', 'Ngọt, Chua, Mặn, Umami', 'Chấm thịt nướng và bún vào nước mắm chua ngọt. Thêm rau sống.', 'Tương tự yakitori nhưng ăn kèm bún và nước chấm.'),
+    (3, 'en', 'Bun Cha', 'A traditional Hanoi specialty dish', 'Pork, fish sauce, lime, herbs, vermicelli', 'Sweet, Sour, Salty, Umami', 'Dip grilled pork and vermicelli in the sweet fish sauce. Add herbs and vegetables.', 'Similar to Japanese yakitori but served with noodles and dipping sauce.'),
+    (4, 'vi', 'Cơm Tấm', 'Món ăn đường phố phổ biến ở miền Nam Việt Nam', 'Cơm tấm, Sườn, Trứng, Dưa chua', 'Ngọt, Mặn, Umami', 'Trộn tất cả các nguyên liệu, rưới nước mắm lên cơm.', 'Giống donburi ở Nhật nhưng dùng cơm tấm và sườn nướng.'),
+    (4, 'en', 'Com Tam', 'Popular street food in Southern Vietnam', 'Broken rice, pork, egg, pickled vegetables', 'Sweet, Salty, Umami', 'Mix all ingredients together. Pour fish sauce over the rice.', 'Like Japanese donburi but uses broken rice and grilled pork chop.'),
+    (5, 'vi', 'Gỏi Cuốn', 'Món khai vị lành mạnh của Việt Nam', 'Tôm, Thịt, Bánh tráng, Rau, Bún', 'Mùi thảo mộc', 'Chấm với nước sốt đậu phộng hoặc nước mắm. Ăn tươi và lạnh.', 'Tương tự hand roll Nhật nhưng dùng bánh tráng và nguyên liệu tươi.'),
+    (5, 'en', 'Goi Cuon', 'A healthy Vietnamese appetizer', 'Shrimp, pork, rice paper, lettuce, mint, cilantro, vermicelli', 'Herbal', 'Dip in peanut sauce or fish sauce. Eat fresh and cold.', 'Similar to Japanese hand rolls but uses rice paper and fresh ingredients.'),
+    (6, 'vi', 'Bánh Xèo', 'Phổ biến ở miền Trung và miền Nam Việt Nam', 'Bột gạo, Tôm, Thịt, Giá, Nghệ', 'Mặn, Umami, Mùi thảo mộc', 'Cuốn với rau sống, chấm với nước mắm.', 'Giống okonomiyaki nhưng mỏng và giòn hơn.'),
+    (6, 'en', 'Banh Xeo', 'Popular in Central and Southern Vietnam', 'Rice flour, shrimp, pork, bean sprouts, turmeric', 'Salty, Umami, Herbal', 'Wrap in lettuce with herbs. Dip in fish sauce.', 'Like Japanese okonomiyaki but thinner and crispier.'),
+    (7, 'vi', 'Bún Bò Huế', 'Món đặc sản kinh đô từ miền Trung', 'Bún, Bò, Heo, Sả, Ớt', 'Cay, Mặn, Umami, Mùi thảo mộc', 'Ăn với rau sống và chanh. Thêm ớt nếu muốn.', 'Phiên bản cay hơn của phở với hương sả.'),
+    (7, 'en', 'Bun Bo Hue', 'Royal city specialty from Central Vietnam', 'Rice noodles, beef, pork, lemongrass, chili', 'Spicy, Salty, Umami, Herbal', 'Eat with fresh herbs and lime. Add chili oil for extra spice.', 'Spicier version of pho with lemongrass flavor. Similar to spicy ramen.'),
+    (8, 'vi', 'Cao Lầu', 'Món đặc sản của phố cổ Hội An', 'Bún, Thịt heo, Rau, Xà lách', 'Mặn, Umami', 'Trộn bún với các topping, ăn cùng ít nước dùng.', 'Đặc trưng riêng, kết cấu giống một chút với udon.'),
+    (8, 'en', 'Cao Lau', 'Exclusive to Hoi An ancient town', 'Rice noodles, pork, herbs, lettuce', 'Salty, Umami', 'Mix noodles with toppings. Eat with the small amount of broth.', 'Unique to Vietnam, no direct Japanese equivalent. Texture similar to udon.'),
+    (9, 'vi', 'Mì Quảng', 'Món truyền thống của Quảng Nam', 'Bún, Bò, Tôm, Trứng, Đậu phộng, Nghệ', 'Mặn, Umami, Mùi thảo mộc', 'Trộn các nguyên liệu với nhau, thêm đậu phộng và bánh tráng.', 'Giống mazesoba Nhật nhưng ít nước hơn.'),
+    (9, 'en', 'Mi Quang', 'Traditional dish from Quang Nam province', 'Rice noodles, beef, shrimp, egg, peanuts, turmeric', 'Salty, Umami, Herbal', 'Mix all ingredients together. Add peanuts and sesame crackers.', 'Like Japanese mazesoba (mixed noodles) with less broth.'),
+    (10, 'vi', 'Bánh Cuốn', 'Món điểm tâm phổ biến ở miền Bắc', 'Thịt, Gạo, Nấm', 'Mặn, Umami', 'Ăn với nước mắm và hành phi. Nên ăn khi nóng.', 'Tương tự bánh crepe gạo của Nhật nhưng được hấp.'),
+    (10, 'en', 'Banh Cuon', 'Northern Vietnamese breakfast favorite', 'Pork, rice, mushroom', 'Salty, Umami', 'Eat with fish sauce and fried shallots. Best when hot.', 'Similar to Japanese rice crepes but steamed instead of grilled.'),
+    (11, 'vi', 'Chả Cá', 'Món nổi tiếng của Hà Nội từ Cha Ca La Vong', 'Bún, Cá, Nghệ, Hành xanh', 'Mặn, Umami, Mùi thảo mộc', 'Nấu cá tại bàn với thì là. Trộn với bún và đậu phộng.', 'Giống món lẩu cá nhưng có nghệ và thì là đặc trưng.'),
+    (11, 'en', 'Cha Ca', 'Famous Hanoi dish from Cha Ca La Vong restaurant', 'Rice noodles, fish, turmeric, green onion', 'Salty, Umami, Herbal', 'Cook fish at the table with dill. Mix with vermicelli and peanuts.', 'Similar to Japanese fish hot pot but with turmeric and dill.'),
+    (12, 'vi', 'Hủ Tiếu', 'Món ăn sáng phổ biến ở miền Nam', 'Bún, Thịt heo, Tôm, Giá', 'Ngọt, Mặn, Umami', 'Ăn với chanh và ớt. Có thể ăn khô hoặc có nước.', 'Giống ramen nhưng nước trong và hơi ngọt.'),
+    (12, 'en', 'Hu Tieu', 'Southern Vietnamese breakfast staple', 'Rice noodles, pork, shrimp, bean sprouts', 'Sweet, Salty, Umami', 'Eat with lime and chili. Can be served dry or with broth.', 'Like Japanese ramen but with clearer, sweeter broth.'),
+    (13, 'vi', 'Bánh Bột Lọc', 'Món đặc sản Huế', 'Thịt, Tôm, Bột sắn', 'Mặn, Umami', 'Chấm với nước mắm. Nên ăn khi nóng.', 'Giống gyoza của Nhật nhưng lớp vỏ trong suốt.'),
+    (13, 'en', 'Bot Loc Cake', 'Traditional Hue delicacy', 'Pork, shrimp, tapioca flour', 'Salty, Umami', 'Dip in fish sauce. Eat while hot.', 'Similar to Japanese gyoza but with translucent wrapper.'),
+    (14, 'vi', 'Nem Rán/Chả Giò', 'Món khai vị phổ biến khắp Việt Nam', 'Thịt, Tôm, Cà rốt, Nấm, Bánh tráng', 'Mặn, Umami', 'Cuốn với rau sống và chấm nước mắm.', 'Giống chả giò Nhật nhưng chiên giòn hơn.'),
+    (14, 'en', 'Nem Ran/Cha Gio', 'Popular Vietnamese appetizer nationwide', 'Pork, shrimp, carrot, mushroom, spring roll wrapper', 'Salty, Umami', 'Wrap in lettuce with herbs. Dip in fish sauce.', 'Like Japanese spring rolls but fried until very crispy.'),
+    (15, 'vi', 'Cá Kho Tộ', 'Món cơm gia đình Nam Bộ', 'Cá, Nước mắm, Đường, Giấm', 'Ngọt, Mặn, Umami', 'Ăn với cơm trắng. Nước sốt thấm vào cơm rất hợp.', 'Tương tự cá kho teriyaki của Nhật nhưng caramel hơn.'),
+    (15, 'en', 'Ca Kho To', 'Southern Vietnamese home-cooked meal', 'Fish, fish sauce, sugar, vinegar', 'Sweet, Salty, Umami', 'Eat with white rice. The sauce is perfect for soaking rice.', 'Similar to Japanese teriyaki fish but with caramelized sauce.'),
+    (16, 'vi', 'Thịt Kho Tàu', 'Món truyền thống ngày Tết của Việt Nam', 'Thịt, Nước cốt dừa, Trứng, Đường', 'Ngọt, Mặn', 'Ăn với cơm trắng và dưa chua. Món truyền thống dịp Tết.', 'Giống kakuni của Nhật nhưng ngọt hơn và có nước dừa.'),
+    (16, 'en', 'Thit Kho Tau', 'Vietnamese Lunar New Year traditional dish', 'Pork, coconut milk, egg, sugar', 'Sweet, Salty', 'Eat with white rice and pickled vegetables. A traditional Tet dish.', 'Like Japanese kakuni (braised pork belly) but sweeter with coconut.'),
+    (17, 'vi', 'Bánh Khọt', 'Món nổi tiếng Vũng Tàu', 'Tôm, Gạo, Bột sắn', 'Mặn, Umami', 'Ăn nóng và giòn. Chấm với nước mắm và rau.', 'Giống takoyaki nhỏ nhưng có tôm và bột gạo.'),
+    (17, 'en', 'Banh Khot', 'Vung Tau specialty dish', 'Shrimp, rice, tapioca flour', 'Salty, Umami', 'Eat hot and crispy. Dip in fish sauce with vegetables.', 'Like mini takoyaki but with shrimp and rice flour.'),
+    (18, 'vi', 'Bò Lúc Lắc', 'Món Việt - Pháp kết hợp', 'Bò, Hành, Rau, Cà chua', 'Mặn, Umami', 'Ăn với cơm hoặc khoai tây chiên. Chấm với muối tiêu và chanh.', 'Giống teppanyaki nhưng với gia vị Việt.'),
+    (18, 'en', 'Bo Luc Lac', 'Vietnamese-French fusion dish', 'Beef, onion, lettuce, tomato', 'Salty, Umami', 'Eat with rice or French fries. Dip beef in salt, pepper, and lime.', 'Like Japanese teppanyaki beef but with Vietnamese seasonings.'),
+    (19, 'vi', 'Gà Nướng', 'Món ăn đường phố phổ biến của Việt Nam', 'Gà, Sả, Ớt', 'Mặn, Umami, Mùi thảo mộc', 'Ăn với cơm hoặc bún. Thêm chanh và sốt ớt.', 'Tương tự yakitori nhưng có ướp sả.'),
+    (19, 'en', 'Roasted chicken', 'Popular Vietnamese street food', 'Chicken, lemongrass, chili', 'Salty, Umami, Herbal', 'Eat with rice or vermicelli. Add lime and chili sauce.', 'Similar to Japanese yakitori but with lemongrass marinade.'),
+    (20, 'vi', 'Lẩu', 'Trải nghiệm ăn chung, nhiều loại nguyên liệu và nước dùng khác nhau', 'Bò, Gà, Tôm, Rau thơm, Đậu phụ, Nấm', 'Ngọt, Cay, Mặn, Umami', 'Nấu nguyên liệu tại bàn và chấm với các loại sốt.', 'Rất giống shabu-shabu hoặc nabemono ở Nhật.'),
+    (20, 'en', 'Hot Pot', 'Communal Vietnamese dining experience', 'Beef, Chicken, Shrimp, Herbs, Tofu, Mushroom', 'Sweet, Spicy, Salty, Umami', 'Cook ingredients in hot broth at the table. Dip in various sauces.', 'Very similar to Japanese shabu-shabu or nabemono.') ON CONFLICT (food_id, lang) DO NOTHING;
+
+-- ====================================
+-- Insert Restaurant Translations (vi & en)
+-- ====================================
+INSERT INTO restaurant_translations (restaurant_id, lang, name, address) VALUES
+    (1, 'vi', 'Phở Hà Nội', '123 Nguyễn Huệ, Quận 1, TP.HCM'),
+    (1, 'en', 'Hanoi Pho', '123 Nguyen Hue, District 1, Ho Chi Minh City'),
+    (2, 'vi', 'Bánh Mì Huỳnh Hoa', '26 Lê Thị Riêng, Quận 1, TP.HCM'),
+    (2, 'en', 'Huynh Hoa Banh Mi', '26 Le Thi Rieng, District 1, Ho Chi Minh City'),
+    (3, 'vi', 'Bún Chả Hà Nội', '456 Trần Hưng Đạo, Quận 5, TP.HCM'),
+    (3, 'en', 'Bun Cha Hanoi', '456 Tran Hung Dao, District 5, Ho Chi Minh City'),
+    (4, 'vi', 'Cơm Tấm Sườn Nướng', '789 Hai Bà Trưng, Quận 3, TP.HCM'),
+    (4, 'en', 'Com Tam Suon Nuong', '789 Hai Ba Trung, District 3, Ho Chi Minh City'),
+    (5, 'vi', 'Quán Ốc Oanh', '234 Võ Văn Tần, Quận 3, TP.HCM'),
+    (5, 'en', 'Oc Oanh', '234 Vo Van Tan, District 3, Ho Chi Minh City'),
+    (6, 'vi', 'Bánh Xèo 46A', '46A Đinh Công Tráng, Quận 1, TP.HCM'),
+    (6, 'en', 'Banh Xeo 46A', '46A Dinh Cong Trang, District 1, Ho Chi Minh City'),
+    (7, 'vi', 'Bún Bò Huế Xuân Trường', '321 Lê Văn Sỹ, Quận 3, TP.HCM'),
+    (7, 'en', 'Bun Bo Hue Xuan Truong', '321 Le Van Sy, District 3, Ho Chi Minh City'),
+    (8, 'vi', 'Hủ Tiếu Nam Vang', '567 Nguyễn Trãi, Quận 5, TP.HCM'),
+    (8, 'en', 'Hu Tieu Nam Vang', '567 Nguyen Trai, District 5, Ho Chi Minh City'),
+    (9, 'vi', 'Gỏi Cuốn Sài Gòn', '890 Pasteur, Quận 1, TP.HCM'),
+    (9, 'en', 'Goi Cuon Saigon', '890 Pasteur, District 1, Ho Chi Minh City'),
+    (10, 'vi', 'Lẩu Thái Hải Sản', '111 Nguyễn Đình Chiểu, Quận 3, TP.HCM'),
+    (10, 'en', 'Thai Seafood Hot Pot', '111 Nguyen Dinh Chieu, District 3, Ho Chi Minh City'),
+    (11, 'vi', 'Phở Thìn Bờ Hồ', '13 Lò Đúc, Hai Bà Trưng, Hà Nội'),
+    (11, 'en', 'Pho Thin Hoan Kiem', '13 Lo Duc, Hai Ba Trung, Hanoi'),
+    (12, 'vi', 'Bún Chả Đắc Kim', '1 Hàng Mành, Hoàn Kiếm, Hà Nội'),
+    (12, 'en', 'Bun Cha Dac Kim', '1 Hang Manh, Hoan Kiem, Hanoi'),
+    (13, 'vi', 'Chả Cá Lã Vọng', '14 Chả Cá, Hoàn Kiếm, Hà Nội'),
+    (13, 'en', 'Cha Ca La Vong', '14 Cha Ca, Hoan Kiem, Hanoi'),
+    (14, 'vi', 'Bánh Cuốn Bà Xuân', '14 Hàng Gà, Hoàn Kiếm, Hà Nội'),
+    (14, 'en', 'Banh Cuon Ba Xuan', '14 Hang Ga, Hoan Kiem, Hanoi'),
+    (15, 'vi', 'Phở Gia Truyền Bát Đàn', '49 Bát Đàn, Hoàn Kiếm, Hà Nội'),
+    (15, 'en', 'Pho Bat Dan Traditional', '49 Bat Dan, Hoan Kiem, Hanoi'),
+    (16, 'vi', 'Bún Bò Nam Bộ', '67 Hàng Điếu, Hoàn Kiếm, Hà Nội'),
+    (16, 'en', 'Bun Bo Nam Bo', '67 Hang Dieu, Hoan Kiem, Hanoi'),
+    (17, 'vi', 'Nem Phùng', '26 Hàng Bạc, Hoàn Kiếm, Hà Nội'),
+    (17, 'en', 'Nem Phung', '26 Hang Bac, Hoan Kiem, Hanoi'),
+    (18, 'vi', 'Bánh Mì 25', '25 Hàng Cá, Hoàn Kiếm, Hà Nội'),
+    (18, 'en', 'Banh Mi 25', '25 Hang Ca, Hoan Kiem, Hanoi'),
+    (19, 'vi', 'Bò Tùng Xéo', '34 Cầu Gỗ, Hoàn Kiếm, Hà Nội'),
+    (19, 'en', 'Bo Tung Xeo', '34 Cau Go, Hoan Kiem, Hanoi'),
+    (20, 'vi', 'Gà Tần Đồng Xuân', '33 Hàng Giấy, Hoàn Kiếm, Hà Nội'),
+    (20, 'en', 'Ga Tan Dong Xuan', '33 Hang Giay, Hoan Kiem, Hanoi') ON CONFLICT (restaurant_id, lang) DO NOTHING;
 
 -- ====================================
 -- Insert Restaurant Foods
@@ -627,4 +717,4 @@ INSERT INTO i18n (key, lang, value) VALUES
     ('action.filter', 'ja', 'フィルター'),
     ('action.favorite', 'vi', 'Thêm vào yêu thích'),
     ('action.favorite', 'en', 'Add to Favorites'),
-    ('action.favorite', 'ja', 'お気に入りに追加');
+    ('action.favorite', 'ja', 'お気に入りに追加') ON CONFLICT (key, lang) DO NOTHING;

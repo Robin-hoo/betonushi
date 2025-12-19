@@ -4,23 +4,29 @@ const db = require('./src/db');
 
 async function runMigrations() {
     try {
-        const migrationDir = path.join(__dirname, 'src', 'migration');
-        const files = fs.readdirSync(migrationDir).filter(f => f.endsWith('.sql')).sort();
+        // Run only schema.sql and data.sql from the repository root `database` folder
+        const repoDatabase = path.join(__dirname, '..', 'database');
+        const targets = ['schema.sql', 'data.sql'];
 
-        console.log(`Found ${files.length} migration files.`);
+        for (const file of targets) {
+            const sqlPath = path.join(repoDatabase, file);
+            if (!fs.existsSync(sqlPath)) {
+                console.warn(`Skipping ${file} — not found at ${sqlPath}`);
+                continue;
+            }
 
-        for (const file of files) {
-            console.log(`Running migration: ${file}`);
-            const sqlPath = path.join(migrationDir, file);
+            console.log(`Running SQL file: ${file}`);
             const sql = fs.readFileSync(sqlPath, 'utf8');
             try {
                 await db.query(sql);
-                console.log(`  -> Success.`);
+                console.log(`  -> ${file} applied successfully.`);
             } catch (innerErr) {
-                console.warn(`  -> Failed (might already exist): ${innerErr.message}`);
+                // Keep going; most migrations/seeds are idempotent.
+                console.warn(`  -> ${file} failed: ${innerErr.message}`);
             }
         }
-        console.log('All migrations completed.');
+
+        console.log('Selected SQL files completed.');
     } catch (err) {
         console.error('Migration process failed:', err);
     } finally {

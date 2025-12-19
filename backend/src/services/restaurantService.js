@@ -10,13 +10,13 @@ function buildHttpError(status, message) {
  * Get all restaurants from the database
  * @returns {Promise<Array>}
  */
-async function getAllRestaurants() {
+async function getAllRestaurants(lang = 'jp') {
     try {
-        const restaurants = await RestaurantModel.getAllRestaurants();
+        const restaurants = await RestaurantModel.getAllRestaurants(lang);
         return restaurants;
     } catch (err) {
         console.error('Database error in getAllRestaurants:', err);
-        throw buildHttpError(500, `Lỗi khi lấy danh sách nhà hàng: ${err.message}`);
+        throw buildHttpError(500, `Error when fetching restaurant list: ${err.message}`);
     }
 }
 
@@ -25,16 +25,16 @@ async function getAllRestaurants() {
  * @param {string} restaurantIdParam
  * @returns {Promise<object>}
  */
-async function getRestaurantDetails(restaurantIdParam) {
+async function getRestaurantDetails(restaurantIdParam, lang = 'jp') {
     const restaurantId = Number.parseInt(restaurantIdParam, 10);
     if (Number.isNaN(restaurantId) || restaurantId <= 0) {
-        throw buildHttpError(400, 'restaurantId phải là số nguyên dương');
+        throw buildHttpError(400, 'restaurantId must be a positive integer');
     }
 
     try {
-        const result = await RestaurantModel.findRestaurantWithRelations(restaurantId);
+        const result = await RestaurantModel.findRestaurantWithRelations(restaurantId, lang);
         if (!result.restaurant) {
-            throw buildHttpError(404, 'Nhà hàng không tồn tại');
+            throw buildHttpError(404, 'The restaurant does not exist');
         }
 
         return {
@@ -48,7 +48,7 @@ async function getRestaurantDetails(restaurantIdParam) {
             throw err;
         }
         console.error('Database error in getRestaurantDetails:', err);
-        throw buildHttpError(500, `Lỗi khi lấy dữ liệu nhà hàng: ${err.message}`);
+        throw buildHttpError(500, `Error when fetching restaurant details: ${err.message}`);
     }
 }
 

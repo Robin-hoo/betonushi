@@ -27,7 +27,7 @@ const FoodDetailPage: React.FC = () => {
       setLoading(true);
       setError(null);
       try {
-        const data = await getFoodById(id);
+        const data = await getFoodById(id, i18n.language);
         setDishData(data);
 
         if (isLoggedIn) {
@@ -43,7 +43,7 @@ const FoodDetailPage: React.FC = () => {
     };
 
     fetchFood();
-  }, [id, isLoggedIn]);
+  }, [id, isLoggedIn, i18n.language]);
 
   const handleRatingChange = (newRating: number) => {
     setUserRating(newRating);

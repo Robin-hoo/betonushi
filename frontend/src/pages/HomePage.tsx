@@ -10,12 +10,13 @@ import { HeartButton } from "@/components/HeartButton";
 export default function HomePage() {
   const { t } = useTranslation();
   const [foods, setFoods] = useState<Food[]>([]);
+  const { i18n } = useTranslation();
+
   useEffect(() => {
-    api.get("/foods")
+    api.get(`/foods?lang=${encodeURIComponent(i18n.language)}`)
       .then(res => setFoods(res.data.slice(0, 4)))
       .catch(err => console.error("Fetch error:", err));
-    console.log(foods);
-  }, []);
+  }, [i18n.language]);
   return (
     <div className="w-full flex flex-col gap-20">
 
@@ -70,7 +71,7 @@ export default function HomePage() {
 
             {foods.map((item) => (
               <a key={item.food_id} href={`/foods/${item.food_id}`}>
-                <Card className="rounded-xl bg-[#D6EDC5] shadow-md hover:shadow-lg transition p-3 relative">
+                <Card className="rounded-xl bg-[#D6EDC5] shadow-md hover:shadow-lg transition p-5 relative">
 
                   {/* Ảnh */}
                   <img
