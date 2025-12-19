@@ -150,6 +150,7 @@
       "text": "Chưa có tài khoản?",
       "link": "Đăng ký ngay"
     },
+    "success": "Đăng nhập thành công!",
     "error": {
       "required": "Bắt buộc",
       "invalid_email": "Định dạng email không hợp lệ",
@@ -195,7 +196,8 @@
       "label": "Xác nhận mật khẩu"
     },
     "button": {
-      "submit": "Đăng ký"
+      "submit": "Đăng ký",
+      "submitting": "Đang đăng ký..."
     },
     "footer": {
       "text": "Đã có tài khoản?",

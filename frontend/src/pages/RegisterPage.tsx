@@ -1,7 +1,9 @@
 import React, { useState } from 'react';
+import { Eye, EyeOff } from 'lucide-react';
 import { Link, useNavigate } from 'react-router-dom';
 import { register, type RegisterRequest } from '../api/auth.api';
 import { useTranslation } from 'react-i18next';
+import toast from 'react-hot-toast';
 
 const RegisterPage: React.FC = () => {
     const { t } = useTranslation();
@@ -19,6 +21,9 @@ const RegisterPage: React.FC = () => {
     });
 
     const [error, setError] = useState<string | null>(null);
+    const [showPassword, setShowPassword] = useState(false);
+    const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+    const [submitting, setSubmitting] = useState(false);
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
         setFormData({
@@ -26,7 +31,7 @@ const RegisterPage: React.FC = () => {
             [e.target.name]: e.target.value
         });
         setError(null);
-    };
+    }; 
 
     const validate = () => {
         // Email
@@ -63,15 +68,21 @@ const RegisterPage: React.FC = () => {
             return;
         }
 
+        setSubmitting(true);
         try {
             await register(formData);
             console.log("Sign up successfully");
+            toast.success(t("registerPage.success") || 'Registration successful');
             navigate('/login');
         } catch (err: any) {
-            setError(err.response?.data?.message || t("registerPage.error.failed"));
+            const message = err.response?.data?.message || t("registerPage.error.failed");
+            setError(message);
+            toast.error(message);
             console.error(err);
+        } finally {
+            setSubmitting(false);
         }
-    };
+    }; 
 
     return (
         <div className="flex justify-center items-center py-10 w-[90vw] max-w-[750px] mx-auto">
@@ -94,6 +105,7 @@ const RegisterPage: React.FC = () => {
                                 className="w-full border p-2 rounded"
                                 onChange={handleChange}
                                 required
+                                disabled={submitting}
                             />
                         </div>
                         <div className="w-1/2">
@@ -104,6 +116,7 @@ const RegisterPage: React.FC = () => {
                                 className="w-full border p-2 rounded"
                                 onChange={handleChange}
                                 required
+                                disabled={submitting}
                             />
                         </div>
                     </div>
@@ -117,6 +130,7 @@ const RegisterPage: React.FC = () => {
                                 className="w-full border p-2 rounded"
                                 onChange={handleChange}
                                 required
+                                disabled={submitting}
                             />
                         </div>
                         <div className="w-1/2">
@@ -127,6 +141,7 @@ const RegisterPage: React.FC = () => {
                                 className="w-full border p-2 rounded"
                                 onChange={handleChange}
                                 required
+                                disabled={submitting}
                             />
                         </div>
                     </div>
@@ -138,6 +153,7 @@ const RegisterPage: React.FC = () => {
                                 name="gender"
                                 className="w-full border p-2 rounded"
                                 onChange={handleChange}
+                                disabled={submitting}
                             >
                                 <option value="Male">{t("registerPage.gender.options.male")}</option>
                                 <option value="Female">{t("registerPage.gender.options.female")}</option>
@@ -152,6 +168,7 @@ const RegisterPage: React.FC = () => {
                                 className="w-full border p-2 rounded"
                                 onChange={handleChange}
                                 required
+                                disabled={submitting}
                             />
                         </div>
                     </div>
@@ -163,36 +180,86 @@ const RegisterPage: React.FC = () => {
                             className="w-full border p-2 rounded"
                             onChange={handleChange}
                             required
+                            disabled={submitting}
                         />
                     </div>
 
-                    <div>
-                        <label className="block text-sm font-medium mb-1">{t("registerPage.password.label")}</label>
+                    <div className="relative">
+                        <label className="block text-sm font-medium mb-1">
+                            {t("registerPage.password.label")}
+                        </label>
+
                         <input
-                            type="password"
+                            type={showPassword ? "text" : "password"}
                             name="password"
-                            className="w-full border p-2 rounded"
+                            className="w-full border p-2 rounded pr-10"
                             onChange={handleChange}
                             required
+                            disabled={submitting}
                         />
+
+                        <button
+                            type="button"
+                            onClick={() => setShowPassword(s => !s)}
+                            disabled={submitting}
+                            className="
+                            absolute
+                            right-3
+                            top-[68%]
+                            -translate-y-1/2
+                            text-gray-500
+                            hover:text-gray-700
+                            disabled:opacity-50
+                            "
+                            aria-pressed={showPassword}
+                        >
+                            {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+                        </button>
                     </div>
 
-                    <div>
+                    <div className="relative">
                         <label className="block text-sm font-medium mb-1">{t("registerPage.confirmPassword.label")}</label>
                         <input
-                            type="password"
+                            type={showConfirmPassword ? "text" : "password"}
                             name="confirmPassword"
-                            className="w-full border p-2 rounded"
+                            className="w-full border p-2 rounded pr-10"
                             onChange={handleChange}
                             required
+                            aria-describedby="confirm-password-toggle"
+                            disabled={submitting}
                         />
+                        <button
+                            type="button"
+                            id="confirm-password-toggle"
+                            onClick={() => setShowConfirmPassword(s => !s)}
+                            disabled={submitting}
+                            className="absolute
+                                right-3
+                                top-[68%]
+                                -translate-y-1/2
+                                text-gray-500
+                                hover:text-gray-700
+                                disabled:opacity-50
+                            "
+                            aria-pressed={showConfirmPassword}
+                            title={showConfirmPassword ? t("registerPage.hide_password") : t("registerPage.show_password")}
+                        >
+                            {showConfirmPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+                        </button>
                     </div>
 
                     <button
                         type="submit"
-                        className="w-full bg-red-700 text-white font-bold py-2 px-4 rounded hover:bg-red-800 transition"
+                        disabled={submitting}
+                        aria-busy={submitting}
+                        className={`w-full text-white font-bold py-2 px-4 rounded transition ${submitting ? 'bg-red-600 opacity-60 cursor-not-allowed' : 'bg-red-700 hover:bg-red-800'}`}
                     >
-                        {t("registerPage.button.submit")}
+                        {submitting ? (
+                            <span className="inline-flex items-center justify-center">
+                                <span className="inline-block w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin mr-2" />
+                                {t("registerPage.button.submitting") || 'Registering...'}
+                            </span>
+                        ) : t("registerPage.button.submit")}
                     </button>
 
                     <div className="text-center mt-4 text-sm">

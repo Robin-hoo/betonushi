@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import { login } from '../api/auth.api';
 import { useAuth } from '@/context/AuthContext';
+import { toast } from 'react-hot-toast';
 
 const LoginPage: React.FC = () => {
     const { t } = useTranslation();
@@ -54,6 +55,7 @@ const LoginPage: React.FC = () => {
             contextLogin(response.token, response.user);
             // Redirect to home
             navigate('/');
+            toast.success(t("loginPage.success"));
         } catch (err: any) {
             console.error('Login failed:', err);
             // Always show unified error message for auth failures

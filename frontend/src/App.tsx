@@ -1,7 +1,7 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import MainLayout from "@/layouts/MainLayout";
-import AuthLayout from "@/layouts/AuthLayout";
 import HomePage from "@/pages/HomePage";
+import { Toaster } from 'react-hot-toast';
 import HelpfulPage from "@/pages/Helpfulpage";
 import FoodDetailPage from "@/pages/FoodDetailPage";
 import LoginPage from "@/pages/LoginPage";
@@ -14,6 +14,7 @@ import FavoritesPage from "./pages/FavoritesPage";
 function App() {
   return (
     <Router>
+      <Toaster position="top-center" containerStyle={{ marginTop: '80px' }} />
       <Routes>
         <Route element={<MainLayout />}>
           <Route path="/" element={<HomePage />} />

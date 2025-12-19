@@ -147,6 +147,7 @@
       "text": "Don't have an account?",
       "link": "Click here"
     },
+    "success": "Login successful!",
     "error": {
       "required": "Required",
       "invalid_email": "Invalid email format",
@@ -192,7 +193,8 @@
       "label": "Confirm Password"
     },
     "button": {
-      "submit": "Sign Up"
+      "submit": "Sign Up",
+      "loading": "Registering..."
     },
     "footer": {
       "text": "Already have an account?",
