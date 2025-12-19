@@ -6,11 +6,12 @@ const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
 
 // POST /api/generate
 router.post("/generate", async (req, res, next) => {
+  console.log("Received /generate request with body:", req.body);
   try {
     const { dish } = req.body;
 
     if (!dish) {
-      return res.status(400).json({ message: "Thiếu tên món ăn" });
+      return res.status(400).json({ message: "Missing dish name" });
     }
 
     const model = genAI.getGenerativeModel({

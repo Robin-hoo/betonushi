@@ -27,7 +27,8 @@ export interface Food {
 }
 
 export async function getFoodById(id: string, lang?: string) {
-  const url = lang ? `/foods/${id}?lang=${encodeURIComponent(lang)}` : `/food/${id}`;
+  // Note: always use `/foods/${id}` (plural) — backend expects this path
+  const url = lang ? `/foods/${id}?lang=${encodeURIComponent(lang)}` : `/foods/${id}`;
   const res = await api.get<Food>(url);
   return res.data;
 }
