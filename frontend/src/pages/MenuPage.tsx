@@ -1,7 +1,7 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
 import { Heart } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import { favoritesApi } from "@/api/favorites.api";
 import { useAuth } from "@/context/AuthContext";
 
@@ -48,7 +48,10 @@ export default function MenuPage() {
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 6;
 
-  const [searchQuery, setSearchQuery] = useState('');
+  const [searchParams, setSearchParams] = useSearchParams();
+
+  // Initialize state from URL if present
+  const [searchQuery, setSearchQuery] = useState(searchParams.get('search') || '');
 
   const [filterOptions, setFilterOptions] = useState<FilterData>({
     types: [],
@@ -56,10 +59,15 @@ export default function MenuPage() {
     ingredients: []
   });
 
+  // Helper to parse comma-separated IDs from URL
+  const getIdsFromUrl = (paramInfo: string | null) => {
+    return paramInfo ? paramInfo.split(',').map(Number).filter(n => !isNaN(n)) : [];
+  };
+
   const [selectedFilters, setSelectedFilters] = useState({
-    types: [] as number[],
-    flavors: [] as number[],
-    ingredients: [] as number[]
+    types: getIdsFromUrl(searchParams.get('types')),
+    flavors: getIdsFromUrl(searchParams.get('flavors')),
+    ingredients: getIdsFromUrl(searchParams.get('ingredients'))
   });
 
   useEffect(() => {
@@ -93,10 +101,41 @@ export default function MenuPage() {
     });
 
     // fetch initial foods (full page loading on first load)
-    fetchFoods({ full: true });
-  }, [i18n.language]);
+    // We don't fetch here anymore, the searchParams effect will handle it
+    // But we need to ensure initial load happens if params are empty.
+    // Actually, searchParams effect runs on mount, so we are good.
+  }, [i18n.language, t]); // Added t to dependency
 
-  const fetchFoods = useCallback(async (opts?: { full?: boolean }) => {
+  // Sync Local State with URL when URL changes (e.g. Back button)
+  useEffect(() => {
+    const search = searchParams.get('search') || '';
+    const types = getIdsFromUrl(searchParams.get('types'));
+    const flavors = getIdsFromUrl(searchParams.get('flavors'));
+    const ingredients = getIdsFromUrl(searchParams.get('ingredients'));
+    const page = parseInt(searchParams.get('page') || '1', 10);
+
+    setSearchQuery(search);
+    setSelectedFilters({ types, flavors, ingredients });
+    setCurrentPage(page);
+
+    fetchFoods({
+      search,
+      types,
+      flavors,
+      ingredients,
+      page,
+      full: loading // Use existing full loading state for first fetch
+    });
+  }, [searchParams, i18n.language]);
+
+  const fetchFoods = useCallback(async (opts?: {
+    full?: boolean;
+    search?: string;
+    types?: number[];
+    flavors?: number[];
+    ingredients?: number[];
+    page?: number;
+  }) => {
     try {
       // full=true means initial/full-page load (show full-screen spinner). Otherwise show inline spinner in content area.
       if (opts?.full) {
@@ -107,20 +146,33 @@ export default function MenuPage() {
 
       setError(null);
 
+      setError(null);
+
       const params = new URLSearchParams();
 
-      if (searchQuery.trim()) {
-        params.append('search', searchQuery.trim());
+      // Use passed options or fallback to current state (though we aim to always pass opts via the effect)
+      // Note: Inside fetchFoods, we shouldn't rely on state if we want to be pure, but for safety:
+      const sQuery = opts?.search !== undefined ? opts.search : searchQuery;
+      const sTypes = opts?.types !== undefined ? opts.types : selectedFilters.types;
+      const sFlavors = opts?.flavors !== undefined ? opts.flavors : selectedFilters.flavors;
+      const sIngredients = opts?.ingredients !== undefined ? opts.ingredients : selectedFilters.ingredients;
+      // We ignore page param for API for now as the backend apparently doesn't support pagination via params yet? 
+      // Or does it? The original code didn't send 'page'. It did client-side pagination.
+      // We will keep client-side pagination for now as per original code logic (slice),
+      // BUT we should update the 'currentPage' state if we want URL to control it.
+
+      if (sQuery.trim()) {
+        params.append('search', sQuery.trim());
       }
 
-      if (selectedFilters.types.length > 0)
-        params.append('types', selectedFilters.types.join(','));
+      if (sTypes.length > 0)
+        params.append('types', sTypes.join(','));
 
-      if (selectedFilters.flavors.length > 0)
-        params.append('flavors', selectedFilters.flavors.join(','));
+      if (sFlavors.length > 0)
+        params.append('flavors', sFlavors.join(','));
 
-      if (selectedFilters.ingredients.length > 0)
-        params.append('ingredients', selectedFilters.ingredients.join(','));
+      if (sIngredients.length > 0)
+        params.append('ingredients', sIngredients.join(','));
 
       // include language so backend returns localized labels
       params.append('lang', i18n.language);
@@ -146,7 +198,10 @@ export default function MenuPage() {
       }
 
       setFoods(foodsData);
-      setCurrentPage(1);
+
+      // If page was passed in opts, use it, otherwise 1
+      if (opts?.page) setCurrentPage(opts.page);
+
     } catch (err) {
       setError(err instanceof Error ? err.message : 'An error occurred');
     } finally {
@@ -156,11 +211,12 @@ export default function MenuPage() {
         setContentLoading(false);
       }
     }
-  }, [searchQuery, JSON.stringify(selectedFilters), i18n.language, isLoggedIn]);
+  }, [i18n.language, isLoggedIn]); // Removed searchQuery and selectedFilters dependencies to break cycle
 
   // Debounced search: trigger a content fetch 500ms after typing stops.
   // Filters remain manual — they only run when the Filter button is clicked.
   const searchDidMountRef = useRef(false);
+  // Debounced search: updates URL
   useEffect(() => {
     if (!searchDidMountRef.current) {
       searchDidMountRef.current = true;
@@ -168,11 +224,55 @@ export default function MenuPage() {
     }
 
     const handler = setTimeout(() => {
-      fetchFoods();
+      // Update URL with search query
+      updateUrlParams({ search: searchQuery });
     }, 500);
 
     return () => clearTimeout(handler);
   }, [searchQuery]);
+
+  const updateUrlParams = (updates: any) => {
+    setSearchParams(prev => {
+      const newParams = new URLSearchParams(prev);
+
+      // Update Search
+      if (updates.search !== undefined) {
+        if (updates.search) newParams.set('search', updates.search);
+        else newParams.delete('search');
+      }
+
+      // Update Types
+      if (updates.types !== undefined) {
+        if (updates.types.length > 0) newParams.set('types', updates.types.join(','));
+        else newParams.delete('types');
+      }
+
+      // Update Flavors
+      if (updates.flavors !== undefined) {
+        if (updates.flavors.length > 0) newParams.set('flavors', updates.flavors.join(','));
+        else newParams.delete('flavors');
+      }
+
+      // Update Ingredients
+      if (updates.ingredients !== undefined) {
+        if (updates.ingredients.length > 0) newParams.set('ingredients', updates.ingredients.join(','));
+        else newParams.delete('ingredients');
+      }
+
+      // Reset page on filter/search change
+      newParams.delete('page');
+
+      return newParams;
+    });
+  };
+
+  const applyFilters = () => {
+    updateUrlParams({
+      types: selectedFilters.types,
+      flavors: selectedFilters.flavors,
+      ingredients: selectedFilters.ingredients
+    });
+  };
 
   const handleCheckboxChange = (type: keyof typeof selectedFilters, id: number) => {
     setSelectedFilters(prev => {
@@ -216,7 +316,7 @@ export default function MenuPage() {
   const clearAllFilters = async () => {
     setSearchQuery('');
     setSelectedFilters({ types: [], flavors: [], ingredients: [] });
-    await fetchFoods();
+    setSearchParams(new URLSearchParams()); // Clear URL params
   };
 
   const totalPages = Math.ceil(foods.length / itemsPerPage);
@@ -238,11 +338,11 @@ export default function MenuPage() {
             placeholder={t('menu.search.placeholder') || "Tìm kiếm món ăn..."}
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            onKeyDown={(e) => e.key === 'Enter' && fetchFoods()}
+            onKeyDown={(e) => e.key === 'Enter' && updateUrlParams({ search: searchQuery })}
             className="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-600"
           />
           <button
-            onClick={() => fetchFoods()}
+            onClick={() => updateUrlParams({ search: searchQuery })}
             className="px-8 py-2 bg-purple-600 text-white font-semibold rounded-lg hover:bg-purple-700 transition"
           >
             {t('menu.search.button')}
@@ -349,7 +449,7 @@ export default function MenuPage() {
 
                 {/* filter button */}
                 <button
-                  onClick={() => fetchFoods()}
+                  onClick={applyFilters}
                   className="w-full py-2 bg-purple-600 text-white font-semibold rounded-lg hover:bg-purple-700 transition"
                 >
                   {t('menu.filter.button') || 'Lọc kết quả'}
@@ -415,7 +515,15 @@ export default function MenuPage() {
                   {/* Pagination */}
                   <div className="flex items-center justify-center gap-2 mb-8">
                     <button
-                      onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
+                      onClick={() => {
+                        const p = Math.max(1, currentPage - 1);
+                        setCurrentPage(p);
+                        setSearchParams(prev => {
+                          const params = new URLSearchParams(prev);
+                          params.set('page', p.toString());
+                          return params;
+                        });
+                      }}
                       disabled={currentPage === 1}
                       className="px-3 py-1 text-sm font-semibold text-purple-600 hover:bg-purple-100 rounded transition disabled:opacity-50"
                     >
@@ -425,7 +533,14 @@ export default function MenuPage() {
                     {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
                       <button
                         key={page}
-                        onClick={() => setCurrentPage(page)}
+                        onClick={() => {
+                          setCurrentPage(page);
+                          setSearchParams(prev => {
+                            const p = new URLSearchParams(prev);
+                            p.set('page', page.toString());
+                            return p;
+                          });
+                        }}
                         className={`px-3 py-1 text-sm font-semibold rounded transition ${page === currentPage
                           ? 'bg-purple-600 text-white'
                           : 'hover:bg-gray-200'
@@ -436,7 +551,15 @@ export default function MenuPage() {
                     ))}
 
                     <button
-                      onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))}
+                      onClick={() => {
+                        const p = Math.min(totalPages, currentPage + 1);
+                        setCurrentPage(p);
+                        setSearchParams(prev => {
+                          const params = new URLSearchParams(prev);
+                          params.set('page', p.toString());
+                          return params;
+                        });
+                      }}
                       disabled={currentPage === totalPages}
                       className="px-3 py-1 text-sm font-semibold text-purple-600 hover:bg-purple-100 rounded transition disabled:opacity-50"
                     >

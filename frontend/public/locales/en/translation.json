@@ -302,7 +302,40 @@
     "edit": "Edit",
     "cancel": "Cancel",
     "save": "Save",
+    "saving": "Saving...",
     "saveSuccess": "Save successfully!",
-    "saveFailed": "Save failed!"
+    "saveFailed": "Save failed!",
+    "surveyHistory": {
+      "title": "Survey History",
+      "questions": {
+        "q1": "1. What genre of food do you usually eat?",
+        "q2": "2. Choose your favorite tastes.",
+        "q3": "3. Are there any foods or tastes you dislike?",
+        "q4": "4. What is most important to you when eating?",
+        "q5": "5. Do you want to eat in a private room?",
+        "q6": "6. How many people usually eat together?"
+      },
+      "answers": {
+        "vegetarian": "Vegetarian",
+        "warm": "Warm Dish",
+        "cold": "Cold Dish",
+        "sweet": "Sweet",
+        "salty": "Salty",
+        "spicy": "Spicy",
+        "dog": "Dog Meat",
+        "cat": "Cat Meat",
+        "taste": "Taste",
+        "price": "Price",
+        "health": "Health",
+        "private": "Yes, private room",
+        "open": "No, open space",
+        "any": "Either is fine",
+        "people1": "1 person",
+        "people2": "2 people",
+        "people34": "3-4 people"
+      },
+      "delete": "Delete",
+      "viewRecommendation": "View Recommendation"
+    }
   }
 }

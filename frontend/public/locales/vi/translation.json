@@ -302,7 +302,40 @@
     "edit": "Sửa",
     "cancel": "Hủy",
     "save": "Lưu",
+    "saving": "Đang lưu...",
     "saveSuccess": "Lưu thành công!",
-    "saveFailed": "Lưu thất bại!"
+    "saveFailed": "Lưu thất bại!",
+    "surveyHistory": {
+      "title": "Lịch sử khảo sát",
+      "questions": {
+        "q1": "1. Bạn thường ăn loại đồ ăn nào?",
+        "q2": "2. Chọn hương vị yêu thích của bạn.",
+        "q3": "3. Bạn có ghét món ăn hay hương vị nào không?",
+        "q4": "4. Điều quan trọng nhất khi ăn uống là gì?",
+        "q5": "5. Bạn có muốn ăn trong phòng riêng không?",
+        "q6": "6. Bạn thường đi ăn với nhóm bao nhiêu người?"
+      },
+      "answers": {
+        "vegetarian": "Đồ chay",
+        "warm": "Đồ nóng",
+        "cold": "Đồ nguội",
+        "sweet": "Ngọt",
+        "salty": "Mặn",
+        "spicy": "Cay",
+        "dog": "Thịt chó",
+        "cat": "Thịt mèo",
+        "taste": "Hương vị",
+        "price": "Giá cả",
+        "health": "Sức khỏe",
+        "private": "Có, phòng riêng",
+        "open": "Không, không gian mở",
+        "any": "Sao cũng được",
+        "people1": "1 người",
+        "people2": "2 người",
+        "people34": "3-4 người"
+      },
+      "delete": "Xóa",
+      "viewRecommendation": "Xem đề xuất"
+    }
   }
 }
