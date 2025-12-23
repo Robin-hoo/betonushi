@@ -24,7 +24,6 @@ async function getFavorites(req, res, next) {
     }
     const { type = 'food' } = req.query; // Default to food
     const lang = (req.query.lang || (req.headers['accept-language'] || '').split(',')[0] || 'jp').slice(0,2);
-    console.log(`[DEBUG] Getting favorites for user ${userId}, type: ${type}, lang: ${lang}`);
     const favorites = await FavoriteService.getUserFavorites(userId, type, lang);
     return res.json(favorites);
   } catch (error) {

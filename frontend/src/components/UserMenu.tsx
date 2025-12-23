@@ -32,27 +32,29 @@ const UserMenu = () => {
                 {/* Avatar */}
                 <div className="h-8 w-8 rounded-full overflow-hidden bg-gray-200 border border-gray-300">
                     <img
-                        src={user.avatarUrl || "https://api.dicebear.com/9.x/micah/svg?seed=User"}
-                        alt={user.name}
+                        src={user.avatarUrl || `https://api.dicebear.com/9.x/avataaars/svg?seed=${user?.fullName}`}
+                        alt={user.fullName}
                         className="h-full w-full object-cover"
                     />
                 </div>
                 {/* Name */}
                 <span className="text-sm font-medium text-gray-700 max-w-[100px] truncate">
-                    {user.name}
+                    {user.fullName}
                 </span>
             </button>
 
             {isOpen && (
                 <div className="absolute right-0 top-full mt-2 w-48 bg-white rounded-lg shadow-lg border border-gray-200 overflow-hidden z-50 py-1">
                     {/* Items */}
-                    <button
-                        className="w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-50 flex items-center gap-2"
-                        onClick={() => setIsOpen(false)}
-                    >
-                        <UserIcon className="w-4 h-4" />
-                        {t("header.profile")}
-                    </button>
+                    <Link to="/profile">
+                        <button
+                            className="w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-50 flex items-center gap-2"
+                            onClick={() => setIsOpen(false)}
+                        >
+                            <UserIcon className="w-4 h-4" />
+                            {t("header.profile")}
+                        </button>
+                    </Link>
                     <Link to="/favorites">
                         <button
                             className="w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-50 flex items-center gap-2"

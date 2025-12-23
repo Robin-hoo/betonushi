@@ -5,22 +5,24 @@ export interface LoginRequest {
     password?: string;
 }
 
+export interface User {
+    id: number;
+    fullName: string;
+    email: string;
+    avatarUrl?: string;
+    phone?: string;
+    address?: string;
+    dob?: string;
+}
+
 export interface LoginResponse {
     message: string;
     token: string;
-    user: {
-        id: number;
-        name: string;
-        email: string;
-        avatarUrl: string;
-    };
+    user: User;
 }
 
 export const login = async (data: LoginRequest): Promise<LoginResponse> => {
     const response = await api.post<LoginResponse>("/login", data);
-    if (!response.data.user.avatarUrl) {
-        response.data.user.avatarUrl = "/food.jpg";
-    }
     return response.data;
 };
 

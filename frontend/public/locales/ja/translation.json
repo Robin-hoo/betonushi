@@ -22,22 +22,22 @@
     "title": "人気メニュー"
   },
   "banner1": {
-      "title": "あなたの味覚を満たす"   
+    "title": "あなたの味覚を満たす"
   },
   "banner2": {
-      "title": "ベストフード"   
+    "title": "ベストフード"
   },
   "button1": {
-      "title": "味のアンケート"
+    "title": "味のアンケート"
   },
   "button2": {
-      "title": "他の似た料理を見る →"
+    "title": "他の似た料理を見る →"
   },
   "helpButton": {
-      "title": "食事を観察"
+    "title": "食事を観察"
   },
   "saveButton": {
-      "title": "保存"
+    "title": "保存"
   },
   "header": {
     "nav": {
@@ -288,5 +288,21 @@
     "title": "好きな食べ物",
     "no_favorites": "まだお気に入りの料理がありません。",
     "browse_menu": "メニューを閲覧する"
+  },
+  "profilePage": {
+    "title": "個人情報",
+    "changeAvatar": "アバターを変更",
+    "labels": {
+      "name": "名前",
+      "email": "メール",
+      "phone": "電話番号",
+      "dob": "生年月日",
+      "address": "住所"
+    },
+    "edit": "編集",
+    "cancel": "キャンセル",
+    "save": "保存",
+    "saveSuccess": "保存しました！",
+    "saveFailed": "保存に失敗しました！"
   }
 }

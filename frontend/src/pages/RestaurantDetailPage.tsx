@@ -76,7 +76,7 @@ const RestaurantDetailPage: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen">
       {/* Header with back button */}
       <div className="bg-white shadow-sm sticky top-0 z-20">
         <div className="max-w-7xl mx-auto px-6 py-4">
@@ -260,14 +260,14 @@ const RestaurantDetailPage: React.FC = () => {
                     />
                     {food.is_recommended && (
                       <div className="absolute top-2 left-2 bg-orange-500 text-white px-3 py-1 rounded-full text-xs font-bold">
-                        Đề xuất
+                        Recommendation
                       </div>
                     )}
                   </div>
                   <div className="p-4">
                     <h3 className="font-bold text-lg mb-2 text-gray-800">{food.name}</h3>
                     <p className="text-sm text-gray-600 mb-3 line-clamp-2">
-                      {food.story || "Món ăn ngon, đậm đà hương vị Việt Nam"}
+                      {food.story || "Delicious dishes rich in authentic Vietnamese flavors"}
                     </p>
                     <div className="flex items-center justify-between">
                       <span className="text-lg font-bold text-orange-600">
@@ -319,7 +319,7 @@ const RestaurantDetailPage: React.FC = () => {
                     <div className="flex-1">
                       <div className="flex items-center gap-3 mb-2">
                         <span className="font-bold text-gray-800">
-                          {review.user_name || `Người dùng ${review.user_id}`}
+                          {review.user_name || `User ${review.user_id}`}
                         </span>
                         <div className="flex items-center gap-1">
                           {Array.from({ length: 5 }).map((_, i) => (
@@ -347,7 +347,7 @@ const RestaurantDetailPage: React.FC = () => {
 
         {restaurant.reviews.length === 0 && (
           <div className="bg-white rounded-xl shadow-md p-8 text-center">
-            <p className="text-gray-500">Chưa có đánh giá nào cho nhà hàng này.</p>
+            <p className="text-gray-500">There is no review for this restaurant yet.</p>
           </div>
         )}
       </div>

@@ -21,12 +21,26 @@ async function findByEmail(email) {
 module.exports = {
     findByEmail,
     create: async (userData) => {
-        const { full_name, email, password_hash, birth_date } = userData;
+        const { full_name, email, password_hash, birth_date, phone, address, avatar_url } = userData;
         const result = await db.query(
-            `INSERT INTO users (full_name, email, password_hash, birth_date) 
-             VALUES ($1, $2, $3, $4) 
+            `INSERT INTO users (full_name, email, password_hash, birth_date, phone_number, address, avatar_url) 
+             VALUES ($1, $2, $3, $4, $5, $6, $7) 
              RETURNING *`,
-            [full_name, email, password_hash, birth_date]
+            [full_name, email, password_hash, birth_date, phone, address, avatar_url]
+        );
+        return result.rows[0];
+    },
+    update: async (userId, updateData) => {
+        const { full_name, phone, address, birth_date } = updateData;
+        const result = await db.query(
+            `UPDATE users 
+             SET full_name = COALESCE($1, full_name),
+                 phone_number = COALESCE($2, phone_number),
+                 address = COALESCE($3, address),
+                 birth_date = COALESCE($4, birth_date)
+             WHERE user_id = $5
+             RETURNING *`,
+            [full_name, phone, address, birth_date, userId]
         );
         return result.rows[0];
     }

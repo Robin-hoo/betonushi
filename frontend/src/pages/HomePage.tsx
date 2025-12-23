@@ -42,7 +42,7 @@ export default function HomePage() {
           <h1 className="text-5xl mt-2">{t("banner2.title")}</h1>
 
           <div className="mt-6">
-            <Button className="bg-orange-500 hover:bg-orange-600 text-white text-lg px-6 py-4 rounded-full shadow-xl">
+            <Button className="bg-[#ad343e] hover:bg-[#8b4513] text-white text-lg px-6 py-6 rounded-full shadow-xl">
               {t("button1.title")}
             </Button>
           </div>

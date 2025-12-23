@@ -1,6 +1,7 @@
 require("dotenv").config();
 
 const express = require("express");
+const path = require('path');
 const cors = require("cors");
 const authRoutes = require("./routes/authRoutes");
 const geminiRoutes = require("./routes/scriptRoutes");
@@ -17,6 +18,8 @@ app.use(
 
 app.use(express.json());
 app.use(express.static("public"));
+// Serve uploaded files under /uploads (maps to backend/public/uploads)
+app.use('/uploads', express.static(path.join(__dirname, '..', 'public', 'uploads')));
 
 // Routes
 console.log("Mounting Gemini Routes at /api");
@@ -27,6 +30,8 @@ app.use("/api", foodRoutes);
 app.use("/api", restaurantRoutes);
 app.use("/api/favorites", favoriteRoutes);
 app.use("/api", authRoutes);
+const userRoutes = require("./routes/userRoutes");
+app.use("/api/users", userRoutes);
 
 // 404 handler for unmatched routes
 app.use((req, res) => {

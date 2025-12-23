@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
-import { Star, Globe } from "lucide-react";
+import { Star } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { getFoodById, type Food } from "@/api/food.api";
 import { Link } from "react-router-dom";
@@ -114,7 +114,7 @@ const FoodDetailPage: React.FC = () => {
             </div>
 
             {/* Action Buttons */}
-            <div className="flex gap-8 mb-6">
+            <div className="flex gap-8 mb-6 px-10 ">
               <Button
                 onClick={async () => {
                   if (!isLoggedIn) return; // Or show login modal
@@ -127,7 +127,7 @@ const FoodDetailPage: React.FC = () => {
                     console.error(e);
                   }
                 }}
-                className={`w-full px-4 py-2 rounded-lg font-medium mb-2 transition-colors ${isFavorite
+                className={`flex-1  py-2 rounded-lg font-medium mb-2 transition-colors ${isFavorite
                   ? "bg-red-500 text-white"
                   : "bg-red-100 text-red-600 hover:bg-red-200"
                   } ${!isLoggedIn ? "opacity-50 cursor-not-allowed" : ""}`}
@@ -135,9 +135,9 @@ const FoodDetailPage: React.FC = () => {
               >
                 {t('foodDetail.buttons.favorite')}
               </Button>
-              <Link to={`/script/${id}`} className="block w-full">
+              <Link to={`/script/${id}`} className="block">
                 <Button
-                  className="w-full px-4 py-2 bg-blue-500 text-white rounded-lg font-medium hover:bg-blue-600 transition-colors mb-4">
+                  className="w-[100px] px-4 py-2 bg-blue-500 text-white rounded-lg font-medium hover:bg-blue-600 transition-colors mb-4">
                   {t('foodDetail.buttons.help')}
                 </Button>
               </Link>

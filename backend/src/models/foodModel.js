@@ -70,7 +70,7 @@ async function findFoodWithRelations(foodId, lang = 'jp') {
     }
     // Query food_images table (matches schema.sql)
     const imagesResult = await db.query(
-      `SELECT image_url
+      `SELECT food_image_id, image_url
         FROM food_images
         WHERE food_id = $1
         ORDER BY display_order, food_image_id`,
@@ -86,7 +86,7 @@ async function findFoodWithRelations(foodId, lang = 'jp') {
     );
     return {
       food: foodResult.rows[0],
-      images: imagesResult.rows.map((row) => row.image_url),
+      images: imagesResult.rows, // array of { food_image_id, image_url }
       reviews: reviewsResult.rows,
     };
   }
@@ -113,7 +113,7 @@ async function findFoodWithRelations(foodId, lang = 'jp') {
 
   // Query food_images table (matches schema.sql)
   const imagesResult = await db.query(
-    `SELECT image_url
+    `SELECT food_image_id, image_url
      FROM food_images
      WHERE food_id = $1
      ORDER BY display_order, food_image_id`,
@@ -131,13 +131,12 @@ async function findFoodWithRelations(foodId, lang = 'jp') {
 
   return {
     food: foodResult.rows[0],
-    images: imagesResult.rows.map((row) => row.image_url),
+    images: imagesResult.rows, // array of { food_image_id, image_url }
     reviews: reviewsResult.rows,
   };
 }
 
 async function getFilterOptions() {
-  const regions = await db.query('SELECT region_id as id, name FROM regions ORDER BY name');
   const foodTypes = await db.query('SELECT food_type_id as id, name FROM food_types ORDER BY name');
   const flavors = await db.query('SELECT flavor_id as id, name FROM flavors ORDER BY name');
   const ingredients = await db.query('SELECT ingredient_id as id, name FROM ingredients ORDER BY name LIMIT 8'); // MAX 8 ingredients
@@ -182,7 +181,7 @@ async function getAllFoods(filters = {}) {
          WHERE fi.food_id = f.food_id 
          ORDER BY display_order 
          LIMIT 1) AS image_url
-      FROM foods f, food_translations ft
+      FROM foods f
       WHERE 1=1
     `;
   } else {
@@ -216,7 +215,11 @@ async function getAllFoods(filters = {}) {
   }
 
   if (filters.search) {
-    sql += ` AND f.name ILIKE $${paramIndex} OR ft.name ILIKE $${paramIndex}`;
+    if (lang === 'jp') {
+      sql += ` AND (f.name ILIKE $${paramIndex})`;
+    } else {
+      sql += ` AND (f.name ILIKE $${paramIndex} OR ft.name ILIKE $${paramIndex})`;
+    }
     params.push(`%${filters.search}%`);
     paramIndex++;
   }

@@ -41,9 +41,13 @@ async function login(req, res) {
             message: 'Login successful',
             token,
             user: {
-                user_id: user.user_id,
-                full_name: user.full_name,
-                email: user.email
+                id: user.user_id,
+                fullName: user.full_name,
+                email: user.email,
+                phone: user.phone_number,
+                address: user.address,
+                dob: user.birth_date,
+                avatarUrl: user.avatar_url
             }
         });
 
@@ -110,16 +114,23 @@ module.exports = {
                 full_name: fullName,
                 email,
                 password_hash: hashedPassword,
-                birth_date: dob
+                birth_date: dob,
+                phone,
+                address,
+                avatar_url: null // Default avatar logic can be added here
             });
 
             // 5. Response
             return res.status(201).json({
                 message: 'Registration successful',
                 user: {
-                    user_id: newUser.user_id,
-                    full_name: newUser.full_name,
-                    email: newUser.email
+                    id: newUser.user_id,
+                    fullName: newUser.full_name,
+                    email: newUser.email,
+                    phone: newUser.phone_number,
+                    address: newUser.address,
+                    dob: newUser.birth_date,
+                    avatarUrl: newUser.avatar_url
                 }
             });
 

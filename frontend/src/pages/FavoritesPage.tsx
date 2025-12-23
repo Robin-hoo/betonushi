@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import { Badge } from "@/components/ui/badge";
 import { useTranslation } from "react-i18next";
 import { Heart } from 'lucide-react';
 import { favoritesApi } from "@/api/favorites.api";

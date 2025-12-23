@@ -283,10 +283,26 @@
   },
   "ScriptLoading": {
     "title": "Loading..."
-  }, 
+  },
   "FavoritesPage": {
     "title": "Favorite Foods",
     "no_favorites": "You have no favorite dishes yet.",
     "browse_menu": "Browse Menu"
+  },
+  "profilePage": {
+    "title": "Personal Information",
+    "changeAvatar": "Change Avatar",
+    "labels": {
+      "name": "Name",
+      "email": "Email",
+      "phone": "Phone Number",
+      "dob": "Date of Birth",
+      "address": "Address"
+    },
+    "edit": "Edit",
+    "cancel": "Cancel",
+    "save": "Save",
+    "saveSuccess": "Save successfully!",
+    "saveFailed": "Save failed!"
   }
 }

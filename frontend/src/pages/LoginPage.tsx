@@ -1,11 +1,16 @@
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useNavigate } from 'react-router-dom';
+import { Navigate, useNavigate } from 'react-router-dom';
 import { login } from '../api/auth.api';
 import { useAuth } from '@/context/AuthContext';
 import { toast } from 'react-hot-toast';
 
 const LoginPage: React.FC = () => {
+    const { user, isLoading } = useAuth();
+
+    if (isLoading) return <div>Loading...</div>;
+    if (user) return <Navigate to="/" />;
+
     const { t } = useTranslation();
     const navigate = useNavigate();
     const { login: contextLogin } = useAuth();
@@ -53,6 +58,7 @@ const LoginPage: React.FC = () => {
             // Store token (e.g., localStorage)
             // Use context to update state
             contextLogin(response.token, response.user);
+            console.log("User: ", response.user);
             // Redirect to home
             navigate('/');
             toast.success(t("loginPage.success"));

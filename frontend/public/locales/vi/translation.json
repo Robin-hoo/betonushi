@@ -1,47 +1,44 @@
 {
-    "title": "Vite + React",
-    "count_is": "Bây giờ là {{count}}",
-    "edit_save": "Chỉnh sửa src/App.tsx và lưu để kiểm tra HMR",
-    "read_docs": "Nhấn vào logo Vite và React để tìm hiểu thêm",
-
-    "section1": {
-      "title": "1. Mời rủ"
-    },
-
-    "section2": {
-      "title": "2. Đặt câu hỏi"
-    },
-
-    "section3": {
-      "title": "3. Hội thoại mẫu"
-    },
-    "block1": {
-      "title": "Cẩm nang thực hành - ẩm thực Việt Nam"
-    },
-    "block2": {
-      "title": "Cụm từ tiếng Nhật hữu ích về ăn uống và mời rủ"
-    },
-    "popular_menu": {
-      "title": "Món ăn được yêu thích"
-    },
-    "banner1": {
-      "title": "Thỏa mãn vị giác của bạn"   
-    },
-    "banner2": {
-      "title": "Những món ăn tuyệt vời nhất"   
-    },
-    "button1": {
-      "title": "Khảo sát ngay"
-    },
-    "button2": {
-      "title": "Tìm hiểu thêm →"
-    },
-    "helpButton": {
-      "title": "Chỉnh sửa"
-    },
-    "saveButton": {
-      "title": "Lưu"
-    },
+  "title": "Vite + React",
+  "count_is": "Bây giờ là {{count}}",
+  "edit_save": "Chỉnh sửa src/App.tsx và lưu để kiểm tra HMR",
+  "read_docs": "Nhấn vào logo Vite và React để tìm hiểu thêm",
+  "section1": {
+    "title": "1. Mời rủ"
+  },
+  "section2": {
+    "title": "2. Đặt câu hỏi"
+  },
+  "section3": {
+    "title": "3. Hội thoại mẫu"
+  },
+  "block1": {
+    "title": "Cẩm nang thực hành - ẩm thực Việt Nam"
+  },
+  "block2": {
+    "title": "Cụm từ tiếng Nhật hữu ích về ăn uống và mời rủ"
+  },
+  "popular_menu": {
+    "title": "Món ăn được yêu thích"
+  },
+  "banner1": {
+    "title": "Thỏa mãn vị giác của bạn"
+  },
+  "banner2": {
+    "title": "Những món ăn tuyệt vời nhất"
+  },
+  "button1": {
+    "title": "Khảo sát ngay"
+  },
+  "button2": {
+    "title": "Tìm hiểu thêm →"
+  },
+  "helpButton": {
+    "title": "Chỉnh sửa"
+  },
+  "saveButton": {
+    "title": "Lưu"
+  },
   "header": {
     "nav": {
       "home": "Trang chủ",
@@ -69,7 +66,7 @@
     },
     "filter": {
       "button": "Lọc",
-      "region": "Vùng miền"  
+      "region": "Vùng miền"
     },
     "categories": {
       "main_ingredients": "Nguyên liệu chính",
@@ -133,7 +130,7 @@
       "title": "Không tìm thấy kết quả nào",
       "message": "Rất tiếc, chúng tôi không tìm thấy món ăn nào phù hợp với từ khóa \"{{keyword}}\".",
       "clear_search": "Xóa tìm kiếm"
-    }  
+    }
   },
   "loginPage": {
     "title": "Đăng nhập",
@@ -290,8 +287,22 @@
   "FavoritesPage": {
     "title": "Món ăn yêu thích",
     "no_favorites": "Bạn chưa có món ăn yêu thích nào.",
-    "browse_menu": "Duyệt thực đơn"
+    "browse_menu": "Xem thực đơn"
+  },
+  "profilePage": {
+    "title": "Thông tin cá nhân",
+    "changeAvatar": "Đổi ảnh đại diện",
+    "labels": {
+      "name": "Họ và tên",
+      "email": "Email",
+      "phone": "Số điện thoại",
+      "dob": "Ngày sinh",
+      "address": "Địa chỉ"
+    },
+    "edit": "Sửa",
+    "cancel": "Hủy",
+    "save": "Lưu",
+    "saveSuccess": "Lưu thành công!",
+    "saveFailed": "Lưu thất bại!"
   }
 }
-
-
