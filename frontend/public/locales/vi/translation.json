@@ -210,21 +210,27 @@
     }
   },
   "foodDetail": {
+    "messages": {
+      "submitted": "Bình luận đã được gửi!"
+    },
     "backToFoods": "<",
     "loading": "Đang tải...",
     "error": "Không thể tải dữ liệu món ăn.",
     "notFound": "Không tìm thấy món ăn",
     "rating": {
       "outOf": "/5",
-      "reviews": "{{count}} đánh giá"
+      "reviews": "{{count}} đánh giá",
+      "required": "Vui lòng chọn số sao để đánh giá"
     },
     "buttons": {
       "favorite": "Yêu thích",
+      "unfavorite": "Đã thích",
       "help": "Trợ giúp",
       "cancel": "Hủy",
       "comment": "Bình luận",
       "searchRestaurant": "Tìm nhà hàng",
-      "share": "Chia sẻ"
+      "share": "Chia sẻ",
+      "submitting": "Đang gửi..."
     },
     "sections": {
       "description": "1. Mô tả",
@@ -237,7 +243,8 @@
       "comparison": "5. So sánh với ẩm thực Nhật"
     },
     "reviews": {
-      "title": "Đánh giá mới nhất"
+      "title": "Đánh giá mới nhất",
+      "placeholder": "Viết đánh giá của bạn (tối thiểu 10 ký tự)..."
     },
     "language": {
       "label": "Ngôn ngữ",
@@ -349,7 +356,7 @@
     "leftText1": "Nhà hàng",
     "leftText2": "Việt Nam được đánh giá cao"
   },
-  "footer":{
+  "footer": {
     "text": "Kết nối Nhật Bản và Việt Nam qua ẩm thực.",
     "members": {
       "mssv": "MSSV",

@@ -308,6 +308,61 @@ module.exports = {
   deleteFood,
   addFoodImage,
   deleteFoodImage,
+  addReview,
 };
+
+async function addReview(foodIdParam, userId, rating, comment) {
+  const foodId = Number.parseInt(foodIdParam, 10);
+  if (Number.isNaN(foodId) || foodId <= 0) {
+    throw buildHttpError(400, 'foodId must be a positive integer');
+  }
+  if (!rating || rating < 1 || rating > 5) {
+    throw buildHttpError(400, 'Rating must be between 1 and 5');
+  }
+
+  const client = db;
+  try {
+    await client.query('BEGIN');
+
+    // 1. Check if food exists
+    const foodCheck = await client.query('SELECT food_id, rating, number_of_rating FROM foods WHERE food_id = $1 FOR UPDATE', [foodId]);
+    if (foodCheck.rowCount === 0) {
+      throw buildHttpError(404, 'Food not found');
+    }
+    const currentFood = foodCheck.rows[0];
+
+    // 2. Insert review
+    // Review table: review_id, user_id, target_id, type, comment, rating, created_at
+    const insertReviewSql = `
+      INSERT INTO reviews (user_id, target_id, type, comment, rating, created_at)
+      VALUES ($1, $2, 'food', $3, $4, NOW())
+      RETURNING *
+    `;
+    const reviewRes = await client.query(insertReviewSql, [userId, foodId, comment || '', rating]);
+    const newReview = reviewRes.rows[0];
+
+    // 3. Update calculate new average rating
+    // Formula: (oldRating * oldCount + newRating) / (oldCount + 1)
+    const oldRating = parseFloat(currentFood.rating) || 0;
+    const oldCount = parseInt(currentFood.number_of_rating) || 0;
+
+    // We can also query the average from the reviews table table to be more precise over time, 
+    // avoiding floating point drift, but for now incremental update is fine for performance.
+
+    const newCount = oldCount + 1;
+    const newAverage = ((oldRating * oldCount) + rating) / newCount;
+
+    await client.query('UPDATE foods SET rating = $1, number_of_rating = $2 WHERE food_id = $3', [newAverage, newCount, foodId]);
+
+    await client.query('COMMIT');
+
+    return newReview;
+  } catch (err) {
+    await client.query('ROLLBACK');
+    console.error('Error in addReview:', err);
+    if (err.status) throw err;
+    throw buildHttpError(500, `Error when adding review: ${err.message}`);
+  }
+}
 
 

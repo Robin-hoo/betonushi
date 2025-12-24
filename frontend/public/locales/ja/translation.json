@@ -210,6 +210,9 @@
     }
   },
   "foodDetail": {
+    "messages": {
+      "submitted": "レビューを送信しました！"
+    },
     "backToFoods": "<",
     "loading": "読み込み中...",
     "error": "食品データの読み込みに失敗しました。",
@@ -220,11 +223,13 @@
     },
     "buttons": {
       "favorite": "お気に入り登録",
-      "help": "Help",
+      "unfavorite": "お気に入った",
+      "help": "お手伝い",
       "cancel": "キャンセル",
       "comment": "コメントする",
       "searchRestaurant": "レストラン検索",
-      "share": "共有"
+      "share": "共有",
+      "submitting": "送信中..."
     },
     "sections": {
       "description": "1. 説明",
@@ -237,7 +242,8 @@
       "comparison": "5. 日本料理との比較"
     },
     "reviews": {
-      "title": "最新レビュー"
+      "title": "最新レビュー",
+      "placeholder": "レビューを入力してください（10文字以上）"
     },
     "language": {
       "label": "言語",
@@ -349,7 +355,7 @@
     "leftText1": "高評価の",
     "leftText2": "ベトナム料理店"
   },
-  "footer":{
+  "footer": {
     "text": "日本とベトナムを食でつなぐ。",
     "members": {
       "mssv": "学籍番号",
