@@ -1,27 +1,101 @@
 const db = require('../db');
 
 /**
- * Fetch all restaurants from the database
+ * Fetch restaurants with filters (distance, facilities)
+ * @param {string} lang
+ * @param {object} filters - { lat, lng, distance, facilities }
  * @returns {Promise<Array>}
  */
-async function getAllRestaurants(lang = 'jp') {
-    const result = await db.query(
-        `SELECT 
-      r.restaurant_id,
-      COALESCE(rt.name, r.name) AS name,
-      COALESCE(rt.address, r.address) AS address,
-      r.latitude,
-      r.longitude,
-      r.open_time,
-      r.close_time,
-      r.price_range,
-      r.phone_number
-     FROM restaurants r
-     LEFT JOIN restaurant_translations rt ON rt.restaurant_id = r.restaurant_id AND rt.lang = $1
-     ORDER BY r.restaurant_id`,
-        [lang]
-    );
+async function getAllRestaurants(lang = 'jp', filters = {}) {
+    const { lat, lng, distance, facilities } = filters;
+    
+    // 1. Base Query
+    let query = `
+        SELECT 
+            r.restaurant_id,
+            COALESCE(rt.name, r.name) AS name,
+            COALESCE(rt.address, r.address) AS address,
+            r.latitude,
+            r.longitude,
+            r.open_time,
+            r.close_time,
+            r.price_range,
+            r.phone_number
+            ${lat && lng ? `, (
+                6371 * acos(
+                    cos(radians($2)) * cos(radians(r.latitude)) *
+                    cos(radians(r.longitude) - radians($3)) +
+                    sin(radians($2)) * sin(radians(r.latitude))
+                )
+            ) AS distance_km` : ''}
+        FROM restaurants r
+        LEFT JOIN restaurant_translations rt ON rt.restaurant_id = r.restaurant_id AND rt.lang = $1
+    `;
 
+    const params = [lang];
+    let paramCount = 1;
+
+    // 2. Add params for Distance Calculation
+    if (lat && lng) {
+        params.push(lat); 
+        params.push(lng); 
+        paramCount += 2;
+    }
+
+    let whereClauses = [];
+    let havingClauses = [];
+
+    // 3. Filter by Facilities
+    if (facilities && facilities.length > 0) {
+        query += `
+            JOIN restaurant_facilities rf ON r.restaurant_id = rf.restaurant_id
+        `;
+        whereClauses.push(`rf.facility_name = ANY($${paramCount + 1})`);
+        params.push(facilities); // e.g., ['WiFi', 'Parking']
+        paramCount++;
+    }
+
+    if (whereClauses.length > 0) {
+        query += ' WHERE ' + whereClauses.join(' AND ');
+    }
+
+    // 4. Group By
+    if (facilities && facilities.length > 0) {
+        query += ` GROUP BY r.restaurant_id, rt.name, rt.address `;
+        havingClauses.push(`COUNT(DISTINCT rf.facility_name) >= $${paramCount + 1}`);
+        params.push(facilities.length);
+        paramCount++;
+    }
+
+    // 5. Filter by Distance
+    if (lat && lng && distance) {
+        const distanceFormula = `(
+            6371 * acos(
+                cos(radians($2)) * cos(radians(r.latitude)) *
+                cos(radians(r.longitude) - radians($3)) +
+                sin(radians($2)) * sin(radians(r.latitude))
+            )
+        )`;
+        havingClauses.push(`${distanceFormula} <= $${paramCount + 1}`);
+        params.push(distance);
+        paramCount++;
+    }
+
+    if (havingClauses.length > 0) {
+        if (!query.includes('GROUP BY')) {
+             query += ` GROUP BY r.restaurant_id, rt.name, rt.address `;
+        }
+        query += ' HAVING ' + havingClauses.join(' AND ');
+    }
+
+    // 6. Order By
+    if (lat && lng) {
+        query += ` ORDER BY distance_km ASC`;
+    } else {
+        query += ` ORDER BY r.restaurant_id`;
+    }
+
+    const result = await db.query(query, params);
     return result.rows;
 }
 

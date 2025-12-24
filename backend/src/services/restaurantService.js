@@ -7,12 +7,20 @@ function buildHttpError(status, message) {
 }
 
 /**
- * Get all restaurants from the database
+ * Get all restaurants from the database with optional filters
+ * @param {string} lang
+ * @param {object} filters - { lat, lng, distance, facilities }
  * @returns {Promise<Array>}
  */
-async function getAllRestaurants(lang = 'jp') {
+async function getAllRestaurants(lang = 'jp', filters = {}) {
     try {
-        const restaurants = await RestaurantModel.getAllRestaurants(lang);
+        // Validate lat/lng if distance is provided
+        if (filters.distance && (!filters.lat || !filters.lng)) {
+            console.warn('Distance filter provided without coordinates. Ignoring distance filter.');
+            delete filters.distance;
+        }
+
+        const restaurants = await RestaurantModel.getAllRestaurants(lang, filters);
         return restaurants;
     } catch (err) {
         console.error('Database error in getAllRestaurants:', err);
