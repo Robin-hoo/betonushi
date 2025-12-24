@@ -10,6 +10,7 @@ import { useAuth } from "@/context/AuthContext";
 import { useTranslation } from "react-i18next";
 
 const FoodDetailPage: React.FC = () => {
+  const [showShareModal, setShowShareModal] = useState(false);
   const { id } = useParams<{ id: string }>();
   const { t, i18n } = useTranslation();
   const { isLoggedIn } = useAuth();
@@ -114,6 +115,29 @@ const FoodDetailPage: React.FC = () => {
             </div>
 
             {/* Action Buttons */}
+           
+<div className="flex gap-4 w-full mb-4">
+  {/* SHARE */}
+  <Button
+   onClick={() => setShowShareModal(true)}
+    className="flex-1 py-2 bg-purple-600 text-white font-semibold rounded-lg hover:bg-purple-700 transition"
+  >
+    {t('foodDetail.buttons.share')}
+  </Button>
+
+  {/* HELP */}
+  <Link to={`/script/${id}`} className="flex-1 w-full">
+    <Button
+      className="w-full py-2 bg-blue-500 text-white font-semibold rounded-lg hover:bg-blue-600 transition flex items-center justify-center gap-2"
+    >
+      <span className="bg-white text-blue-500 rounded-full w-5 h-5 flex items-center justify-center text-sm font-bold">
+        ?
+      </span>
+      {t('foodDetail.buttons.help')}
+    </Button>
+  </Link>
+</div>
+
             <div className="flex gap-8 mb-6 px-10 ">
               <Button
                 onClick={async () => {
@@ -135,12 +159,7 @@ const FoodDetailPage: React.FC = () => {
               >
                 {t('foodDetail.buttons.favorite')}
               </Button>
-              <Link to={`/script/${id}`} className="block">
-                <Button
-                  className="w-[100px] px-4 py-2 bg-blue-500 text-white rounded-lg font-medium hover:bg-blue-600 transition-colors mb-4">
-                  {t('foodDetail.buttons.help')}
-                </Button>
-              </Link>
+              
             </div>
             <div className="flex justify-center">
               <InteractiveStarRating
@@ -225,6 +244,43 @@ const FoodDetailPage: React.FC = () => {
           </div>
         </div>
       </div>
+      {showShareModal && (
+  <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50">
+    <div className="bg-white rounded-lg p-6 w-[400px] max-w-[90%]">
+      <h3 className="text-lg font-bold text-gray-800 mb-4">
+        {t('foodDetail.shareModal.title')}
+      </h3>
+
+      {/* Link input */}
+      <input
+        readOnly
+        value={window.location.href}
+        className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm mb-4"
+      />
+
+      {/* Actions */}
+      <div className="grid grid-cols-2 gap-4 justify-between">
+        <Button
+          variant="outline"
+          onClick={() => setShowShareModal(false)}
+        >
+          {t('foodDetail.shareModal.close')}
+        </Button>
+
+        <Button
+          onClick={() => {
+            navigator.clipboard.writeText(window.location.href);
+            alert(t('foodDetail.shareModal.linkCopied'));
+          }}
+          className="bg-purple-600 text-white hover:bg-purple-700"
+        >
+          {t('foodDetail.shareModal.copyLink')}
+        </Button>
+      </div>
+    </div>
+  </div>
+)}
+
     </div>
   );
 };

@@ -223,7 +223,8 @@
       "help": "Trợ giúp",
       "cancel": "Hủy",
       "comment": "Bình luận",
-      "searchRestaurant": "Tìm nhà hàng"
+      "searchRestaurant": "Tìm nhà hàng",
+      "share": "Chia sẻ"
     },
     "sections": {
       "description": "1. Mô tả",
@@ -243,6 +244,12 @@
       "ja": "日本語",
       "vi": "Tiếng Việt",
       "en": "English"
+    },
+    "shareModal": {
+      "title": "Chia sẻ món ăn",
+      "copyLink": "Sao chép liên kết",
+      "linkCopied": "Đã sao chép liên kết!",
+      "close": "Đóng"
     }
   },
   "restaurant": {
@@ -336,6 +343,34 @@
       },
       "delete": "Xóa",
       "viewRecommendation": "Xem đề xuất"
+    }
+  },
+  "deliveryPlatforms": {
+    "leftText1": "Nhà hàng",
+    "leftText2": "Việt Nam được đánh giá cao"
+  },
+  "footer":{
+    "text": "Kết nối Nhật Bản và Việt Nam qua ẩm thực.",
+    "members": {
+      "mssv": "MSSV",
+      "name": "Họ và tên",
+      "membernum1": "20225919",
+      "membername1": "Lê Thái Sơn",
+      "membernum2": "20225866",
+      "membername2": "Nguyễn Quốc Khánh",
+      "membernum3": "20225110",
+      "membername3": "Vũ Thị Quỳnh Như",
+      "membernum4": "20225859",
+      "membername4": "Trần Doãn Huy",
+      "membernum5": "20225816",
+      "membername5": "Nguyễn Đức Đại Dương",
+      "membernum6": "20225840",
+      "membername6": "Phạm Long Khánh",
+      "membernum7": "20225803",
+      "membername7": "Cao Thành Đạt"
+    },
+    "foodImage": {
+      "title": "Xem thêm món ăn"
     }
   }
 }

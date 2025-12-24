@@ -223,7 +223,8 @@
       "help": "Help",
       "cancel": "キャンセル",
       "comment": "コメントする",
-      "searchRestaurant": "レストラン検索"
+      "searchRestaurant": "レストラン検索",
+      "share": "共有"
     },
     "sections": {
       "description": "1. 説明",
@@ -243,6 +244,12 @@
       "ja": "日本語",
       "vi": "Tiếng Việt",
       "en": "English"
+    },
+    "shareModal": {
+      "title": "料理を共有する",
+      "copyLink": "リンクをコピー",
+      "linkCopied": "リンクがコピーされました！",
+      "close": "閉じる"
     }
   },
   "restaurant": {
@@ -336,6 +343,34 @@
       },
       "delete": "削除",
       "viewRecommendation": "提案を見る"
+    }
+  },
+  "deliveryPlatforms": {
+    "leftText1": "高評価の",
+    "leftText2": "ベトナム料理店"
+  },
+  "footer":{
+    "text": "日本とベトナムを食でつなぐ。",
+    "members": {
+      "mssv": "学籍番号",
+      "name": "名前",
+      "membernum1": "20225919",
+      "membername1": "レ・ダイ・ソン",
+      "membernum2": "20225866",
+      "membername2": "グエン・クオック・カーン",
+      "membernum3": "20225110",
+      "membername3": "ヴー・ティ・クイン・ヌー",
+      "membernum4": "20225859",
+      "membername4": "トラン・ドアン・フイ",
+      "membernum5": "20225816",
+      "membername5": "グエン・ドゥック・ダイ・ドゥオン",
+      "membernum6": "20225840",
+      "membername6": "ファム・ロン・カン",
+      "membernum7": "20225803",
+      "membername7": "カオ・タン・ダット"
+    },
+    "foodImage": {
+      "title": "料理をもっと見る"
     }
   }
 }

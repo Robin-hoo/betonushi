@@ -223,7 +223,8 @@
       "help": "Help",
       "cancel": "Cancel",
       "comment": "Comment",
-      "searchRestaurant": "Search Restaurant"
+      "searchRestaurant": "Search Restaurant",
+      "share": "Share"
     },
     "sections": {
       "description": "1. Description",
@@ -243,6 +244,12 @@
       "ja": "日本語",
       "vi": "Tiếng Việt",
       "en": "English"
+    },
+    "shareModal": {
+      "title": "Share this Dish",
+      "copyLink": "Copy Link",
+      "linkCopied": "Link copied!",
+      "close": "Close"
     }
   },
   "restaurant": {
@@ -336,6 +343,35 @@
       },
       "delete": "Delete",
       "viewRecommendation": "View Recommendation"
+    }
+  },
+  "deliveryPlatforms": {
+    "leftText1": "Highly Rated",
+    "leftText2": "Vietnamese Restaurants"
+  },
+  "footer":{
+    "text": "Connecting Japan and Vietnam through food.",
+    "members": {
+      "mssv": "Student ID",
+      "name": "Name",
+      "membernum1": "20225919",
+      "membername1": "Lê Thái Sơn",
+      "membernum2": "20225866",
+      "membername2": "Nguyễn Quốc Khánh",
+      "membernum3": "20225110",
+      "membername3": "Vũ Thị Quỳnh Như",
+      "membernum4": "20225859",
+      "membername4": "Trần Doãn Huy",
+      "membernum5": "20225816",
+      "membername5": "Nguyễn Đức Đại Dương",
+      "membernum6": "20225840",
+      "membername6": "Phạm Long Khánh",
+      "membernum7": "20225803",
+      "membername7": "Cao Thành Đạt"
+
+    },
+    "foodImage": {
+      "title": "See more dishes"
     }
   }
 }
