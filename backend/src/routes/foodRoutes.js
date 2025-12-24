@@ -3,6 +3,7 @@ const path = require('path');
 const fs = require('fs');
 const multer = require('multer');
 const FoodController = require('../controllers/foodController');
+const authenticateToken = require('../middleware/authMiddleware');
 
 const router = express.Router();
 
@@ -37,6 +38,9 @@ router.put('/foods/:id', upload.single('image'), FoodController.updateFood);
 router.delete('/foods/:id', FoodController.deleteFood);
 router.post('/foods/:id/images', upload.single('image'), FoodController.uploadFoodImage);
 router.delete('/foods/:id/images/:imageId', FoodController.deleteFoodImage);
+
+// Reviews
+router.post('/foods/:id/reviews', authenticateToken, FoodController.addReview);
 
 module.exports = router;
 

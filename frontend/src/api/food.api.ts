@@ -3,13 +3,14 @@ import { api } from "./client";
 export interface Review {
   review_id: number;
   user_id: number;
+  full_name: string;
   comment: string;
   rating: number;
   created_at: string;
 }
 
 export interface Food {
-  food_id : number;
+  food_id: number;
   name: string;
   story: string;
   ingredient: string;
@@ -64,5 +65,10 @@ export async function uploadFoodImage(id: number | string, file: File) {
 
 export async function deleteFoodImage(foodId: number | string, imageId: number | string) {
   const res = await api.delete(`/foods/${foodId}/images/${imageId}`);
+  return res.data;
+}
+
+export async function addReview(id: number | string, data: { rating: number, comment: string }) {
+  const res = await api.post<Review>(`/foods/${id}/reviews`, data);
   return res.data;
 }

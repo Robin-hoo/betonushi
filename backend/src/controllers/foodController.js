@@ -5,7 +5,7 @@ const FoodService = require('../services/foodService');
  */
 async function getFoodById(req, res, next) {
   try {
-    const lang = (req.query.lang || (req.headers['accept-language'] || '').split(',')[0] || 'jp').slice(0,2);
+    const lang = (req.query.lang || (req.headers['accept-language'] || '').split(',')[0] || 'jp').slice(0, 2);
     const data = await FoodService.getFoodDetails(req.params.id, lang);
 
     // Convert relative upload paths to absolute URLs pointing to this server
@@ -24,7 +24,6 @@ async function getFoodById(req, res, next) {
     if (data.image_url) {
       data.image_url = makeAbsolute(data.image_url);
     }
-
     return res.json(data);
   } catch (error) {
     return next(error);
@@ -42,7 +41,7 @@ async function getFilterOptions(req, res, next) {
 
 async function getPopularFoods(req, res, next) {
   try {
-    const lang = (req.query.lang || (req.headers['accept-language'] || '').split(',')[0] || 'jp').slice(0,2);
+    const lang = (req.query.lang || (req.headers['accept-language'] || '').split(',')[0] || 'jp').slice(0, 2);
     const limit = req.query.limit || 4;
 
     const foods = await FoodService.getPopularFoods(limit, lang);
@@ -69,7 +68,7 @@ async function getPopularFoods(req, res, next) {
 async function getAllFoods(req, res, next) {
   try {
     const { search, flavors, ingredients, types } = req.query;
-    const lang = (req.query.lang || (req.headers['accept-language'] || '').split(',')[0] || 'jp').slice(0,2);
+    const lang = (req.query.lang || (req.headers['accept-language'] || '').split(',')[0] || 'jp').slice(0, 2);
 
     const filters = {
       search: search || '',
@@ -155,6 +154,26 @@ async function deleteFoodImage(req, res, next) {
   }
 }
 
+async function addReview(req, res, next) {
+  try {
+    const { id } = req.params;
+    const { rating, comment } = req.body;
+    const userId = req.user ? req.user.userId : null;
+
+    if (!userId) {
+      // Should be handled by middleware, but double check
+      const err = new Error('User not authenticated');
+      err.status = 401;
+      throw err;
+    }
+
+    const review = await FoodService.addReview(id, userId, rating, comment);
+    return res.status(201).json(review);
+  } catch (error) {
+    return next(error);
+  }
+}
+
 module.exports = {
   getFoodById,
   getPopularFoods,
@@ -165,6 +184,10 @@ module.exports = {
   deleteFood,
   uploadFoodImage,
   deleteFoodImage,
+  addReview,
 };
+
+
+
 
 

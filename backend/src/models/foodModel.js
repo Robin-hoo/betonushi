@@ -78,8 +78,8 @@ async function findFoodWithRelations(foodId, lang = 'jp') {
     );
     // Query reviews table (matches schema.sql)
     const reviewsResult = await db.query(
-      `SELECT review_id, user_id, comment, rating, created_at
-       FROM reviews
+      `SELECT review_id, users.user_id, users.full_name, comment, rating, r.created_at
+       FROM reviews r JOIN users ON r.user_id = users.user_id
        WHERE target_id = $1 AND type = 'food'
        ORDER BY review_id DESC`,
       [foodId]
@@ -122,8 +122,8 @@ async function findFoodWithRelations(foodId, lang = 'jp') {
 
   // Query reviews table (matches schema.sql)
   const reviewsResult = await db.query(
-    `SELECT review_id, user_id, comment, rating, created_at
-     FROM reviews
+    `SELECT review_id, users.user_id, users.full_name, comment, rating, r.created_at
+     FROM reviews r JOIN users ON r.user_id = users.user_id
      WHERE target_id = $1 AND type = 'food'
      ORDER BY review_id DESC`,
     [foodId]
@@ -140,7 +140,7 @@ async function getFilterOptions() {
   const foodTypes = await db.query('SELECT food_type_id as id, name FROM food_types ORDER BY name');
   const flavors = await db.query('SELECT flavor_id as id, name FROM flavors ORDER BY name');
   const ingredients = await db.query('SELECT ingredient_id as id, name FROM ingredients ORDER BY name LIMIT 8'); // MAX 8 ingredients
-  
+
   return {
     regions: regions.rows,
     food_types: foodTypes.rows,
