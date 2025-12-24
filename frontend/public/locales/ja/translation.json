@@ -223,7 +223,8 @@
       "help": "Help",
       "cancel": "キャンセル",
       "comment": "コメントする",
-      "searchRestaurant": "レストラン検索"
+      "searchRestaurant": "レストラン検索",
+      "share": "共有"
     },
     "sections": {
       "description": "1. 説明",
@@ -243,6 +244,12 @@
       "ja": "日本語",
       "vi": "Tiếng Việt",
       "en": "English"
+    },
+    "shareModal": {
+      "title": "料理を共有する",
+      "copyLink": "リンクをコピー",
+      "linkCopied": "リンクがコピーされました！",
+      "close": "閉じる"
     }
   },
   "restaurant": {

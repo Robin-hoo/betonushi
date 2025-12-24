@@ -223,7 +223,8 @@
       "help": "Trợ giúp",
       "cancel": "Hủy",
       "comment": "Bình luận",
-      "searchRestaurant": "Tìm nhà hàng"
+      "searchRestaurant": "Tìm nhà hàng",
+      "share": "Chia sẻ"
     },
     "sections": {
       "description": "1. Mô tả",
@@ -243,6 +244,12 @@
       "ja": "日本語",
       "vi": "Tiếng Việt",
       "en": "English"
+    },
+    "shareModal": {
+      "title": "Chia sẻ món ăn",
+      "copyLink": "Sao chép liên kết",
+      "linkCopied": "Đã sao chép liên kết!",
+      "close": "Đóng"
     }
   },
   "restaurant": {

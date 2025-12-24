@@ -223,7 +223,8 @@
       "help": "Help",
       "cancel": "Cancel",
       "comment": "Comment",
-      "searchRestaurant": "Search Restaurant"
+      "searchRestaurant": "Search Restaurant",
+      "share": "Share"
     },
     "sections": {
       "description": "1. Description",
@@ -243,6 +244,12 @@
       "ja": "日本語",
       "vi": "Tiếng Việt",
       "en": "English"
+    },
+    "shareModal": {
+      "title": "Share this Dish",
+      "copyLink": "Copy Link",
+      "linkCopied": "Link copied!",
+      "close": "Close"
     }
   },
   "restaurant": {
