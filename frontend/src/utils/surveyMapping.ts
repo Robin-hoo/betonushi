@@ -1,7 +1,10 @@
 export interface SurveyData {
     q1?: string[]; // Preference: vegetarian, warm, cold
     q2?: string[]; // Taste: sweet, spicy, sour, salty
+    q3?: string[]; // Dislike
     q4?: string[]; // Priority: health, taste, price
+    q5?: string[]; // View
+    q6?: string[]; //  Many Prople
     [key: string]: any;
 }
 
@@ -15,9 +18,9 @@ export interface FilterParams {
  * Maps survey answers to MenuPage filter IDs.
  * 
  * MenuPage Filter IDs reference:
- * Types: 1:Noodle, 2:Rice, 3:Bread, 4:SideDish, 5:Salad, 6:Hotpot
- * Flavors: 1:Sour, 2:Sweet, 3:Herb, 4:Light, 5:Spicy
- * Ingredients: 1:Beef, 2:Pork, 3:Chicken, 4:Seafood, 5:Vegetable
+ * Types: 1: Noodle, 2: Rice, 3: Bread, 4: SideDish, 5: Salad, 6: Hotpot
+ * Flavors: 1: Sour, 2: Sweet, 3: Herb, 4: Light, 5: Spicy
+ * Ingredients: 1: Beef, 2: Pork, 3: Chicken, 4: Seafood, 5: Vegetable
  */
 export const mapSurveyToFilters = (survey: SurveyData): FilterParams => {
     const filters = {

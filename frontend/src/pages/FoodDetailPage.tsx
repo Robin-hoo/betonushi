@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
-import { Star } from "lucide-react";
+import { Star, ArrowLeft } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { getFoodById, type Food } from "@/api/food.api";
 import { Link } from "react-router-dom";
@@ -21,6 +21,8 @@ const FoodDetailPage: React.FC = () => {
   const [isFavorite, setIsFavorite] = useState(false);
   const [userRating, setUserRating] = useState(0);
 
+  const [selectedImage, setSelectedImage] = useState<string | null>(null);
+
   useEffect(() => {
     if (!id) return;
 
@@ -30,6 +32,9 @@ const FoodDetailPage: React.FC = () => {
       try {
         const data = await getFoodById(id, i18n.language);
         setDishData(data);
+        if (data.images && data.images.length > 0) {
+          setSelectedImage(data.images[0]);
+        }
 
         if (isLoggedIn) {
           const status = await favoritesApi.checkStatus(Number(id), 'food');
@@ -58,43 +63,62 @@ const FoodDetailPage: React.FC = () => {
 
   return (
     <div className="min-h-screen bg-white">
-      <button className="px-8 py-2 bg-purple-600 text-white font-semibold rounded-lg hover:bg-purple-700 transition">
-        <Link to="/foods">{t('foodDetail.backToFoods')}</Link>
-      </button>
+      <Link
+        to="/foods"
+        className="
+          inline-flex items-center justify-center
+          w-10 h-10
+          bg-purple-600 text-white
+          rounded-md
+          hover:bg-purple-700
+          transition
+        "
+        aria-label="Back to foods"
+      >
+        <ArrowLeft size={20} />
+      </Link>
 
-      <div className="max-w-7xl mx-auto p-6">
+      <div className="max-w-6xl mx-auto p-6 ">
         {/* Top Section - 2 Columns */}
-        <div className="grid grid-cols-12 gap-6">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-10">
           {/* Left Column */}
-          <div className="col-span-5">
+          <div className="lg:col-span-4">
             {/* Main Image */}
-            <div className="bg-gradient-to-br from-green-100 to-green-200 rounded-lg p-4 mb-3">
-              <div className="w-full aspect-square flex items-center justify-center overflow-hidden rounded-lg">
-                <img
-                  src={dishData.images?.[0]}
-                  alt={dishData.name}
-                  className="w-full h-full object-cover rounded-lg"
-                />
-              </div>
+            <div className="relative w-full aspect-[4/3] flex items-center justify-center overflow-hidden rounded-xl bg-white group pb-5">
+              <img
+                src={selectedImage || dishData.images?.[0]}
+                alt={dishData.name}
+                className="w-full h-full object-cover rounded-xl transition-all duration-500 group-hover:scale-105"
+              />
             </div>
 
-            {/* Thumbnail Images */}
-            <div className="grid grid-cols-3 gap-2 mb-4">
-              {dishData.images?.map((img, i) =>
-                i !== 0 ? (
-                  <div
-                    key={i}
-                    className="bg-gradient-to-br from-green-100 to-green-200 rounded-lg aspect-square flex items-center justify-center cursor-pointer hover:scale-105 transition-transform"
-                  >
-                    <img
-                      src={img}
-                      alt={dishData.name}
-                      className="w-full h-full object-cover rounded-lg"
-                    />
-                  </div>
-                ) : null
-              )}
-            </div>
+            {/* Thumbnail Images Slider */}
+            {dishData.images && dishData.images.length > 0 && (
+              <div className="relative mb-4">
+                <div className="flex gap-3 overflow-x-auto pb-2 snap-x scrollbar-thin scrollbar-thumb-purple-200 scrollbar-track-transparent">
+                  {dishData.images.map((img, i) => (
+                    <button
+                      key={i}
+                      onClick={() => setSelectedImage(img)}
+                      className={`
+                        relative flex-shrink-0 w-[calc(33.333%-0.5rem)] aspect-square rounded-lg overflow-hidden snap-start 
+                        border-2 transition-all duration-300
+                        ${selectedImage === img || (!selectedImage && i === 0)
+                          ? "border-purple-600 ring-2 ring-purple-100 scale-95"
+                          : "border-transparent opacity-70 hover:opacity-100 hover:scale-95"
+                        }
+                      `}
+                    >
+                      <img
+                        src={img}
+                        alt={`${dishData.name} thumbnail ${i + 1}`}
+                        className="w-full h-full object-cover"
+                      />
+                    </button>
+                  ))}
+                </div>
+              </div>
+            )}
 
             {/* Title with rating */}
             <div className="mb-4 flex flex-col items-center">
@@ -177,6 +201,7 @@ const FoodDetailPage: React.FC = () => {
               ></textarea>
             </div>
 
+            {/* Post comment buttons */}
             <div className="flex gap-8 mb-6 ">
               <Button className="w-full px-4 py-2 bg-orange-500 text-white rounded-lg hover:bg-orange-600 transition-colors mb-2">
                 {t('foodDetail.buttons.cancel')}
@@ -193,7 +218,7 @@ const FoodDetailPage: React.FC = () => {
           </div>
 
           {/* Right Column - Content Sections */}
-          <div className="space-y-6 col-span-7">
+          <div className="space-y-6 lg:col-span-8">
             {/** POT sections: story, ingredient, taste, style, comparison */}
             {[
               { title: t('foodDetail.sections.story'), content: dishData.story },
