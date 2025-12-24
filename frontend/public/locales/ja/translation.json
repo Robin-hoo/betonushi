@@ -260,7 +260,7 @@
     "filters": {
       "distance": {
         "title": "現在地からの距離",
-        "all": "地区名し",
+        "undefined": "指定なし",
         "300m": "300m以内",
         "1km": "1km以内",
         "3km": "3 km以内",
@@ -268,7 +268,7 @@
         "10km": "10 km以内"
       },
       "area": {
-        "title": "エリア",
+        "title": "アメニティ",
         "downtown": "料理中心",
         "cardPayment": "カードOK決済可",
         "smokingArea": "授煙席あり",
@@ -278,7 +278,20 @@
       },
       "button": "絞り込み"
     },
-    "details": "詳細",
+    "facilities": {
+        "WiFi": "無料Wi-Fi",
+        "Air Conditioning": "エアコン",
+        "Parking": "駐車場あり",
+        "Card Payment": "カード/QR決済可",
+        "Private Room": "個室",
+        "Beer/Alcohol": "アルコール",
+        "Takeout": "テイクアウト",
+        "Late Night": "24時間営業",
+        "Smoking": "喫煙席あり",
+        "RoofSeat": "テラス席あり"
+      },
+      "location_required": "位置情報が必要です",
+    "details": "もっと詳しく見る",
     "pagination": {
       "prev": "前へ",
       "next": "次へ"

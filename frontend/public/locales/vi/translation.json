@@ -259,7 +259,8 @@
     },
     "filters": {
       "distance": {
-        "title": "Khoảng cách từ vị trí hiện tại",
+        "title": "Khoảng cách",
+        "undefined": "Không giới hạn",
         "all": "Tất cả",
         "300m": "Trong 300m",
         "1km": "Trong 1km",
@@ -268,17 +269,24 @@
         "10km": "Trong 10km"
       },
       "area": {
-        "title": "Khu vực",
-        "downtown": "Trung tâm ẩm thực",
-        "cardPayment": "Chấp nhận thẻ",
-        "smokingArea": "Khu vực hút thuốc",
-        "parking": "Có bãi đỗ xe",
-        "24hours": "Mở cửa 24h",
-        "terrace": "Có khu vực sân thượng"
+        "title": "Tiện nghi"
       },
       "button": "Lọc"
     },
-    "details": "Chi tiết",
+    "facilities": {
+      "WiFi": "Wi-Fi miễn phí",
+      "Air Conditioning": "Có điều hòa",
+      "Parking": "Có chỗ đậu xe",
+      "Card Payment": "Thanh toán thẻ/Mã QR",
+      "Private Room": "Phòng riêng",
+      "Beer/Alcohol": "Bia/Rượu",
+      "Takeout": "Mang về",
+      "Late Night": "Mở cửa 24 giờ",
+      "Smoking": "Có chỗ hút thuốc",
+      "RoofSeat": "Có ghế ngồi trên sân thượng"
+    },
+    "location_required": "Cần vị trí để lọc",
+    "details": " Xem chi tiết",
     "pagination": {
       "prev": "Trước",
       "next": "Sau"

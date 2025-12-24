@@ -259,7 +259,8 @@
     },
     "filters": {
       "distance": {
-        "title": "Distance from Current Location",
+        "title": "Distance",
+        "undefined": "Undefined",
         "all": "All",
         "300m": "Within 300m",
         "1km": "Within 1km",
@@ -268,9 +269,9 @@
         "10km": "Within 10km"
       },
       "area": {
-        "title": "Area",
+        "title": "Facilities", 
         "downtown": "Downtown",
-        "cardPayment": "Card Payment OK",
+        "cardPayment": "Card/QR code Payment",
         "smokingArea": "Smoking Area",
         "parking": "Parking",
         "24hours": "24 Hours",
@@ -278,7 +279,20 @@
       },
       "button": "Filter"
     },
-    "details": "Details",
+  "facilities": {
+      "WiFi": "Free Wi-Fi",
+      "Air Conditioning": "Air Conditioning",
+      "Parking": "Parking",
+      "Card Payment": "Card/QR code Payment",
+      "Private Room": "Private Room",
+      "Beer/Alcohol": "Beer/Alcohol",
+      "Takeout": "Takeout",
+      "Late Night": "Open all night",
+      "Smoking": "Smoking Seats",
+      "RoofSeat": "Roof Seats"
+    },
+    "location_required": "Location required",
+    "details": "View Details",
     "pagination": {
       "prev": "Prev",
       "next": "Next"
