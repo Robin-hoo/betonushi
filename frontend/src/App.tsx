@@ -13,6 +13,7 @@ import FoodScriptPage from "./pages/FoodScriptPage";
 import FavoritesPage from "./pages/FavoritesPage";
 import AdminFoodsPage from "./pages/AdminFoodsPage";
 import ProfilePage from "./pages/ProfilePage";
+import SurveyPage from "./pages/SurveyPage";
 function App() {
   return (
     <Router>
@@ -35,7 +36,9 @@ function App() {
           <Route path="/script/:id" element={<FoodScriptPage />} />
           <Route path="/favorites" element={<FavoritesPage />} />
           <Route path="/admin/foods" element={<AdminFoodsPage />} />
+          <Route path="/admin/foods" element={<AdminFoodsPage />} />
           <Route path="/profile" element={<ProfilePage />} />
+          <Route path="/survey" element={<SurveyPage />} />
         </Route>
       </Routes>
     </Router>

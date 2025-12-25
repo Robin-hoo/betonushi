@@ -8,6 +8,7 @@ const geminiRoutes = require("./routes/scriptRoutes");
 const foodRoutes = require("./routes/foodRoutes");
 const restaurantRoutes = require("./routes/restaurantRoutes");
 const favoriteRoutes = require("./routes/favoriteRoutes");
+const recommendationRoutes = require("./routes/recommendationRoutes");
 const app = express();
 app.use(
   cors({
@@ -31,7 +32,10 @@ app.use("/api", restaurantRoutes);
 app.use("/api/favorites", favoriteRoutes);
 app.use("/api", authRoutes);
 const userRoutes = require("./routes/userRoutes");
+const preferenceRoutes = require("./routes/preferenceRoutes"); // Added
 app.use("/api/users", userRoutes);
+app.use("/api", recommendationRoutes);
+app.use("/api/preferences", preferenceRoutes); // Added
 
 // 404 handler for unmatched routes
 app.use((req, res) => {
