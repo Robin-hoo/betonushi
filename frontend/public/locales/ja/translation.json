@@ -285,18 +285,18 @@
       "button": "絞り込み"
     },
     "facilities": {
-        "WiFi": "無料Wi-Fi",
-        "Air Conditioning": "エアコン",
-        "Parking": "駐車場あり",
-        "Card Payment": "カード/QR決済可",
-        "Private Room": "個室",
-        "Beer/Alcohol": "アルコール",
-        "Takeout": "テイクアウト",
-        "Late Night": "24時間営業",
-        "Smoking": "喫煙席あり",
-        "RoofSeat": "テラス席あり"
-      },
-      "location_required": "位置情報が必要です",
+      "WiFi": "無料Wi-Fi",
+      "Air Conditioning": "エアコン",
+      "Parking": "駐車場あり",
+      "Card Payment": "カード/QR決済可",
+      "Private Room": "個室",
+      "Beer/Alcohol": "アルコール",
+      "Takeout": "テイクアウト",
+      "Late Night": "24時間営業",
+      "Smoking": "喫煙席あり",
+      "RoofSeat": "テラス席あり"
+    },
+    "location_required": "位置情報が必要です",
     "details": "もっと詳しく見る",
     "pagination": {
       "prev": "前へ",
@@ -391,5 +391,52 @@
     "foodImage": {
       "title": "料理をもっと見る"
     }
+  },
+  "survey": {
+    "title": "味のアンケート",
+    "target": "このアンケートは、どの国の人の味の好みに関するものですか？",
+    "targetPlaceholder": "A さん",
+    "q1": "1. 普段よく食べる料理のジャンルはどれですか？",
+    "q2": "2. 好きな味を選んでください。",
+    "q3": "3. 嫌いな食べ物や苦手な味はありますか？",
+    "q4": "4. 食事のときに一番大切にしていることは何ですか？",
+    "q5": "5. 個室で食事をしたいですか？",
+    "q6": "6. 何人くらいのグループで食事をしますか？",
+    "options": {
+      "vegetarian": "ベジタリアン料理",
+      "warm": "温かい料理",
+      "cold": "冷たい料理",
+      "noodle": "汁物・麺類",
+      "other": "その他",
+      "sweet": "甘い",
+      "sour": "酸っぱい",
+      "salty": "塩辛い",
+      "bitter": "苦い",
+      "umami": "うま味",
+      "spicy": "辛い",
+      "dog": "犬肉",
+      "blood": "血を使った料理",
+      "frog": "カエル",
+      "buffalo": "水牛肉",
+      "snake": "ヘビ",
+      "organs": "ホルモン / レバーなど",
+      "taste": "味",
+      "nutrition": "栄養",
+      "price": "価格",
+      "looks": "見た目",
+      "health": "健康志向",
+      "quantity": "量",
+      "privateYes": "はい、個室がいい",
+      "privateNo": "いいえ、オープンスペースがいい",
+      "privateAny": "どちらでもいい",
+      "people1": "1人",
+      "people2": "2人",
+      "people34": "3~4人",
+      "people56": "5~6人",
+      "people7": "7人以上"
+    },
+    "freeText": "自由記入",
+    "save": "保存する",
+    "search": "料理を探す"
   }
 }

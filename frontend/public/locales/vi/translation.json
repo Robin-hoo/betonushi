@@ -387,5 +387,52 @@
     "foodImage": {
       "title": "Xem thêm món ăn"
     }
+  },
+  "survey": {
+    "title": "Khảo sát khẩu vị",
+    "target": "Khảo sát này dành cho ai?",
+    "targetPlaceholder": "Tên (ví dụ: Anh A)",
+    "q1": "1. Bạn thường ăn loại đồ ăn nào?",
+    "q2": "2. Chọn hương vị yêu thích của bạn.",
+    "q3": "3. Bạn có ghét món ăn hay hương vị nào không?",
+    "q4": "4. Điều quan trọng nhất khi ăn uống là gì?",
+    "q5": "5. Bạn có muốn ăn trong phòng riêng không?",
+    "q6": "6. Bạn thường đi ăn với nhóm bao nhiêu người?",
+    "options": {
+      "vegetarian": "Đồ chay",
+      "warm": "Đồ nóng",
+      "cold": "Đồ nguội",
+      "noodle": "Món nước/Mì",
+      "other": "Khác",
+      "sweet": "Ngọt",
+      "sour": "Chua",
+      "salty": "Mặn",
+      "bitter": "Đắng",
+      "umami": "Vị Umami",
+      "spicy": "Cay",
+      "dog": "Thịt chó",
+      "blood": "Tiết canh",
+      "frog": "Thịt ếch",
+      "buffalo": "Thịt trâu",
+      "snake": "Thịt rắn",
+      "organs": "Nội tạng",
+      "taste": "Hương vị",
+      "nutrition": "Dinh dưỡng",
+      "price": "Giá cả",
+      "looks": "Hình thức",
+      "health": "Sức khỏe",
+      "quantity": "Số lượng",
+      "privateYes": "Có, phòng riêng",
+      "privateNo": "Không, không gian mở",
+      "privateAny": "Sao cũng được",
+      "people1": "1 người",
+      "people2": "2 người",
+      "people34": "3-4 người",
+      "people56": "5-6 người",
+      "people7": "7 người trở lên"
+    },
+    "freeText": "Nhập tự do",
+    "save": "Lưu",
+    "search": "Tìm món ăn"
   }
 }

@@ -21,6 +21,9 @@
   "popular_menu": {
     "title": "Popular Food"
   },
+  "recommendation": {
+    "title": "Recommended For You"
+  },
   "banner1": {
     "title": "Satisfy Your Taste Buds"
   },
@@ -275,7 +278,7 @@
         "10km": "Within 10km"
       },
       "area": {
-        "title": "Facilities", 
+        "title": "Facilities",
         "downtown": "Downtown",
         "cardPayment": "Card/QR code Payment",
         "smokingArea": "Smoking Area",
@@ -285,7 +288,7 @@
       },
       "button": "Filter"
     },
-  "facilities": {
+    "facilities": {
       "WiFi": "Free Wi-Fi",
       "Air Conditioning": "Air Conditioning",
       "Parking": "Parking",
@@ -392,5 +395,52 @@
     "foodImage": {
       "title": "See more dishes"
     }
+  },
+  "survey": {
+    "title": "Taste Survey",
+    "target": "Who is this survey for?",
+    "targetPlaceholder": "Name (e.g. Mr. A)",
+    "q1": "1. What genre of food do you usually eat?",
+    "q2": "2. Choose your favorite tastes.",
+    "q3": "3. Are there any foods or tastes you dislike?",
+    "q4": "4. What is most important to you when eating?",
+    "q5": "5. Do you want to eat in a private room?",
+    "q6": "6. How many people usually eat together?",
+    "options": {
+      "vegetarian": "Vegetarian",
+      "warm": "Warm Dish",
+      "cold": "Cold Dish",
+      "noodle": "Soup/Noodle",
+      "other": "Other",
+      "sweet": "Sweet",
+      "sour": "Sour",
+      "salty": "Salty",
+      "bitter": "Bitter",
+      "umami": "Umami",
+      "spicy": "Spicy",
+      "dog": "Dog meat",
+      "blood": "Blood pudding",
+      "frog": "Frog",
+      "buffalo": "Buffalo",
+      "snake": "Snake",
+      "organs": "Organs/Liver",
+      "taste": "Taste",
+      "nutrition": "Nutrition",
+      "price": "Price",
+      "looks": "Appearance",
+      "health": "Health",
+      "quantity": "Quantity",
+      "privateYes": "Yes, private room",
+      "privateNo": "No, open space",
+      "privateAny": "Either is fine",
+      "people1": "1 person",
+      "people2": "2 people",
+      "people34": "3-4 people",
+      "people56": "5-6 people",
+      "people7": "7+ people"
+    },
+    "freeText": "Free text",
+    "save": "Save",
+    "search": "Search Food"
   }
 }
