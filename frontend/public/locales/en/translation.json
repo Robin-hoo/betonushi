@@ -442,5 +442,8 @@
     "freeText": "Free text",
     "save": "Save",
     "search": "Search Food"
+  },
+  "helpfulpage":{
+    "sectionTitle":"Vietnamese Cuisine Guide"
   }
 }

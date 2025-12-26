@@ -434,5 +434,8 @@
     "freeText": "Nhập tự do",
     "save": "Lưu",
     "search": "Tìm món ăn"
+  },
+  "helpfulpage":{
+    "sectionTitle":"Hướng dẫn giới thiệu ẩm thực Việt Nam"
   }
 }

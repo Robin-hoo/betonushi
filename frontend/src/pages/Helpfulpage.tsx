@@ -10,11 +10,8 @@ export default function HelpfulPage() {
       {/* Title Section */}
       <div className="w-full max-w-4xl text-center mb-12 px-4">
         <h1 className="text-4xl font-bold mb-3 text-gray-900">
-          ベトナム的料理実施ガイド
+          {t("helpfulpage.sectionTitle")}
         </h1>
-        <p className="text-gray-500 text-lg">
-          Helpful Japanese Phrases for Food & Invitations
-        </p>
       </div>
 
       {/* Content Sections */}

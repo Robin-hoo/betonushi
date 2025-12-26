@@ -167,7 +167,7 @@ export default function HomePage() {
               },
               {
                 name: "DoorDash",
-                url: "https://play-lh.googleusercontent.com/OOr0wepNC4FIlt5vc95R4InIRUnv6ibbl7GDyfIXFJA5Av4WVBWsgsdyNWB0F8PBmQ=w3840-h2160-rw",
+                url: "https://capsource-bucket.s3.us-west-2.amazonaws.com/wp-content/uploads/2020/09/08180359/doordash-logo3.png",
               },
               {
                 name: "Foodpanda",
@@ -197,7 +197,7 @@ export default function HomePage() {
                 <img
                   src={platform.url}
                   alt={platform.name}
-                  className="h-6 object-contain"
+                  className="h-full w-full object-contain"
                   loading="lazy"
                 />
               </div>

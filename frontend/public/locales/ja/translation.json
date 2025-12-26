@@ -438,5 +438,8 @@
     "freeText": "自由記入",
     "save": "保存する",
     "search": "料理を探す"
+  },
+  "helpfulpage":{
+    "sectionTitle":"ベトナム料理紹介ガイド"
   }
 }
