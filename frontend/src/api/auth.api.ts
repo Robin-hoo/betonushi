@@ -19,6 +19,7 @@ export interface LoginResponse {
     message: string;
     token: string;
     user: User;
+    exprires_at: number;
 }
 
 export const login = async (data: LoginRequest): Promise<LoginResponse> => {

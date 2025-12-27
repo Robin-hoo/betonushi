@@ -1,6 +1,7 @@
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const userModel = require('../models/userModel');
+const e = require('express');
 
 const JWT_SECRET = process.env.JWT_SECRET || 'supersecretkey'; // In production, use env var
 
@@ -40,6 +41,7 @@ async function login(req, res) {
         return res.json({
             message: 'Login successful',
             token,
+            exprires_at: Date.now() + 3600 * 1000, // 1 hour from now
             user: {
                 id: user.user_id,
                 fullName: user.full_name,

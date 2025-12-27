@@ -62,6 +62,9 @@
     "see_more": "See More"
   },
   "menu": {
+    "message": {
+      "login_to_fav": "Please login to add favorite"
+    },
     "view_details": "View Details",
     "search": {
       "placeholder": "Dish name",

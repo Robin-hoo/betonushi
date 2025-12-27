@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { favoritesApi } from "@/api/favorites.api";
 import { useAuth } from "@/context/AuthContext";
+import { toast } from 'react-hot-toast';
 
 interface Food {
   food_id: number;
@@ -297,7 +298,7 @@ export default function MenuPage() {
   const handleToggleLike = async (food_id: number) => {
     if (!isLoggedIn) {
       // Prompt login or redirect
-      alert("Please login to favorite items");
+      toast.error(t('menu.message.login_to_fav'));
       return;
     }
 

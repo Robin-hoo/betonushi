@@ -59,6 +59,9 @@
     "see_more": "もっと詳しく見る"
   },
   "menu": {
+    "message": {
+      "login_to_fav": "お気に入りを追加するにはログインしてください。"
+    },
     "view_details": "もっと詳しく見る",
     "search": {
       "placeholder": "料理名",

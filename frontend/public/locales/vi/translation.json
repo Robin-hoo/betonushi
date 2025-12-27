@@ -59,6 +59,9 @@
     "see_more": "Xem thêm"
   },
   "menu": {
+    "message": {
+      "login_to_fav": "Vui lòng đăng nhập để thêm yêu thích!"
+    },
     "view_details": "Xem chi tiết",
     "search": {
       "placeholder": "Tên món ăn",

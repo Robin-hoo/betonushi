@@ -21,6 +21,7 @@ const FoodDetailPage: React.FC = () => {
 
   const [isFavorite, setIsFavorite] = useState(false);
   const [userRating, setUserRating] = useState(0);
+  const [isComentting, setIsCommenting] = useState(false);
 
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
   const [comment, setComment] = useState("");
@@ -40,8 +41,12 @@ const FoodDetailPage: React.FC = () => {
       }
 
       if (isLoggedIn) {
-        const status = await favoritesApi.checkStatus(Number(id), 'food');
-        setIsFavorite(status.isFavorited);
+        try {
+          const status = await favoritesApi.checkStatus(Number(id), 'food');
+          setIsFavorite(status.isFavorited);
+        }  catch (err) {
+            console.error(err);
+        }  
       }
     } catch (err) {
       console.error(err);
@@ -57,6 +62,11 @@ const FoodDetailPage: React.FC = () => {
   }, [id, isLoggedIn, i18n.language]);
 
   const handleRatingChange = (newRating: number) => {
+    if (!isLoggedIn) {
+      toast.error("Please login to review");
+      return;
+    }
+    setIsCommenting(true);
     setUserRating(newRating);
   };
 
@@ -83,6 +93,7 @@ const FoodDetailPage: React.FC = () => {
     } finally {
       toast.success(t('foodDetail.messages.submitted'));
       setIsSubmitting(false);
+      setIsCommenting(false);
     }
   };
 
@@ -192,7 +203,7 @@ const FoodDetailPage: React.FC = () => {
                 </Button>
               </Link>
             </div>
-
+            {isLoggedIn && (
             <div className="flex gap-8 mb-6 px-10 justify-center">
               <Button
                 onClick={async () => {
@@ -207,15 +218,14 @@ const FoodDetailPage: React.FC = () => {
                   }
                 }}
                 className={`w-fit py-2 rounded-lg font-medium mb-2 transition-colors ${isFavorite
-                  ? "bg-red-200 text-red-600"
-                  : "bg-red-500 hover:bg-red-200"
+                  ? "bg-red-200 text-red-600 hover:bg-red-300"
+                  : "bg-red-500 text-white hover:bg-red-400"
                   } ${!isLoggedIn ? "opacity-50 cursor-not-allowed" : ""}`}
                 disabled={!isLoggedIn}
               >
                 {isFavorite ? t('foodDetail.buttons.favorite') : t('foodDetail.buttons.unfavorite')}
               </Button>
-
-            </div>
+            </div> )}
             <div className="flex justify-center">
               <InteractiveStarRating
                 initialRating={userRating}
@@ -224,7 +234,7 @@ const FoodDetailPage: React.FC = () => {
               />
             </div>
 
-            {userRating > 0 && (
+            {isComentting && (
               <>
                 {/* Comment Section */}
                 <div className="bg-gray-50 rounded-lg p-3 mb-4">

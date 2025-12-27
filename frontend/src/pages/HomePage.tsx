@@ -8,11 +8,13 @@ import { api } from "@/api/client";
 import { HeartButton } from "@/components/HeartButton";
 import { RecommendationSection } from "@/components/RecommendationSection";
 import foodIcon from "../assets/icon/japanese-food.svg";
+import { useAuth } from "@/context/AuthContext";
 export default function HomePage() {
   const { t } = useTranslation();
   const [foods, setFoods] = useState<Food[]>([]);
   const { i18n } = useTranslation();
   const [foodImages, setFoodImages] = useState<Food[]>([]);
+  const { isLoggedIn } = useAuth()
 
   useEffect(() => {
     api
@@ -65,8 +67,9 @@ export default function HomePage() {
       {/* =========================== */}
       {/* Recommendation Section */}
       {/* =========================== */}
+      { isLoggedIn &&
       <RecommendationSection />
-
+      }
       {/* =========================== */}
       {/* Popular Menu */}
       {/* =========================== */}
