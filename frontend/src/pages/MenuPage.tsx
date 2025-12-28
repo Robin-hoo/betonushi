@@ -2,9 +2,9 @@ import { useState, useEffect, useCallback, useRef } from 'react';
 import { Heart, Star } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate, useSearchParams } from 'react-router-dom';
-import { favoritesApi } from "@/api/favorites.api";
 import { useAuth } from "@/context/AuthContext";
 import { toast } from 'react-hot-toast';
+import { useFavorites } from "@/context/FavoritesContext";
 
 interface Food {
   food_id: number;
@@ -20,7 +20,7 @@ interface Food {
   number_of_rating: number;
   created_at: string;
   image_url: string | null;
-  liked?: boolean;
+  // liked?: boolean; // Deprecated, use context
 }
 
 interface FilterOption {
@@ -40,6 +40,7 @@ export default function MenuPage() {
   const { t, i18n } = useTranslation();
   const navigate = useNavigate();
   const { isLoggedIn } = useAuth();
+  const { checkIsFavorited, toggleFavorite } = useFavorites();
 
   const [foods, setFoods] = useState<Food[]>([]);
   const [loading, setLoading] = useState(true);
@@ -100,14 +101,9 @@ export default function MenuPage() {
         { id: 5, name: t('menu.categories.items.vegetable') },
       ],
     });
+  }, [i18n.language, t]);
 
-    // fetch initial foods (full page loading on first load)
-    // We don't fetch here anymore, the searchParams effect will handle it
-    // But we need to ensure initial load happens if params are empty.
-    // Actually, searchParams effect runs on mount, so we are good.
-  }, [i18n.language, t]); // Added t to dependency
-
-  // Sync Local State with URL when URL changes (e.g. Back button)
+  // Sync Local State with URL when URL changes
   useEffect(() => {
     const search = searchParams.get('search') || '';
     const types = getIdsFromUrl(searchParams.get('types'));
@@ -125,7 +121,7 @@ export default function MenuPage() {
       flavors,
       ingredients,
       page,
-      full: loading // Use existing full loading state for first fetch
+      full: loading
     });
   }, [searchParams, i18n.language]);
 
@@ -138,7 +134,6 @@ export default function MenuPage() {
     page?: number;
   }) => {
     try {
-      // full=true means initial/full-page load (show full-screen spinner). Otherwise show inline spinner in content area.
       if (opts?.full) {
         setLoading(true);
       } else {
@@ -147,20 +142,12 @@ export default function MenuPage() {
 
       setError(null);
 
-      setError(null);
-
       const params = new URLSearchParams();
 
-      // Use passed options or fallback to current state (though we aim to always pass opts via the effect)
-      // Note: Inside fetchFoods, we shouldn't rely on state if we want to be pure, but for safety:
       const sQuery = opts?.search !== undefined ? opts.search : searchQuery;
       const sTypes = opts?.types !== undefined ? opts.types : selectedFilters.types;
       const sFlavors = opts?.flavors !== undefined ? opts.flavors : selectedFilters.flavors;
       const sIngredients = opts?.ingredients !== undefined ? opts.ingredients : selectedFilters.ingredients;
-      // We ignore page param for API for now as the backend apparently doesn't support pagination via params yet? 
-      // Or does it? The original code didn't send 'page'. It did client-side pagination.
-      // We will keep client-side pagination for now as per original code logic (slice),
-      // BUT we should update the 'currentPage' state if we want URL to control it.
 
       if (sQuery.trim()) {
         params.append('search', sQuery.trim());
@@ -175,32 +162,13 @@ export default function MenuPage() {
       if (sIngredients.length > 0)
         params.append('ingredients', sIngredients.join(','));
 
-      // include language so backend returns localized labels
       params.append('lang', i18n.language);
 
-      //call  API: /foods?search=abc&regions=1,2&lang=ja
       const response = await api.get(`/foods?${params.toString()}`);
 
-      const data = response.data;
+      // Just set foods data, don't mix with favorites here
+      setFoods(response.data);
 
-      let foodsData = data.map((food: Food) => ({ ...food, liked: false }));
-
-      if (isLoggedIn) {
-        try {
-          const userFavorites = await favoritesApi.getFavorites('food');
-          const likedIds = new Set(userFavorites.map((f: any) => f.target_id || f.food_id));
-          foodsData = foodsData.map((f: Food) => ({
-            ...f,
-            liked: likedIds.has(f.food_id)
-          }));
-        } catch (e) {
-          console.error("Failed to fetch favorites", e);
-        }
-      }
-
-      setFoods(foodsData);
-
-      // If page was passed in opts, use it, otherwise 1
       if (opts?.page) setCurrentPage(opts.page);
 
     } catch (err) {
@@ -212,12 +180,9 @@ export default function MenuPage() {
         setContentLoading(false);
       }
     }
-  }, [i18n.language, isLoggedIn]); // Removed searchQuery and selectedFilters dependencies to break cycle
+  }, [i18n.language]); // Removed isLoggedIn dependency as it's no longer needed for fetch
 
-  // Debounced search: trigger a content fetch 500ms after typing stops.
-  // Filters remain manual — they only run when the Filter button is clicked.
   const searchDidMountRef = useRef(false);
-  // Debounced search: updates URL
   useEffect(() => {
     if (!searchDidMountRef.current) {
       searchDidMountRef.current = true;
@@ -225,7 +190,6 @@ export default function MenuPage() {
     }
 
     const handler = setTimeout(() => {
-      // Update URL with search query
       updateUrlParams({ search: searchQuery });
     }, 500);
 
@@ -236,31 +200,26 @@ export default function MenuPage() {
     setSearchParams(prev => {
       const newParams = new URLSearchParams(prev);
 
-      // Update Search
       if (updates.search !== undefined) {
         if (updates.search) newParams.set('search', updates.search);
         else newParams.delete('search');
       }
 
-      // Update Types
       if (updates.types !== undefined) {
         if (updates.types.length > 0) newParams.set('types', updates.types.join(','));
         else newParams.delete('types');
       }
 
-      // Update Flavors
       if (updates.flavors !== undefined) {
         if (updates.flavors.length > 0) newParams.set('flavors', updates.flavors.join(','));
         else newParams.delete('flavors');
       }
 
-      // Update Ingredients
       if (updates.ingredients !== undefined) {
         if (updates.ingredients.length > 0) newParams.set('ingredients', updates.ingredients.join(','));
         else newParams.delete('ingredients');
       }
 
-      // Reset page on filter/search change
       newParams.delete('page');
 
       return newParams;
@@ -278,46 +237,30 @@ export default function MenuPage() {
   const handleCheckboxChange = (type: keyof typeof selectedFilters, id: number) => {
     setSelectedFilters(prev => {
       const list = prev[type];
-
-      // If user clicks "全部" (id === 0), clear selections for that category
       if (id === 0) {
-        // If already empty (already '全部'), do nothing
         if (list.length === 0) return prev;
         return { ...prev, [type]: [] };
       }
-
-      // Toggle specific id; selecting any item removes the implicit '全部' state
       const newList = list.includes(id)
         ? list.filter(item => item !== id)
         : [...list, id];
-
       return { ...prev, [type]: newList };
     });
   };
 
   const handleToggleLike = async (food_id: number) => {
     if (!isLoggedIn) {
-      // Prompt login or redirect
       toast.error(t('menu.message.login_to_fav'));
       return;
     }
-
-    // Optimistic update
-    setFoods(foods.map(f => f.food_id === food_id ? { ...f, liked: !f.liked } : f));
-
-    try {
-      await favoritesApi.toggleFavorite(food_id, 'food');
-    } catch (error) {
-      // Revert on error
-      console.error("Failed to toggle favorite", error);
-      setFoods(foods.map(f => f.food_id === food_id ? { ...f, liked: !f.liked } : f));
-    }
+    // Context handles optimistic update safely
+    await toggleFavorite(food_id, 'food');
   };
 
   const clearAllFilters = async () => {
     setSearchQuery('');
     setSelectedFilters({ types: [], flavors: [], ingredients: [] });
-    setSearchParams(new URLSearchParams()); // Clear URL params
+    setSearchParams(new URLSearchParams());
   };
 
   const totalPages = Math.ceil(foods.length / itemsPerPage);
@@ -471,53 +414,56 @@ export default function MenuPage() {
                 <>
                   {/* Grid Cards */}
                   <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
-                    {paginatedFoods.map((food) => (
-                      <div
-                        key={food.food_id}
-                        className="bg-white rounded-lg shadow-md hover:shadow-lg transition overflow-hidden flex flex-col"
-                      >
-                        <div className="relative w-full h-48 bg-gray-200 overflow-hidden group">
-                          <img
-                            src={food.image_url || '/image/placeholder.jpg'}
-                            alt={food.name}
-                            className="w-full h-full object-cover group-hover:scale-105 transition"
-                          />
-                          <button
-                            onClick={() => handleToggleLike(food.food_id)}
-                            className="absolute top-2 right-2 z-0 bg-white rounded-full p-2 shadow-md hover:bg-gray-100 transition"
-                          >
-                            <Heart
-                              size={20}
-                              className={food.liked ? 'fill-red-500 text-red-500' : 'text-gray-400'}
+                    {paginatedFoods.map((food) => {
+                      const isLiked = checkIsFavorited(food.food_id, 'food');
+                      return (
+                        <div
+                          key={food.food_id}
+                          className="bg-white rounded-lg shadow-md hover:shadow-lg transition overflow-hidden flex flex-col"
+                        >
+                          <div className="relative w-full h-48 bg-gray-200 overflow-hidden group">
+                            <img
+                              src={food.image_url || '/image/placeholder.jpg'}
+                              alt={food.name}
+                              className="w-full h-full object-cover group-hover:scale-105 transition"
                             />
-                          </button>
-                        </div>
-
-                        <div className="p-4 flex flex-col flex-1">
-                          <h3 className="font-bold text-lg mb-1 text-gray-800 text-center">
-                            {food.name}
-                          </h3>
-                            <div className="flex flex-col items-center gap-1 mb-2">
-                            <div className="flex items-center gap-1">
-                              <span className="font-bold text-gray-800">
-                                {food.rating || 0}{t('foodDetail.rating.outOf')}
-                              </span>
-                              <Star className="w-4 h-4 fill-yellow-400 text-yellow-400" />
-                            </div>
+                            <button
+                              onClick={() => handleToggleLike(food.food_id)}
+                              className="absolute top-2 right-2 z-0 bg-white rounded-full p-2 shadow-md hover:bg-gray-100 transition"
+                            >
+                              <Heart
+                                size={20}
+                                className={isLiked ? 'fill-red-500 text-red-500' : 'text-gray-400'}
+                              />
+                            </button>
                           </div>
-                          <p className="text-sm text-gray-600 mb-3 line-clamp-2">
-                            {food.story || food.ingredient || ''}
-                          </p>
 
-                          <button
-                            onClick={() => navigate(`/foods/${food.food_id}`)}
-                            className="mt-auto w-full py-2 border-2 border-gray-300 rounded-lg text-sm font-semibold hover:border-purple-600 hover:text-purple-600 transition"
-                          >
-                            {t('menu.view_details')}
-                          </button>
+                          <div className="p-4 flex flex-col flex-1">
+                            <h3 className="font-bold text-lg mb-1 text-gray-800 text-center">
+                              {food.name}
+                            </h3>
+                            <div className="flex flex-col items-center gap-1 mb-2">
+                              <div className="flex items-center gap-1">
+                                <span className="font-bold text-gray-800">
+                                  {food.rating || 0}{t('foodDetail.rating.outOf')}
+                                </span>
+                                <Star className="w-4 h-4 fill-yellow-400 text-yellow-400" />
+                              </div>
+                            </div>
+                            <p className="text-sm text-gray-600 mb-3 line-clamp-2">
+                              {food.story || food.ingredient || ''}
+                            </p>
+
+                            <button
+                              onClick={() => navigate(`/foods/${food.food_id}`)}
+                              className="mt-auto w-full py-2 border-2 border-gray-300 rounded-lg text-sm font-semibold hover:border-purple-600 hover:text-purple-600 transition"
+                            >
+                              {t('menu.view_details')}
+                            </button>
+                          </div>
                         </div>
-                      </div>
-                    ))}
+                      );
+                    })}
                   </div>
 
                   {/* Pagination */}
