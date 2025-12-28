@@ -5,6 +5,8 @@ import { useAuth } from "@/context/AuthContext";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-hot-toast";
+import { getPreferences } from "@/api/profile.api";
+import type { PreferenceData } from "@/types/preferences";
 
 const ProfilePage = () => {
     const { t } = useTranslation();
@@ -22,6 +24,8 @@ const ProfilePage = () => {
         address: "",
         dob: ""
     });
+    const [surveyHistory, setSurveyHistory] = useState(mockSurveyHistory);
+    const [historyLoading, setHistoryLoading] = useState(false);
 
     useEffect(() => {
         if (!isLoading && !user) {
@@ -37,6 +41,40 @@ const ProfilePage = () => {
             });
         }
     }, [user, isLoading, navigate]);
+
+    useEffect(() => {
+        if (isLoading) {
+            return;
+        }
+        if (!user) {
+            setSurveyHistory(mockSurveyHistory);
+            setHistoryLoading(false);
+            return;
+        }
+
+        const buildHistoryEntry = (prefs: PreferenceData) => ({
+            name: prefs.target_name || t("profilePage.surveyHistory.defaultName"),
+            q1: prefs.dietary_criteria ?? [],
+            q2: prefs.favorite_taste ?? [],
+            q3: prefs.disliked_ingredients ?? [],
+            q4: prefs.priorities ?? [],
+            q5: prefs.private_room ? [prefs.private_room] : [],
+            q6: prefs.group_size ? [prefs.group_size] : [],
+        });
+
+        setHistoryLoading(true);
+        getPreferences()
+            .then((data) => {
+                if (data && Object.keys(data).length) {
+                    const entries = data.map((prep) => buildHistoryEntry(prep));
+                    setSurveyHistory(entries);
+                }
+            })
+            .catch((error) => {
+                console.error("Load preferences error", error);
+            })
+            .finally(() => setHistoryLoading(false));
+    }, [user, isLoading, t]);
 
     if (isLoading) {
         return <div className="min-h-screen flex items-center justify-center">Loading...</div>;
@@ -247,9 +285,13 @@ const ProfilePage = () => {
                 <h2 className="text-3xl font-bold text-center mb-8 text-black tracking-wide">{t("profilePage.surveyHistory.title")}</h2>
 
                 <div className="space-y-4">
-                    {mockSurveyHistory.map((survey, index) => (
-                        <SurveyHistoryItem key={index} survey={survey} t={t} />
-                    ))}
+                    {historyLoading ? (
+                        <p className="text-center text-sm text-gray-500">{t("profilePage.surveyHistory.loading")}</p>
+                    ) : (
+                        surveyHistory.map((survey, index) => (
+                            <SurveyHistoryItem key={index} survey={survey} t={t} />
+                        ))
+                    )}
                 </div>
             </div>
         </div>
@@ -264,8 +306,8 @@ const mockSurveyHistory = [
         q2: ["sweet", "salty"],
         q3: ["dog"],
         q4: ["taste", "health"],
-        q5: "private",
-        q6: "people1"
+        q5: ["private"],
+        q6: ["people1"]
     },
     {
         name: "田中 次郎 先輩",
@@ -273,8 +315,8 @@ const mockSurveyHistory = [
         q2: ["spicy"],
         q3: [],
         q4: ["price"],
-        q5: "open",
-        q6: "people34"
+        q5: ["open"],
+        q6: ["people34"]
     },
     {
         name: "高橋 一郎 先生",
@@ -282,8 +324,8 @@ const mockSurveyHistory = [
         q2: ["sweet"],
         q3: ["cat"],
         q4: ["taste"],
-        q5: "any",
-        q6: "people2"
+        q5: ["any"],
+        q6: ["people2"]
     }
 ];
 
@@ -314,6 +356,24 @@ const SurveyHistoryItem = ({ survey, t }: { survey: any, t: any }) => {
 
         console.log("View recommendation for", survey.name, params.toString());
         navigate(`/foods?${params.toString()}`);
+    };
+
+    const translateAnswer = (value: string) => {
+        const key = `survey.options.${value}`;
+        const translated = t(key);
+        return translated === key ? value : translated;
+    };
+
+    const renderAnswerChips = (answers: string[], emptyLabel?: string) => {
+        if (answers.length === 0) {
+            return <p className="text-gray-500 text-sm">{emptyLabel || "None"}</p>;
+        }
+
+        return answers.map((ans: string, index: number) => (
+            <span key={`${ans}-${index}`} className="bg-gray-200 text-gray-700 px-3 py-1 rounded-md text-sm">
+                {translateAnswer(ans)}
+            </span>
+        ));
     };
 
     return (
@@ -355,73 +415,49 @@ const SurveyHistoryItem = ({ survey, t }: { survey: any, t: any }) => {
                         {/* Q1 */}
                         <div>
                             <p className="font-semibold text-gray-800 mb-2">{t("profilePage.surveyHistory.questions.q1")}</p>
-                            <div className="flex flex-wrap gap-2">
-                                {survey.q1.map((ans: string) => (
-                                    <span key={ans} className="bg-gray-200 text-gray-700 px-3 py-1 rounded-md text-sm">
-                                        {t(`profilePage.surveyHistory.answers.${ans}`)}
-                                    </span>
-                                ))}
-                            </div>
+                        <div className="flex flex-wrap gap-2">
+                            {renderAnswerChips(survey.q1)}
+                        </div>
                         </div>
 
                         {/* Q4 */}
                         <div>
                             <p className="font-semibold text-gray-800 mb-2">{t("profilePage.surveyHistory.questions.q4")}</p>
-                            <div className="flex flex-wrap gap-2">
-                                {survey.q4.map((ans: string) => (
-                                    <span key={ans} className="bg-gray-200 text-gray-700 px-3 py-1 rounded-md text-sm">
-                                        {t(`profilePage.surveyHistory.answers.${ans}`)}
-                                    </span>
-                                ))}
-                            </div>
+                        <div className="flex flex-wrap gap-2">
+                            {renderAnswerChips(survey.q4)}
+                        </div>
                         </div>
 
                         {/* Q2 */}
                         <div>
                             <p className="font-semibold text-gray-800 mb-2">{t("profilePage.surveyHistory.questions.q2")}</p>
-                            <div className="flex flex-wrap gap-2">
-                                {survey.q2.map((ans: string) => (
-                                    <span key={ans} className="bg-gray-200 text-gray-700 px-3 py-1 rounded-md text-sm">
-                                        {t(`profilePage.surveyHistory.answers.${ans}`)}
-                                    </span>
-                                ))}
-                            </div>
+                        <div className="flex flex-wrap gap-2">
+                            {renderAnswerChips(survey.q2)}
+                        </div>
                         </div>
 
                         {/* Q5 */}
                         <div>
                             <p className="font-semibold text-gray-800 mb-2">{t("profilePage.surveyHistory.questions.q5")}</p>
-                            <div className="flex flex-wrap gap-2">
-                                <span className="bg-gray-200 text-gray-700 px-3 py-1 rounded-md text-sm">
-                                    {t(`profilePage.surveyHistory.answers.${survey.q5}`)}
-                                </span>
-                            </div>
+                        <div className="flex flex-wrap gap-2">
+                            {renderAnswerChips(survey.q5)}
+                        </div>
                         </div>
 
                         {/* Q3 */}
                         <div>
                             <p className="font-semibold text-gray-800 mb-2">{t("profilePage.surveyHistory.questions.q3")}</p>
-                            {survey.q3.length > 0 ? (
-                                <div className="flex flex-wrap gap-2">
-                                    {survey.q3.map((ans: string) => (
-                                        <span key={ans} className="bg-gray-200 text-gray-700 px-3 py-1 rounded-md text-sm">
-                                            {t(`profilePage.surveyHistory.answers.${ans}`)}
-                                        </span>
-                                    ))}
-                                </div>
-                            ) : (
-                                <p className="text-gray-500 text-sm">None</p>
-                            )}
+                            <div className="flex flex-wrap gap-2">
+                                {renderAnswerChips(survey.q3, t("profilePage.surveyHistory.none"))}
+                            </div>
                         </div>
 
                         {/* Q6 */}
                         <div>
                             <p className="font-semibold text-gray-800 mb-2">{t("profilePage.surveyHistory.questions.q6")}</p>
-                            <div className="flex flex-wrap gap-2">
-                                <span className="bg-gray-200 text-gray-700 px-3 py-1 rounded-md text-sm">
-                                    {t(`profilePage.surveyHistory.answers.${survey.q6}`)}
-                                </span>
-                            </div>
+                        <div className="flex flex-wrap gap-2">
+                            {renderAnswerChips(survey.q6)}
+                        </div>
                         </div>
                     </div>
 

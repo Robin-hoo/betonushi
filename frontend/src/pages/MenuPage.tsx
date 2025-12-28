@@ -1,9 +1,10 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
-import { Heart } from 'lucide-react';
+import { Heart, Star } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { favoritesApi } from "@/api/favorites.api";
 import { useAuth } from "@/context/AuthContext";
+import { toast } from 'react-hot-toast';
 
 interface Food {
   food_id: number;
@@ -297,7 +298,7 @@ export default function MenuPage() {
   const handleToggleLike = async (food_id: number) => {
     if (!isLoggedIn) {
       // Prompt login or redirect
-      alert("Please login to favorite items");
+      toast.error(t('menu.message.login_to_fav'));
       return;
     }
 
@@ -496,7 +497,14 @@ export default function MenuPage() {
                           <h3 className="font-bold text-lg mb-1 text-gray-800 text-center">
                             {food.name}
                           </h3>
-
+                            <div className="flex flex-col items-center gap-1 mb-2">
+                            <div className="flex items-center gap-1">
+                              <span className="font-bold text-gray-800">
+                                {food.rating || 0}{t('foodDetail.rating.outOf')}
+                              </span>
+                              <Star className="w-4 h-4 fill-yellow-400 text-yellow-400" />
+                            </div>
+                          </div>
                           <p className="text-sm text-gray-600 mb-3 line-clamp-2">
                             {food.story || food.ingredient || ''}
                           </p>

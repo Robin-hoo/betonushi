@@ -5,38 +5,48 @@ import { Card, CardTitle } from '@/components/ui/card';
 import { api } from '@/api/client'; // Assumes axios instance
 import { useNavigate } from 'react-router-dom';
 import { HeartButton } from '@/components/HeartButton';
+import {
+  DISLIKED_INGREDIENT_OPTIONS,
+  GROUP_SIZE_OPTIONS,
+  GENRE_OPTIONS,
+  PRIVATE_ROOM_OPTIONS,
+  PRIORITY_OPTIONS,
+  TASTE_OPTIONS,
+  type DislikedIngredientOption,
+  type GenreOption,
+  type GroupSizeOption,
+  type PrivateRoomOption,
+  type PriorityOption,
+  type TasteOption,
+} from '@/types/preferences';
+
+function toggleCheckbox<T extends string>(
+  value: T,
+  currentList: T[],
+  setter: React.Dispatch<React.SetStateAction<T[]>>
+) {
+  if (currentList.includes(value)) {
+    setter(currentList.filter(item => item !== value));
+  } else {
+    setter([...currentList, value]);
+  }
+}
 
 export default function SurveyPage() {
   const { t, i18n } = useTranslation();
   const navigate = useNavigate();
 
   const [targetName, setTargetName] = useState('');
-  const [genres, setGenres] = useState<string[]>([]);
-  const [tastes, setTastes] = useState<string[]>([]);
-  const [dislikes, setDislikes] = useState<string[]>([]);
+  const [genres, setGenres] = useState<GenreOption[]>([]);
+  const [tastes, setTastes] = useState<TasteOption[]>([]);
+  const [dislikes, setDislikes] = useState<DislikedIngredientOption[]>([]);
   const [otherDislike, setOtherDislike] = useState('');
-  const [priorities, setPriorities] = useState<string[]>([]);
-  const [privateRoom, setPrivateRoom] = useState('');
-  const [groupSize, setGroupSize] = useState('');
+  const [priorities, setPriorities] = useState<PriorityOption[]>([]);
+  const [privateRoom, setPrivateRoom] = useState<PrivateRoomOption | "">("");
+  const [groupSize, setGroupSize] = useState<GroupSizeOption | "">("");
 
   const [recommendations, setRecommendations] = useState<any[]>([]);
   const [showResults, setShowResults] = useState(false);
-
-  // Options using keys from translation.json
-  const genreOptions = ["vegetarian", "warm", "other", "noodle", "cold"];
-  const tasteOptions = ["sweet", "sour", "other", "salty", "bitter", "umami", "spicy"];
-  const dislikeOptions = ["dog", "blood", "frog", "buffalo", "snake", "organs", "other"];
-  const priorityOptions = ["taste", "nutrition", "other", "price", "looks", "health", "quantity"];
-  const privateRoomOptions = ["privateYes", "privateNo", "privateAny"];
-  const groupSizeOptions = ["people1", "people2", "people34", "people56", "people7"];
-
-  const toggleCheckbox = (value: string, currentList: string[], setter: (list: string[]) => void) => {
-    if (currentList.includes(value)) {
-      setter(currentList.filter(item => item !== value));
-    } else {
-      setter([...currentList, value]);
-    }
-  };
 
 
 
@@ -70,10 +80,16 @@ export default function SurveyPage() {
 
   const handleSave = async () => {
     const preferences = {
-      favorite_taste: tastes.map(k => t(`survey.options.${k}`)).join(','),
-      disliked_ingredients: [...dislikes.map(k => t(`survey.options.${k}`)), otherDislike].filter(Boolean).join(','),
-      dietary_criteria: genres.map(k => t(`survey.options.${k}`)).join(',')
+      favorite_taste: tastes.join(','),
+      disliked_ingredients: dislikes.filter(Boolean).join(','),
+      dietary_criteria: genres.join(','),
+      target_name: targetName.trim(),
+      priorities: priorities.join(','),
+      private_room: privateRoom || '',
+      group_size: groupSize || ''
     };
+
+    console.log(JSON.stringify(preferences));
 
     try {
       await api.post('/preferences', preferences);
@@ -134,7 +150,7 @@ export default function SurveyPage() {
             <div>
               <p className="font-semibold text-gray-800 mb-3">{t('survey.q1')}</p>
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
-                {genreOptions.map(opt => (
+                {GENRE_OPTIONS.map(opt => (
                   <label key={opt} className="flex items-center gap-2 cursor-pointer hover:bg-gray-50 p-2 rounded transition">
                     <input
                       type="checkbox"
@@ -152,7 +168,7 @@ export default function SurveyPage() {
             <div>
               <p className="font-semibold text-gray-800 mb-3">{t('survey.q2')}</p>
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
-                {tasteOptions.map(opt => (
+                {TASTE_OPTIONS.map(opt => (
                   <label key={opt} className="flex items-center gap-2 cursor-pointer hover:bg-gray-50 p-2 rounded transition">
                     <input
                       type="checkbox"
@@ -170,7 +186,7 @@ export default function SurveyPage() {
             <div>
               <p className="font-semibold text-gray-800 mb-3">{t('survey.q3')}</p>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-3">
-                {dislikeOptions.map(opt => (
+                {DISLIKED_INGREDIENT_OPTIONS.map(opt => (
                   <label key={opt} className="flex items-center gap-2 cursor-pointer hover:bg-gray-50 p-2 rounded transition">
                     <input
                       type="checkbox"
@@ -195,7 +211,7 @@ export default function SurveyPage() {
             <div>
               <p className="font-semibold text-gray-800 mb-3">{t('survey.q4')}</p>
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
-                {priorityOptions.map(opt => (
+                {PRIORITY_OPTIONS.map(opt => (
                   <label key={opt} className="flex items-center gap-2 cursor-pointer hover:bg-gray-50 p-2 rounded transition">
                     <input
                       type="checkbox"
@@ -214,7 +230,7 @@ export default function SurveyPage() {
             <div>
               <p className="font-semibold text-gray-800 mb-3">{t('survey.q5')}</p>
               <div className="space-y-2">
-                {privateRoomOptions.map(opt => (
+                {PRIVATE_ROOM_OPTIONS.map(opt => (
                   <label key={opt} className="flex items-center gap-2 cursor-pointer hover:bg-gray-50 p-2 rounded transition">
                     <input
                       type="radio"
@@ -233,7 +249,7 @@ export default function SurveyPage() {
             <div>
               <p className="font-semibold text-gray-800 mb-3">{t('survey.q6')}</p>
               <div className="space-y-2">
-                {groupSizeOptions.map(opt => (
+                {GROUP_SIZE_OPTIONS.map(opt => (
                   <label key={opt} className="flex items-center gap-2 cursor-pointer hover:bg-gray-50 p-2 rounded transition">
                     <input
                       type="radio"

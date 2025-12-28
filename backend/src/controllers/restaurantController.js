@@ -18,7 +18,8 @@ async function getAllRestaurants(req, res, next) {
             lat: req.query.lat ? parseFloat(req.query.lat) : null,
             lng: req.query.lng ? parseFloat(req.query.lng) : null,
             distance: req.query.distance ? parseFloat(req.query.distance) : null,
-            facilities: req.query.facilities ? req.query.facilities.split(',').filter(f => f.trim() !== '') : []
+            facilities: req.query.facilities ? req.query.facilities.split(',').filter(f => f.trim() !== '') : [],
+            foodId: req.query.foodId ? parseInt(req.query.foodId, 10) : null
         };
 
         const restaurants = await RestaurantService.getAllRestaurants(lang, filters);

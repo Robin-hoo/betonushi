@@ -60,6 +60,9 @@
     "user": "Người dùng"
   },
   "menu": {
+    "message": {
+      "login_to_fav": "Vui lòng đăng nhập để thêm yêu thích!"
+    },
     "view_details": "Xem chi tiết",
     "search": {
       "placeholder": "Tên món ăn",
@@ -381,7 +384,10 @@
         "people34": "3-4 người"
       },
       "delete": "Xóa",
-      "viewRecommendation": "Xem đề xuất"
+      "viewRecommendation": "Xem đề xuất",
+      "loading": "Đang tải lịch sử khảo sát...",
+      "none": "Không có",
+      "defaultName": "Khảo sát đã lưu"
     }
   },
   "deliveryPlatforms": {
@@ -463,4 +469,7 @@
     "sectionTitle": "Hướng dẫn giới thiệu ẩm thực Việt Nam"
   }
 }
+<<<<<<< HEAD
 
+=======
+>>>>>>> 2c6d3d37b7bc4fddc7cd5d443ea5116800aad896

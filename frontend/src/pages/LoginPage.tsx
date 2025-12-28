@@ -8,9 +8,6 @@ import { toast } from 'react-hot-toast';
 const LoginPage: React.FC = () => {
     const { user, isLoading } = useAuth();
 
-    if (isLoading) return <div>Loading...</div>;
-    if (user) return <Navigate to="/" />;
-
     const { t } = useTranslation();
     const navigate = useNavigate();
     const { login: contextLogin } = useAuth();
@@ -57,7 +54,7 @@ const LoginPage: React.FC = () => {
             console.log('Login success:', response);
             // Store token (e.g., localStorage)
             // Use context to update state
-            contextLogin(response.token, response.user);
+            contextLogin(response.token, response.user, response.exprires_at);
             console.log("User: ", response.user);
             // Redirect to home
             navigate('/');
@@ -68,6 +65,9 @@ const LoginPage: React.FC = () => {
             setGeneralError(t('loginPage.error.failed'));
         }
     };
+
+    if (isLoading) return <div>Loading...</div>;
+    if (user) return <Navigate to="/" />;
 
     return (
         <div className="flex flex-col items-center justify-center min-h-[60vh] w-[500px] py-10">

@@ -52,6 +52,10 @@ CREATE TABLE user_preferences (
     favorite_taste VARCHAR(255),
     disliked_ingredients VARCHAR(255),
     dietary_criteria VARCHAR(255),
+    target_name VARCHAR(255),
+    priorities VARCHAR(255),
+    private_room VARCHAR(255),
+    group_size VARCHAR(255),
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
@@ -345,7 +349,7 @@ EXECUTE FUNCTION trigger_update_food_rating_delete();
 -- ====================================
 
 COMMENT ON TABLE users IS 'User accounts and authentication';
-COMMENT ON TABLE user_preferences IS 'User food preferences and dietary restrictions';
+COMMENT ON TABLE user_preferences IS 'User food preferences, dietary restrictions, and survey metadata';
 COMMENT ON TABLE regions IS 'Vietnamese geographical regions';
 COMMENT ON TABLE foods IS 'Vietnamese foods';
 COMMENT ON TABLE flavors IS 'Flavor profiles (sweet, sour, spicy, etc.)';

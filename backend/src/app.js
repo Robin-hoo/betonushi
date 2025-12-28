@@ -9,6 +9,8 @@ const foodRoutes = require("./routes/foodRoutes");
 const restaurantRoutes = require("./routes/restaurantRoutes");
 const favoriteRoutes = require("./routes/favoriteRoutes");
 const recommendationRoutes = require("./routes/recommendationRoutes");
+const userRoutes = require("./routes/userRoutes");
+const preferenceRoutes = require("./routes/preferenceRoutes"); // Added
 const app = express();
 app.use(
   cors({
@@ -18,6 +20,7 @@ app.use(
 );
 
 app.use(express.json());
+
 app.use(express.static("public"));
 // Serve uploaded files under /uploads (maps to backend/public/uploads)
 app.use('/uploads', express.static(path.join(__dirname, '..', 'public', 'uploads')));
@@ -27,12 +30,10 @@ console.log("Mounting Gemini Routes at /api");
 app.use("/api", geminiRoutes);
 console.log("Gemini routes mounted.");
 
-app.use("/api", foodRoutes);
-app.use("/api", restaurantRoutes);
-app.use("/api/favorites", favoriteRoutes);
 app.use("/api", authRoutes);
-const userRoutes = require("./routes/userRoutes");
-const preferenceRoutes = require("./routes/preferenceRoutes"); // Added
+app.use("/api", foodRoutes);
+app.use("/api/restaurants", restaurantRoutes);
+app.use("/api/favorites", favoriteRoutes);
 app.use("/api/users", userRoutes);
 app.use("/api", recommendationRoutes);
 app.use("/api/preferences", preferenceRoutes); // Added

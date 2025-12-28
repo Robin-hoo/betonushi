@@ -19,6 +19,7 @@ export interface LoginResponse {
     message: string;
     token: string;
     user: User;
+    exprires_at: number;
 }
 
 export const login = async (data: LoginRequest): Promise<LoginResponse> => {
@@ -49,6 +50,5 @@ export interface RegisterResponse {
 
 export const register = async (data: RegisterRequest): Promise<RegisterResponse> => {
     const response = await api.post<RegisterResponse>("/register", data);
-    console.log(response.data);
     return response.data;
 };

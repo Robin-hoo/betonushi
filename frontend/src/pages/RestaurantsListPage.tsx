@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
-import { Heart } from 'lucide-react';
+import { Heart, Star } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import defaultRestaurantImage from '@/assets/default.jpg';
@@ -18,6 +18,8 @@ interface Restaurant {
     phone_number: string | null;
     distance_km?: number;
     liked?: boolean;
+    rating?: number;
+    number_of_rating?: number;
 }
 
 const DISTANCE_OPTIONS = [
@@ -46,7 +48,7 @@ export default function RestaurantsListPage() {
     const { t } = useTranslation();
     const navigate = useNavigate();
     const [searchParams, setSearchParams] = useSearchParams();
-
+    const foodId = searchParams.get('foodId');
     const [restaurants, setRestaurants] = useState<Restaurant[]>([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
@@ -71,17 +73,21 @@ export default function RestaurantsListPage() {
     const searchDidMountRef = useRef(false);
 
     useEffect(() => {
-        if (!searchDidMountRef.current) {
-            searchDidMountRef.current = true;
-            return;
-        }
+    // ❗ Nếu đang ở mode foodId thì KHÔNG update URL
+    if (foodId) return;
 
-        const handler = setTimeout(() => {
-            updateUrlParams({ search: searchQuery });
-        }, 500);
+    if (!searchDidMountRef.current) {
+        searchDidMountRef.current = true;
+        return;
+    }
 
-        return () => clearTimeout(handler);
-    }, [searchQuery]);
+    const handler = setTimeout(() => {
+        updateUrlParams({ search: searchQuery });
+    }, 500);
+
+    return () => clearTimeout(handler);
+}, [searchQuery, foodId]);
+
 
     useEffect(() => {
         if (navigator.geolocation) {
@@ -118,7 +124,7 @@ export default function RestaurantsListPage() {
             facilities
         });
     }, [searchParams, userLocation]);
-
+    
     // 3. Fetch Function
     const fetchRestaurants = useCallback(async (opts?: {
         search?: string;
@@ -135,6 +141,11 @@ export default function RestaurantsListPage() {
 
             const params = new URLSearchParams();
             params.append('lang', i18n.language);
+
+            if (foodId) {
+                 params.append('foodId', foodId);
+            }
+
             
             if (userLocation) {
                 params.append('lat', userLocation.lat.toString());
@@ -167,7 +178,7 @@ export default function RestaurantsListPage() {
         } finally {
             setLoading(false);
         }
-    }, [i18n.language, userLocation, searchQuery, selectedFilters]); // Depends on state logic
+    }, [i18n.language, userLocation, searchQuery, selectedFilters,foodId]); // Depends on state logic
 
     // 4. Update URL Helper
     const updateUrlParams = (updates: any) => {
@@ -388,6 +399,14 @@ export default function RestaurantsListPage() {
                                                 <h3 className="font-bold text-lg mb-2 text-gray-800 text-center">
                                                     {restaurant.name}
                                                 </h3>
+                                                <div className="flex flex-col items-center gap-1 mb-2">
+                                                    <div className="flex items-center gap-1">
+                                                        <span className="font-bold text-gray-800">
+                                                            {restaurant.rating || 0}{t('foodDetail.rating.outOf')}
+                                                        </span>
+                                                        <Star className="w-4 h-4 fill-yellow-400 text-yellow-400" />
+                                                    </div>
+                                                </div>
                                                 <p className="text-sm text-gray-600 mb-3 line-clamp-2 text-center">
                                                     {restaurant.address || 'Địa chỉ không có sẵn'}
                                                 </p>
