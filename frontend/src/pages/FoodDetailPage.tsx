@@ -13,6 +13,7 @@ import toast from "react-hot-toast";
 const FoodDetailPage: React.FC = () => {
   const [showShareModal, setShowShareModal] = useState(false);
   const { id } = useParams<{ id: string }>();
+  console.log("FoodDetailPage rendering with id:", id);
   const { t, i18n } = useTranslation();
   const { isLoggedIn } = useAuth();
   const [dishData, setDishData] = useState<Food | null>(null);
@@ -270,9 +271,12 @@ const FoodDetailPage: React.FC = () => {
               </>
             )}
             <div className="pt-10 flex justify-center">
-              <button className="px-8 py-2 bg-purple-600 text-white font-semibold rounded-lg hover:bg-purple-700 transition">
-                <Link to="/restaurants">{t('foodDetail.buttons.searchRestaurant')}</Link>
-              </button>
+              <Link
+                to={`/restaurants?foodId=${id}`}
+                className="px-8 py-2 bg-purple-600 text-white font-semibold rounded-lg hover:bg-purple-700 transition inline-block"
+              >
+                {t('foodDetail.buttons.searchRestaurant')}
+              </Link>
             </div>
           </div>
 

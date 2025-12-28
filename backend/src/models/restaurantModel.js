@@ -7,30 +7,32 @@ const db = require('../db');
  * @returns {Promise<Array>}
  */
 async function getAllRestaurants(lang = 'jp', filters = {}) {
-    const { lat, lng, distance, facilities } = filters;
+    const { lat, lng, distance, facilities,foodId  } = filters;
     
     // 1. Base Query
     let query = `
-        SELECT 
-            r.restaurant_id,
-            COALESCE(rt.name, r.name) AS name,
-            COALESCE(rt.address, r.address) AS address,
-            r.latitude,
-            r.longitude,
-            r.open_time,
-            r.close_time,
-            r.price_range,
-            r.phone_number
-            ${lat && lng ? `, (
-                6371 * acos(
-                    cos(radians($2)) * cos(radians(r.latitude)) *
-                    cos(radians(r.longitude) - radians($3)) +
-                    sin(radians($2)) * sin(radians(r.latitude))
-                )
-            ) AS distance_km` : ''}
-        FROM restaurants r
-        LEFT JOIN restaurant_translations rt ON rt.restaurant_id = r.restaurant_id AND rt.lang = $1
+    SELECT 
+        r.restaurant_id,
+        COALESCE(rt.name, r.name) AS name,
+        COALESCE(rt.address, r.address) AS address,
+        r.latitude,
+        r.longitude,
+        r.open_time,
+        r.close_time,
+        r.price_range,
+        r.phone_number
+        ${lat && lng ? `, (
+            6371 * acos(
+                cos(radians($2)) * cos(radians(r.latitude)) *
+                cos(radians(r.longitude) - radians($3)) +
+                sin(radians($2)) * sin(radians(r.latitude))
+            )
+        ) AS distance_km` : ''}
+    FROM restaurants r
+    LEFT JOIN restaurant_translations rt 
+        ON rt.restaurant_id = r.restaurant_id AND rt.lang = $1
     `;
+
 
     const params = [lang];
     let paramCount = 1;
@@ -44,7 +46,18 @@ async function getAllRestaurants(lang = 'jp', filters = {}) {
 
     let whereClauses = [];
     let havingClauses = [];
-
+    if (foodId) {
+        query += `
+            JOIN restaurant_foods rfo 
+                ON r.restaurant_id = rfo.restaurant_id
+        `;
+    }
+    /* 🍽 FILTER BY FOOD */
+    if (foodId) {
+        whereClauses.push(`rfo.food_id = $${paramCount + 1}`);
+        params.push(foodId);
+        paramCount++;
+    }
     // 3. Filter by Facilities
     if (facilities && facilities.length > 0) {
         query += `
@@ -58,6 +71,7 @@ async function getAllRestaurants(lang = 'jp', filters = {}) {
     if (whereClauses.length > 0) {
         query += ' WHERE ' + whereClauses.join(' AND ');
     }
+    
 
     // 4. Group By
     if (facilities && facilities.length > 0) {
@@ -94,7 +108,7 @@ async function getAllRestaurants(lang = 'jp', filters = {}) {
     } else {
         query += ` ORDER BY r.restaurant_id`;
     }
-
+    
     const result = await db.query(query, params);
     return result.rows;
 }
@@ -192,13 +206,21 @@ async function findRestaurantWithRelations(restaurantId, lang = 'jp') {
         rating: parseFloat(ratingResult.rows[0].avg_rating) || 0,
         number_of_rating: parseInt(ratingResult.rows[0].total_reviews) || 0,
     };
-
+    // Query food ids only (for navigation / linking)
+    const foodIdsResult = await db.query(
+        `SELECT food_id
+         FROM restaurant_foods
+         WHERE restaurant_id = $1`,
+        [restaurantId]
+    );
     return {
         restaurant,
         foods: foodsResult.rows,
+        food_ids: foodIdsResult.rows.map(r => r.food_id),
         facilities: facilitiesResult.rows.map((row) => row.facility_name),
         reviews: reviewsResult.rows,
     };
+    
 }
 
 module.exports = {
