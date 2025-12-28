@@ -1,11 +1,14 @@
 import React, { useState, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { useParams, useNavigate, Link } from "react-router-dom";
-import { Star, Clock, Phone, DollarSign, ArrowLeft } from "lucide-react";
-import { getRestaurantById, type Restaurant } from "@/api/restaurant.api";
+import { Star, MapPin, Clock, Phone, DollarSign, ArrowLeft } from "lucide-react";
+import { getRestaurantById, addReview, type Restaurant } from "@/api/restaurant.api";
 import { Button } from "@/components/ui/button";
 import defaultRestaurantImage from "@/assets/default.jpg";
 import defaultFoodImage from "@/assets/default.jpg";
+import InteractiveStarRating from "@/components/InteractiveStarRating";
+import { useAuth } from "@/context/AuthContext";
+import toast from "react-hot-toast";
 
 const RestaurantDetailPage: React.FC = () => {
   const { id } = useParams<{ id: string }>();
@@ -16,28 +19,71 @@ const RestaurantDetailPage: React.FC = () => {
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
 
   const { t, i18n } = useTranslation();
+  const { isLoggedIn } = useAuth();
+
+  // State for review form
+  const [userRating, setUserRating] = useState(0);
+  const [comment, setComment] = useState("");
+  const [isCommenting, setIsCommenting] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const fetchRestaurant = async (showLoading = true) => {
+    if (!id) return;
+    if (showLoading) setLoading(true);
+    setError(null);
+    try {
+      const data = await getRestaurantById(id, i18n.language);
+      setRestaurant(data);
+    } catch (err) {
+      console.error(err);
+      setError(t('restaurant.detail.fetch_error'));
+    } finally {
+      if (showLoading) setLoading(false);
+    }
+  };
 
   useEffect(() => {
-    if (!id) return;
-
-    const fetchRestaurant = async () => {
-      setLoading(true);
-      setError(null);
-      try {
-        const data = await getRestaurantById(id, i18n.language);
-        setRestaurant(data);
-        // Tự động chọn ảnh đầu tiên nếu có (logic giống FoodDetail)
-        // Ở đây dùng mock images nên sẽ xử lý ở dưới render
-      } catch (err) {
-        console.error(err);
-        setError(t('restaurant.detail.fetch_error'));
-      } finally {
-        setLoading(false);
-      }
-    };
-
     fetchRestaurant();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [id, i18n.language]);
+
+  const handleRatingChange = (newRating: number) => {
+    if (!isLoggedIn) {
+      toast.error(t('foodDetail.messages.loginRequired')); // Assuming translation exists
+      return;
+    }
+    setIsCommenting(true);
+    setUserRating(newRating);
+  };
+
+  const handleCommentSubmit = async () => {
+    if (!id || !isLoggedIn) return;
+    if (userRating === 0) {
+      toast.error(t('foodDetail.rating.required'));
+      return;
+    }
+    if (comment.length < 10) {
+      toast.error(t('foodDetail.reviews.minLength'));
+      return;
+    }
+
+    setIsSubmitting(true);
+    try {
+      await addReview(id, { rating: userRating, comment });
+      setComment("");
+      setUserRating(0);
+      await fetchRestaurant(false); // Refresh without full loading state
+      toast.success(t('foodDetail.messages.submitted'));
+    } catch (error: any) {
+      console.error("Failed to submit review", error);
+      const errorMessage = error.response?.data?.message || error.message || "An unknown error occurred";
+      toast.error(`Failed to submit review: ${errorMessage}`);
+    } finally {
+      setIsSubmitting(false);
+      setIsCommenting(false);
+    }
+  };
+
 
   // Mock images for restaurant
   const restaurantImages = [
@@ -96,7 +142,7 @@ const RestaurantDetailPage: React.FC = () => {
             transition
             shadow-sm
           "
-          aria-label={t('restaurant.back_to_list')}
+          aria-label="Back to restaurants"
         >
           <ArrowLeft size={20} />
         </Link>
@@ -167,9 +213,10 @@ const RestaurantDetailPage: React.FC = () => {
           <div className="col-span-7 space-y-6">
             {/* Address */}
             <div className="bg-white rounded-xl p-6 shadow-md">
-              <h2 className="text-xl font-bold text-orange-600 mb-4">
-                  {t('restaurant.detail.address_title')}
-                </h2>
+              <h2 className="text-xl font-bold text-orange-600 mb-4 flex items-center gap-2">
+                <MapPin className="w-5 h-5" />
+                {t('restaurant.detail.address_title')}
+              </h2>
               <p className="text-gray-700 leading-relaxed">{restaurant.address || t('restaurant.detail.address_missing')}</p>
             </div>
 
@@ -304,12 +351,60 @@ const RestaurantDetailPage: React.FC = () => {
           </div>
         )}
 
-        {/* Section 4: Latest Reviews */}
-        {restaurant.reviews.length > 0 && (
-          <div className="bg-white rounded-xl shadow-md p-8">
-            <h2 className="text-3xl font-bold text-orange-600 mb-6 text-center">
-              {t('restaurant.detail.latest_reviews')}
-            </h2>
+        {/* Section 4: Add Review */}
+        {isLoggedIn && (
+          <div className="bg-white rounded-xl shadow-md p-8 mb-8">
+            <h2 className="text-2xl font-bold text-orange-600 mb-4 text-center">{t('restaurant.add_review.title')}</h2>
+            <div className="flex justify-center mb-4">
+              <InteractiveStarRating
+                initialRating={userRating}
+                starSize="w-8 h-8"
+                onRatingChange={handleRatingChange}
+              />
+            </div>
+
+            {isCommenting && (
+              <>
+                <div className="mb-4">
+                  <textarea
+                    className="w-full h-24 p-3 border border-gray-300 rounded-lg resize-none text-sm focus:outline-none focus:ring-2 focus:ring-orange-400"
+                    placeholder={t('foodDetail.reviews.placeholder') || "Write your review..."}
+                    value={comment}
+                    onChange={(e) => setComment(e.target.value)}
+                    disabled={isSubmitting}
+                  ></textarea>
+                </div>
+                <div className="flex justify-center gap-4">
+                  <Button
+                    onClick={() => {
+                      setIsCommenting(false);
+                      setComment("");
+                      setUserRating(0);
+                    }}
+                    disabled={isSubmitting}
+                    variant="outline"
+                  >
+                    {t('foodDetail.buttons.cancel')}
+                  </Button>
+                  <Button
+                    onClick={handleCommentSubmit}
+                    disabled={isSubmitting || userRating === 0 || comment.length < 10}
+                    className="bg-orange-500 text-white hover:bg-orange-600 disabled:opacity-50"
+                  >
+                    {isSubmitting ? t('foodDetail.buttons.submitting') : t('foodDetail.buttons.comment')}
+                  </Button>
+                </div>
+              </>
+            )}
+          </div>
+        )}
+
+        {/* Section 5: Latest Reviews */}
+        <div className="bg-white rounded-xl shadow-md p-8">
+          <h2 className="text-3xl font-bold text-orange-600 mb-6 text-center">
+            {t('restaurant.detail.latest_reviews')}
+          </h2>
+          {restaurant.reviews.length > 0 ? (
             <div className="space-y-6">
               {restaurant.reviews.map((review) => (
                 <div
@@ -356,14 +451,12 @@ const RestaurantDetailPage: React.FC = () => {
                 </div>
               ))}
             </div>
-          </div>
-        )}
-
-        {restaurant.reviews.length === 0 && (
-          <div className="bg-white rounded-xl shadow-md p-8 text-center">
-            <p className="text-gray-500">{t('restaurant.detail.no_reviews')}</p>
-          </div>
-        )}
+          ) : (
+            <div className="text-center">
+              <p className="text-gray-500">{t('restaurant.detail.no_reviews')}</p>
+            </div>
+          )}
+        </div>
       </div>
     </div>
   );

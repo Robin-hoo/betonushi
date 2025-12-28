@@ -306,7 +306,10 @@
       "prev": "前へ",
       "next": "次へ"
     },
-    "back_to_list": "レストラン一覧に戻る"
+    "back_to_list": "レストラン一覧に戻る",
+    "add_review": {
+      "title": "レビューを追加"
+    }
   ,
     "detail": {
       "address_title": "1. 住所",

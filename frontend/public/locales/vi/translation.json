@@ -303,6 +303,9 @@
       "next": "Sau"
     },
     "back_to_list": "Quay lại danh sách nhà hàng",
+    "add_review": {
+      "title": "Thêm đánh giá của bạn"
+    },
     "detail": {
       "address_title": "1. Địa chỉ",
       "address_missing": "Chưa cập nhật địa chỉ",
@@ -469,7 +472,3 @@
     "sectionTitle": "Hướng dẫn giới thiệu ẩm thực Việt Nam"
   }
 }
-<<<<<<< HEAD
-
-=======
->>>>>>> 2c6d3d37b7bc4fddc7cd5d443ea5116800aad896

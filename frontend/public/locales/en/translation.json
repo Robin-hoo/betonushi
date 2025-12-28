@@ -311,6 +311,9 @@
       "next": "Next"
     },
     "back_to_list": "Back to Restaurant List",
+    "add_review": {
+      "title": "Add Your Review"
+    },
     "detail": {
       "address_title": "1. Address",
       "address_missing": "Address not available",

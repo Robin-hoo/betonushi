@@ -1,5 +1,6 @@
 const RestaurantService = require('../services/restaurantService');
 
+
 /**
  * Get all restaurants with filters
  * Query Params supported:
@@ -12,7 +13,7 @@ const RestaurantService = require('../services/restaurantService');
 async function getAllRestaurants(req, res, next) {
     try {
         const lang = (req.query.lang || (req.headers['accept-language'] || '').split(',')[0] || 'jp').slice(0,2);
-        
+       
         // Extract filters
         const filters = {
             lat: req.query.lat ? parseFloat(req.query.lat) : null,
@@ -22,12 +23,14 @@ async function getAllRestaurants(req, res, next) {
             foodId: req.query.foodId ? parseInt(req.query.foodId, 10) : null
         };
 
+
         const restaurants = await RestaurantService.getAllRestaurants(lang, filters);
         return res.json(restaurants);
     } catch (error) {
         return next(error);
     }
 }
+
 
 /**
  * Get restaurant by ID
@@ -42,7 +45,30 @@ async function getRestaurantById(req, res, next) {
     }
 }
 
+
+/**
+ * Add review to restaurant
+ */
+async function addReview(req, res, next) {
+    try {
+        const { rating, comment } = req.body;
+        const userId = req.user.userId;
+        const restaurantId = req.params.id;
+
+
+        const review = await RestaurantService.addReview(restaurantId, userId, rating, comment);
+        return res.json(review);
+    } catch (error) {
+        return next(error);
+    }
+}
+
+
 module.exports = {
     getAllRestaurants,
     getRestaurantById,
+    addReview,
 };
+
+
+

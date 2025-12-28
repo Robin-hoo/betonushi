@@ -44,3 +44,7 @@ export async function getRestaurantById(id: string, lang?: string) {
   return res.data;
 }
 
+export async function addReview(id: number | string, data: { rating: number, comment: string }) {
+  const res = await api.post<Review>(`/restaurants/${id}/reviews`, data);
+  return res.data;
+}
