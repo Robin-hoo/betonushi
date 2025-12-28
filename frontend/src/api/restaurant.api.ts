@@ -31,6 +31,8 @@ export interface Restaurant {
   phone_number: string | null;
   rating: number;
   number_of_rating: number;
+  description?: string;
+  images?: string[];
   foods: RestaurantFood[];
   facilities: string[];
   reviews: Review[];

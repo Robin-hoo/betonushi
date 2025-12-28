@@ -52,14 +52,15 @@
     "login": "Login",
     "signup": "Sign Up",
     "profile": "Profile",
-    "log-out": "Log Out",
+       "back_to_list": "Back to Restaurant List",
     "favorites": "Favorites"
   },
   "common": {
     "loading": "Loading...",
     "error": "Error",
     "retry": "Retry",
-    "see_more": "See More"
+    "see_more": "See More",
+    "user": "User"
   },
   "menu": {
     "view_details": "View Details",
@@ -306,7 +307,31 @@
       "prev": "Prev",
       "next": "Next"
     },
-    "back_to_list": "Back to Restaurant List"
+    "back_to_list": "Back to Restaurant List",
+    "detail": {
+      "address_title": "1. Address",
+      "address_missing": "Address not available",
+      "intro_title": "2. Restaurant Introduction",
+      "intro_text": "{{name}} is a well-known restaurant serving traditional Vietnamese dishes. With a cozy atmosphere and a varied menu, it offers a great dining experience for guests.",
+      "highlights_title": "Highlights",
+      "default_highlight1": "Varied and diverse dishes",
+      "default_highlight2": "Cozy, friendly atmosphere",
+      "default_highlight3": "Attentive service",
+      "contact_title": "Contact Information",
+      "note_title": "Note",
+      "note_text": "The restaurant may be busy during peak hours. Please book in advance or arrive early to avoid waiting.",
+      "menu_title": "Menu",
+      "recommended": "Recommended",
+      "default_food_story": "Delicious dishes rich in authentic Vietnamese flavors",
+      "view_food": "View Details",
+      "latest_reviews": "Latest Reviews",
+      "no_reviews": "There is no review for this restaurant yet.",
+      "not_found": "Restaurant not found",
+      "fetch_error": "Can't fetch restaurant details. Please try again later.",
+      "n_a": "N/A"
+      ,
+      "reviews": "{{count}} reviews"
+    }
   },
   "ScriptTitle": {
     "title": "Dish Introduction Script"

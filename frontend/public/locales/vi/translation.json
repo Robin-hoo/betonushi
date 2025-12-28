@@ -44,7 +44,7 @@
       "home": "Trang chủ",
       "menu": "Thực đơn",
       "restaurant": "Nhà hàng",
-      "phrases": "Cụm từ hội thoại"
+      "back_to_list": "Quay lại danh sách nhà hàng"
     },
     "login": "Đăng nhập",
     "signup": "Đăng ký",
@@ -56,7 +56,8 @@
     "loading": "Đang tải...",
     "error": "Lỗi",
     "retry": "Thử lại",
-    "see_more": "Xem thêm"
+    "see_more": "Xem thêm",
+    "user": "Người dùng"
   },
   "menu": {
     "view_details": "Xem chi tiết",
@@ -293,12 +294,35 @@
       "RoofSeat": "Có ghế ngồi trên sân thượng"
     },
     "location_required": "Cần vị trí để lọc",
-    "details": " Xem chi tiết",
+    "details": "Xem chi tiết",
     "pagination": {
       "prev": "Trước",
       "next": "Sau"
     },
-    "back_to_list": "Quay lại danh sách nhà hàng"
+    "back_to_list": "Quay lại danh sách nhà hàng",
+    "detail": {
+      "address_title": "1. Địa chỉ",
+      "address_missing": "Chưa cập nhật địa chỉ",
+      "intro_title": "2. Giới thiệu nhà hàng",
+      "intro_text": "{{name}} là một nhà hàng nổi tiếng phục vụ các món ăn Việt Nam truyền thống. Với không gian ấm cúng và thực đơn đa dạng, nhà hàng mang đến trải nghiệm ẩm thực tuyệt vời cho thực khách.",
+      "highlights_title": "3. Điểm nổi bật",
+      "default_highlight1": "Món ăn đa dạng, phong phú",
+      "default_highlight2": "Không gian ấm cúng, thân thiện",
+      "default_highlight3": "Phục vụ tận tình, chu đáo",
+      "contact_title": "4. Thông tin liên hệ",
+      "note_title": "Lưu ý",
+      "note_text": "Nhà hàng có thể đông khách vào giờ cao điểm. Vui lòng đặt bàn trước hoặc đến sớm để tránh chờ đợi.",
+      "menu_title": "Thực đơn",
+      "recommended": "Đề xuất",
+      "default_food_story": "Món ăn ngon, đậm đà hương vị Việt Nam",
+      "view_food": "Xem chi tiết",
+      "latest_reviews": "Đánh giá mới nhất",
+      "no_reviews": "Chưa có đánh giá nào cho nhà hàng này.",
+      "not_found": "Không tìm thấy nhà hàng",
+      "fetch_error": "Không thể tải thông tin nhà hàng. Vui lòng thử lại sau.",
+      "n_a": "Không có",
+      "reviews": "{{count}} đánh giá"
+    }
   },
   "ScriptTitle": {
     "title": "Kịch bản giới thiệu món ăn"
@@ -435,7 +459,8 @@
     "save": "Lưu",
     "search": "Tìm món ăn"
   },
-  "helpfulpage":{
-    "sectionTitle":"Hướng dẫn giới thiệu ẩm thực Việt Nam"
+  "helpfulpage": {
+    "sectionTitle": "Hướng dẫn giới thiệu ẩm thực Việt Nam"
   }
 }
+

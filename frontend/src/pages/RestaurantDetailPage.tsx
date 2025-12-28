@@ -1,12 +1,11 @@
 import React, { useState, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { useParams, useNavigate, Link } from "react-router-dom";
-import { Star, MapPin, Clock, Phone, DollarSign, ArrowLeft } from "lucide-react";
+import { Star, Clock, Phone, DollarSign, ArrowLeft } from "lucide-react";
 import { getRestaurantById, type Restaurant } from "@/api/restaurant.api";
 import { Button } from "@/components/ui/button";
 import defaultRestaurantImage from "@/assets/default.jpg";
 import defaultFoodImage from "@/assets/default.jpg";
-import { t } from "i18next";
 
 const RestaurantDetailPage: React.FC = () => {
   const { id } = useParams<{ id: string }>();
@@ -14,9 +13,9 @@ const RestaurantDetailPage: React.FC = () => {
   const [restaurant, setRestaurant] = useState<Restaurant | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [selectedImageIndex, setSelectedImageIndex] = useState(0);
+  const [selectedImage, setSelectedImage] = useState<string | null>(null);
 
-  const { i18n } = useTranslation();
+  const { t, i18n } = useTranslation();
 
   useEffect(() => {
     if (!id) return;
@@ -27,9 +26,11 @@ const RestaurantDetailPage: React.FC = () => {
       try {
         const data = await getRestaurantById(id, i18n.language);
         setRestaurant(data);
+        // Tự động chọn ảnh đầu tiên nếu có (logic giống FoodDetail)
+        // Ở đây dùng mock images nên sẽ xử lý ở dưới render
       } catch (err) {
         console.error(err);
-        setError("Can't fetch restaurant details. Please try again later.");
+        setError(t('restaurant.detail.fetch_error'));
       } finally {
         setLoading(false);
       }
@@ -38,7 +39,7 @@ const RestaurantDetailPage: React.FC = () => {
     fetchRestaurant();
   }, [id, i18n.language]);
 
-  // Mock images for restaurant (you can add restaurant_images table later)
+  // Mock images for restaurant
   const restaurantImages = [
     defaultRestaurantImage,
     defaultRestaurantImage,
@@ -60,35 +61,45 @@ const RestaurantDetailPage: React.FC = () => {
     return (
       <div className="min-h-screen flex items-center justify-center">
         <div className="text-center">
-          <p className="text-red-500 mb-4">{error || "Nhà hàng không tồn tại"}</p>
+          <p className="text-red-500 mb-4">{error || t('restaurant.detail.not_found')}</p>
           <Button onClick={() => navigate("/restaurants")}>{t("restaurant.back_to_list")}</Button>
         </div>
       </div>
     );
 
   const formatTime = (time: string | null) => {
-    if (!time) return "N/A";
+    if (!time) return t('restaurant.detail.n_a');
     return time.substring(0, 5); // HH:MM
   };
 
   const formatPrice = (price: number) => {
-    return new Intl.NumberFormat("vi-VN").format(price) + " đ";
+    try {
+      return new Intl.NumberFormat(i18n.language || 'vi-VN').format(price) + ' đ';
+    } catch (e) {
+      return price + ' đ';
+    }
   };
 
   return (
-    <div className="min-h-screen">
-      {/* Header with back button */}
-      <div className="bg-white shadow-sm sticky top-0 z-20">
-        <div className="max-w-7xl mx-auto px-6 py-4">
-          <Button
-            variant="ghost"
-            onClick={() => navigate("/restaurants")}
-            className="flex items-center gap-2 text-gray-600 hover:text-gray-900"
-          >
-            <ArrowLeft className="w-4 h-4" />
-            {t("restaurant.back_to_list")}
-          </Button>
-        </div>
+    <div className="min-h-screen bg-gray-50">
+      
+      {/* Nút Back giống FoodDetailPage */}
+      <div className="p-6 pb-0">
+        <Link
+          to="/restaurants"
+          className="
+            inline-flex items-center justify-center
+            w-10 h-10
+            bg-purple-600 text-white
+            rounded-md
+            hover:bg-purple-700
+            transition
+            shadow-sm
+          "
+          aria-label={t('restaurant.back_to_list')}
+        >
+          <ArrowLeft size={20} />
+        </Link>
       </div>
 
       <div className="max-w-7xl mx-auto px-6 py-8">
@@ -96,36 +107,46 @@ const RestaurantDetailPage: React.FC = () => {
         <div className="grid grid-cols-12 gap-8 mb-12">
           {/* Left: Images */}
           <div className="col-span-5">
-            {/* Main Image */}
-            <div className="bg-gradient-to-br from-orange-100 to-orange-200 rounded-xl p-4 mb-4 shadow-lg">
-              <div className="w-full aspect-square flex items-center justify-center overflow-hidden rounded-lg">
-                <img
-                  src={restaurantImages[selectedImageIndex]}
-                  alt={restaurant.name}
-                  className="w-full h-full object-cover rounded-lg"
-                />
-              </div>
+            
+            {/* --- CẬP NHẬT PHẦN ẢNH GIỐNG FOOD DETAIL --- */}
+            
+            {/* 1. Main Image (Style mới) */}
+            <div className="relative w-full aspect-[4/3] flex items-center justify-center overflow-hidden rounded-xl bg-white group pb-5">
+              <img
+                src={selectedImage || restaurantImages[0]}
+                alt={restaurant.name}
+                className="w-full h-full object-cover rounded-xl transition-all duration-500 group-hover:scale-105"
+              />
             </div>
 
-            {/* Thumbnail Images */}
-            <div className="grid grid-cols-3 gap-3">
-              {restaurantImages.map((img, index) => (
-                <button
-                  key={index}
-                  onClick={() => setSelectedImageIndex(index)}
-                  className={`bg-gradient-to-br from-orange-100 to-orange-200 rounded-lg aspect-square overflow-hidden transition-all ${selectedImageIndex === index
-                      ? "ring-4 ring-orange-500 scale-105"
-                      : "hover:scale-105"
-                    }`}
-                >
-                  <img
-                    src={img}
-                    alt={`${restaurant.name} ${index + 1}`}
-                    className="w-full h-full object-cover"
-                  />
-                </button>
-              ))}
+            {/* 2. Thumbnail Images Slider (Style mới) */}
+            <div className="relative mb-4">
+              <div className="flex gap-3 overflow-x-auto pb-2 snap-x scrollbar-thin scrollbar-thumb-orange-200 scrollbar-track-transparent">
+                {restaurantImages.map((img, index) => (
+                  <button
+                    key={index}
+                    onClick={() => setSelectedImage(img)}
+                    className={`
+                      relative flex-shrink-0 w-[calc(33.333%-0.5rem)] aspect-square rounded-lg overflow-hidden snap-start 
+                      border-2 transition-all duration-300
+                      ${selectedImage === img || (!selectedImage && index === 0)
+                        ? "border-orange-600 ring-2 ring-orange-100 scale-95" // Giữ tông màu cam của nhà hàng
+                        : "border-transparent opacity-70 hover:opacity-100 hover:scale-95"
+                      }
+                    `}
+                  >
+                    <img
+                      src={img}
+                      alt={`${restaurant.name} thumbnail ${index + 1}`}
+                      className="w-full h-full object-cover"
+                    />
+                  </button>
+                ))}
+              </div>
             </div>
+            
+            {/* --- KẾT THÚC CẬP NHẬT --- */}
+
 
             {/* Restaurant Name and Rating */}
             <div className="mt-6 text-center">
@@ -137,9 +158,7 @@ const RestaurantDetailPage: React.FC = () => {
                     {restaurant.rating.toFixed(1)}
                   </span>
                 </div>
-                <span className="text-gray-500">
-                  ({restaurant.number_of_rating} đánh giá)
-                </span>
+                <span className="text-gray-500">{t('restaurant.detail.reviews', { count: restaurant.number_of_rating })}</span>
               </div>
             </div>
           </div>
@@ -148,30 +167,26 @@ const RestaurantDetailPage: React.FC = () => {
           <div className="col-span-7 space-y-6">
             {/* Address */}
             <div className="bg-white rounded-xl p-6 shadow-md">
-              <h2 className="text-xl font-bold text-orange-600 mb-4 flex items-center gap-2">
-                <MapPin className="w-5 h-5" />
-                1. Địa chỉ
-              </h2>
-              <p className="text-gray-700 leading-relaxed">{restaurant.address || "Chưa cập nhật địa chỉ"}</p>
+              <h2 className="text-xl font-bold text-orange-600 mb-4">
+                  {t('restaurant.detail.address_title')}
+                </h2>
+              <p className="text-gray-700 leading-relaxed">{restaurant.address || t('restaurant.detail.address_missing')}</p>
             </div>
 
             {/* Restaurant Introduction */}
             <div className="bg-white rounded-xl p-6 shadow-md">
               <h2 className="text-xl font-bold text-orange-600 mb-4">
-                2. Giới thiệu nhà hàng
+                {t('restaurant.detail.intro_title')}
               </h2>
               <p className="text-gray-700 leading-relaxed">
-                {`${restaurant.name} là một nhà hàng nổi tiếng phục vụ các món ăn Việt Nam truyền thống. 
-                  Với không gian ấm cúng và thực đơn đa dạng, nhà hàng mang đến trải nghiệm ẩm thực 
-                  tuyệt vời cho thực khách. Chúng tôi tự hào phục vụ những món ăn đậm đà hương vị quê nhà, 
-                  được chế biến từ những nguyên liệu tươi ngon nhất.`}
+                {restaurant.description || t('restaurant.detail.intro_text', { name: restaurant.name })}
               </p>
             </div>
 
             {/* Recommended Points */}
             <div className="bg-white rounded-xl p-6 shadow-md">
               <h2 className="text-xl font-bold text-orange-600 mb-4">
-                Điểm nổi bật
+                {t('restaurant.detail.highlights_title')}
               </h2>
               <div className="space-y-3">
                 {restaurant.facilities.length > 0 ? (
@@ -185,15 +200,15 @@ const RestaurantDetailPage: React.FC = () => {
                   <>
                     <div className="flex items-start gap-3">
                       <div className="w-2 h-2 bg-orange-500 rounded-full mt-2 flex-shrink-0"></div>
-                      <p className="text-gray-700">Món ăn đa dạng, phong phú</p>
+                      <p className="text-gray-700">{t('restaurant.detail.default_highlight1')}</p>
                     </div>
                     <div className="flex items-start gap-3">
                       <div className="w-2 h-2 bg-orange-500 rounded-full mt-2 flex-shrink-0"></div>
-                      <p className="text-gray-700">Không gian ấm cúng, thân thiện</p>
+                      <p className="text-gray-700">{t('restaurant.detail.default_highlight2')}</p>
                     </div>
                     <div className="flex items-start gap-3">
                       <div className="w-2 h-2 bg-orange-500 rounded-full mt-2 flex-shrink-0"></div>
-                      <p className="text-gray-700">Phục vụ tận tình, chu đáo</p>
+                      <p className="text-gray-700">{t('restaurant.detail.default_highlight3')}</p>
                     </div>
                   </>
                 )}
@@ -203,7 +218,7 @@ const RestaurantDetailPage: React.FC = () => {
             {/* Additional Info */}
             <div className="bg-white rounded-xl p-6 shadow-md">
               <h2 className="text-xl font-bold text-orange-600 mb-4">
-                Thông tin liên hệ
+                {t('restaurant.detail.contact_title')}
               </h2>
               <div className="space-y-3">
                 {restaurant.phone_number && (
@@ -230,11 +245,10 @@ const RestaurantDetailPage: React.FC = () => {
             {/* Notes */}
             <div className="bg-yellow-50 border border-yellow-200 rounded-xl p-6">
               <h2 className="text-lg font-bold text-yellow-800 mb-3">
-                Lưu ý
+                {t('restaurant.detail.note_title')}
               </h2>
               <p className="text-yellow-700 text-sm leading-relaxed">
-                Nhà hàng có thể đông khách vào giờ cao điểm. Vui lòng đặt bàn trước hoặc đến sớm
-                để tránh chờ đợi. Chúng tôi luôn cố gắng phục vụ tốt nhất có thể.
+                {t('restaurant.detail.note_text')}
               </p>
             </div>
           </div>
@@ -244,7 +258,7 @@ const RestaurantDetailPage: React.FC = () => {
         {restaurant.foods.length > 0 && (
           <div className="mb-12">
             <h2 className="text-3xl font-bold text-orange-600 mb-6 text-center">
-              Thực đơn
+              {t('restaurant.detail.menu_title')}
             </h2>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {restaurant.foods.map((food) => (
@@ -260,14 +274,14 @@ const RestaurantDetailPage: React.FC = () => {
                     />
                     {food.is_recommended && (
                       <div className="absolute top-2 left-2 bg-orange-500 text-white px-3 py-1 rounded-full text-xs font-bold">
-                        Recommendation
+                        {t('restaurant.detail.recommended')}
                       </div>
                     )}
                   </div>
                   <div className="p-4">
                     <h3 className="font-bold text-lg mb-2 text-gray-800">{food.name}</h3>
                     <p className="text-sm text-gray-600 mb-3 line-clamp-2">
-                      {food.story || "Delicious dishes rich in authentic Vietnamese flavors"}
+                      {food.story || t('restaurant.detail.default_food_story')}
                     </p>
                     <div className="flex items-center justify-between">
                       <span className="text-lg font-bold text-orange-600">
@@ -279,7 +293,7 @@ const RestaurantDetailPage: React.FC = () => {
                           size="sm"
                           className="border-orange-500 text-orange-600 hover:bg-orange-50"
                         >
-                          Xem chi tiết
+                          {t('restaurant.detail.view_food')}
                         </Button>
                       </Link>
                     </div>
@@ -294,7 +308,7 @@ const RestaurantDetailPage: React.FC = () => {
         {restaurant.reviews.length > 0 && (
           <div className="bg-white rounded-xl shadow-md p-8">
             <h2 className="text-3xl font-bold text-orange-600 mb-6 text-center">
-              Đánh giá mới nhất
+              {t('restaurant.detail.latest_reviews')}
             </h2>
             <div className="space-y-6">
               {restaurant.reviews.map((review) => (
@@ -307,7 +321,7 @@ const RestaurantDetailPage: React.FC = () => {
                       {review.avatar_url ? (
                         <img
                           src={review.avatar_url}
-                          alt={review.user_name || "User"}
+                          alt={review.user_name || t('common.user')}
                           className="w-full h-full rounded-full object-cover"
                         />
                       ) : (
@@ -319,7 +333,7 @@ const RestaurantDetailPage: React.FC = () => {
                     <div className="flex-1">
                       <div className="flex items-center gap-3 mb-2">
                         <span className="font-bold text-gray-800">
-                          {review.user_name || `User ${review.user_id}`}
+                          {review.user_name || `${t('common.user')} ${review.user_id}`}
                         </span>
                         <div className="flex items-center gap-1">
                           {Array.from({ length: 5 }).map((_, i) => (
@@ -333,7 +347,7 @@ const RestaurantDetailPage: React.FC = () => {
                           ))}
                         </div>
                         <span className="text-sm text-gray-500">
-                          {new Date(review.created_at).toLocaleDateString("vi-VN")}
+                          {new Date(review.created_at).toLocaleDateString(i18n.language || 'vi-VN')}
                         </span>
                       </div>
                       <p className="text-gray-700 leading-relaxed">{review.comment}</p>
@@ -347,7 +361,7 @@ const RestaurantDetailPage: React.FC = () => {
 
         {restaurant.reviews.length === 0 && (
           <div className="bg-white rounded-xl shadow-md p-8 text-center">
-            <p className="text-gray-500">There is no review for this restaurant yet.</p>
+            <p className="text-gray-500">{t('restaurant.detail.no_reviews')}</p>
           </div>
         )}
       </div>
@@ -356,4 +370,3 @@ const RestaurantDetailPage: React.FC = () => {
 };
 
 export default RestaurantDetailPage;
-

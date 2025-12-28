@@ -56,7 +56,8 @@
     "loading": "読み込み中...",
     "error": "エラー",
     "retry": "再試行",
-    "see_more": "もっと詳しく見る"
+    "see_more": "もっと詳しく見る",
+    "user": "ユーザー"
   },
   "menu": {
     "view_details": "もっと詳しく見る",
@@ -303,6 +304,30 @@
       "next": "次へ"
     },
     "back_to_list": "レストラン一覧に戻る"
+  ,
+    "detail": {
+      "address_title": "1. 住所",
+      "address_missing": "住所は登録されていません",
+      "intro_title": "2. 店舗紹介",
+      "intro_text": "{{name}} は、伝統的なベトナム料理を提供する有名なレストランです。居心地の良い雰囲気と多彩なメニューで、来店される方に素晴らしい食体験を提供します。",
+      "highlights_title": "おすすめポイント",
+      "default_highlight1": "料理の種類が豊富",
+      "default_highlight2": "居心地の良い雰囲気",
+      "default_highlight3": "丁寧なサービス",
+      "contact_title": "連絡先情報",
+      "note_title": "ご注意",
+      "note_text": "混雑する時間帯があります。予約するか早めにお越しください。",
+      "menu_title": "メニュー",
+      "recommended": "おすすめ",
+      "default_food_story": "本場ベトナムの風味豊かな美味しい料理です",
+      "view_food": "詳細を見る",
+      "latest_reviews": "最新のレビュー",
+      "no_reviews": "この店舗にはまだレビューがありません。",
+      "not_found": "店舗が見つかりません",
+      "fetch_error": "店舗情報の取得に失敗しました。後ほど再度お試しください。",
+      "n_a": "該当なし",
+      "reviews": "{{count}}件のレビュー"
+    }
   },
   "ScriptTitle": {
     "title": "料理紹介スクリプト"
