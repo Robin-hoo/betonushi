@@ -1,21 +1,16 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Button } from '@/components/ui/button';
-import { Card, CardTitle } from '@/components/ui/card';
-import { api } from '@/api/client'; // Assumes axios instance
+import { api } from '@/api/client';
 import { useNavigate } from 'react-router-dom';
-import { HeartButton } from '@/components/HeartButton';
+import { useAuth } from "@/context/AuthContext";
 import {
   DISLIKED_INGREDIENT_OPTIONS,
-  GROUP_SIZE_OPTIONS,
   GENRE_OPTIONS,
-  PRIVATE_ROOM_OPTIONS,
   PRIORITY_OPTIONS,
   TASTE_OPTIONS,
   type DislikedIngredientOption,
   type GenreOption,
-  type GroupSizeOption,
-  type PrivateRoomOption,
   type PriorityOption,
   type TasteOption,
 } from '@/types/preferences';
@@ -33,8 +28,9 @@ function toggleCheckbox<T extends string>(
 }
 
 export default function SurveyPage() {
-  const { t, i18n } = useTranslation();
+  const { t } = useTranslation();
   const navigate = useNavigate();
+  const { isLoggedIn, isLoading } = useAuth(); // authentication
 
   const [targetName, setTargetName] = useState('');
   const [genres, setGenres] = useState<GenreOption[]>([]);
@@ -42,79 +38,84 @@ export default function SurveyPage() {
   const [dislikes, setDislikes] = useState<DislikedIngredientOption[]>([]);
   const [otherDislike, setOtherDislike] = useState('');
   const [priorities, setPriorities] = useState<PriorityOption[]>([]);
-  const [privateRoom, setPrivateRoom] = useState<PrivateRoomOption | "">("");
-  const [groupSize, setGroupSize] = useState<GroupSizeOption | "">("");
 
-  const [recommendations, setRecommendations] = useState<any[]>([]);
-  const [showResults, setShowResults] = useState(false);
+  // Removed PrivateRoom and GroupSize as per request
 
+  useEffect(() => {
+    if (!isLoading && !isLoggedIn) {
+      navigate('/login');
+    }
+  }, [isLoggedIn, isLoading, navigate]);
 
+  if (isLoading) {
+    return <div className="min-h-screen flex items-center justify-center">Loading...</div>;
+  }
 
-  const compileCriteria = () => {
-    // We map the keys to the localized string because `recommendationService` does string matching against DB content.
-    // DB content language depends on the data.
-    // If the user selects "Spicy" (Cay), we want to match "Spicy" or "Cay"?
-    // The `recommendationService` uses the `lang` parameter to join `food_translations`.
-    // But filtering by `taste` or `ingredient` is done on `foods` table columns likely?
-    // Looking at `recommendationService.js`:
-    // `(f.ingredient NOT ILIKE ...)` and `f.taste ILIKE ...`.
-    // These columns in `foods` table are likely English or Vietnamese or mixed.
-    // Let's assume we should send localized strings if the DB is localized or English if DB is standardized.
-    // Safest behavior for this MVP: Send English values or both?
-    // We'll send the localized value corresponding to the current language. Or maybe the key?
-    // Let's map back to English for better consistency if the DB is in English.
-    // Actually, looking at the code, `food_translations` is joined. But `where` uses `f.ingredient`.
-    // Checking `foods` table structure would be ideal, but let's assume `foods` has English or Vietnamese.
+  if (!isLoggedIn) {
+    return null; // Will redirect via useEffect
+  }
 
-    // Let's use `t` for now.
-    return {
-      targetName,
-      genres: genres.map(g => t(`survey.options.${g}`)),
-      tastes: tastes.map(taste => t(`survey.options.${taste}`)),
-      dislikes: [...dislikes.map(d => t(`survey.options.${d}`)), otherDislike].filter(Boolean),
-      priorities: priorities.map(p => t(`survey.options.${p}`)),
-      privateRoom: privateRoom ? t(`survey.options.${privateRoom}`) : '',
-      groupSize: groupSize ? t(`survey.options.${groupSize}`) : ''
-    };
-  };
-
-  const handleSave = async () => {
+  const savePreferences = async (silent = false) => {
     const preferences = {
       favorite_taste: tastes.join(','),
       disliked_ingredients: dislikes.filter(Boolean).join(','),
       dietary_criteria: genres.join(','),
       target_name: targetName.trim(),
       priorities: priorities.join(','),
-      private_room: privateRoom || '',
-      group_size: groupSize || ''
     };
-
-    console.log(JSON.stringify(preferences));
 
     try {
       await api.post('/preferences', preferences);
-      alert(t('profilePage.saveSuccess')); // Reuse or add new key
+      if (!silent) {
+        alert(t('profilePage.saveSuccess'));
+      }
+      return true;
     } catch (error) {
       console.error("Save error", error);
-      alert(t('profilePage.saveFailed') + " (Login required)");
+      if (!silent) {
+        alert(t('profilePage.saveFailed'));
+      }
+      return false;
     }
   };
 
+  const handleSave = async () => {
+    await savePreferences(false);
+  };
+
   const handleSearch = async () => {
-    const criteria = compileCriteria();
-    try {
-      const res = await api.get(`/recommendations`, {
-        params: {
-          lang: i18n.language,
-          limit: 8,
-          criteria: JSON.stringify(criteria)
-        }
-      });
-      setRecommendations(res.data);
-      setShowResults(true);
-    } catch (error) {
-      console.error("Search error", error);
-    }
+    // Save survey data immediately
+    await savePreferences(true);
+
+    // Map survey options to MenuPage filters (IDs)
+    // MenuPage IDs:
+    // Types: 1:Noodle, 2:Rice, 3:Bread, 4:Side, 5:Salad, 6:Hotpot
+    // Flavors: 1:Sour, 2:Sweet, 3:Herb, 4:Light, 5:Spicy
+    // Ingredients: 1:Beef, 2:Pork, 3:Chicken, 4:Seafood, 5:Vegetable
+
+    const typeIds: number[] = [];
+    const flavorIds: number[] = [];
+    const ingredientIds: number[] = [];
+
+    // Map Genres
+    if (genres.includes('noodle')) typeIds.push(1);
+    // 'vegetarian' -> maybe Vegetable ingredient (5)? Let's map it safely.
+    if (genres.includes('vegetarian')) ingredientIds.push(5);
+
+    // Map Tastes
+    if (tastes.includes('sour')) flavorIds.push(1);
+    if (tastes.includes('sweet')) flavorIds.push(2);
+    if (tastes.includes('spicy')) flavorIds.push(5);
+    // 'umami', 'salty', 'bitter' -> no direct mapping, ignored for now as strictly requested
+
+    // Map Dislikes (MenuPage doesn't support exclusion filters yet via URL easily, or logic differs)
+
+    const params = new URLSearchParams();
+    if (typeIds.length > 0) params.set('types', typeIds.join(','));
+    if (flavorIds.length > 0) params.set('flavors', flavorIds.join(','));
+    if (ingredientIds.length > 0) params.set('ingredients', ingredientIds.join(','));
+
+    navigate(`/foods?${params.toString()}`);
   };
 
   return (
@@ -226,43 +227,7 @@ export default function SurveyPage() {
               <div className="border-b border-gray-200 mt-8"></div>
             </div>
 
-            {/* Q5 Private Room */}
-            <div>
-              <p className="font-semibold text-gray-800 mb-3">{t('survey.q5')}</p>
-              <div className="space-y-2">
-                {PRIVATE_ROOM_OPTIONS.map(opt => (
-                  <label key={opt} className="flex items-center gap-2 cursor-pointer hover:bg-gray-50 p-2 rounded transition">
-                    <input
-                      type="radio"
-                      name="privateRoom"
-                      className="w-5 h-5 accent-[#ad343e]"
-                      checked={privateRoom === opt}
-                      onChange={() => setPrivateRoom(opt)}
-                    />
-                    <span className="text-gray-700">{t(`survey.options.${opt}`)}</span>
-                  </label>
-                ))}
-              </div>
-            </div>
-
-            {/* Q6 Group Size */}
-            <div>
-              <p className="font-semibold text-gray-800 mb-3">{t('survey.q6')}</p>
-              <div className="space-y-2">
-                {GROUP_SIZE_OPTIONS.map(opt => (
-                  <label key={opt} className="flex items-center gap-2 cursor-pointer hover:bg-gray-50 p-2 rounded transition">
-                    <input
-                      type="radio"
-                      name="groupSize"
-                      className="w-5 h-5 accent-[#ad343e]"
-                      checked={groupSize === opt}
-                      onChange={() => setGroupSize(opt)}
-                    />
-                    <span className="text-gray-700">{t(`survey.options.${opt}`)}</span>
-                  </label>
-                ))}
-              </div>
-            </div>
+            {/* Removed Private Room and Group Size */}
 
           </div>
 
@@ -282,45 +247,6 @@ export default function SurveyPage() {
               {t('survey.search')}
             </Button>
           </div>
-
-          {/* Recommendations Result */}
-          {showResults && (
-            <div className="mt-12 animate-in fade-in slide-in-from-bottom-4 duration-500">
-              <h2 className="text-2xl font-bold text-[#ad343e] mb-6 text-center">{t('recommendation.title')}</h2>
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-                {recommendations.length > 0 ? (
-                  recommendations.map((item: any) => (
-                    <a key={item.food_id} href={`/foods/${item.food_id}`}>
-                      <Card className="rounded-xl bg-[#F7E8E0] shadow-md hover:shadow-lg transition p-4 relative overflow-hidden group">
-                        <div className="rounded-md overflow-hidden bg-white/70">
-                          <img
-                            src={item.image_url}
-                            alt={item.name}
-                            className="w-full h-40 object-cover group-hover:scale-105 transition duration-300"
-                          />
-                        </div>
-
-                        <div className="absolute top-3 right-3 z-10">
-                          <HeartButton targetId={item.food_id} type="food" className="bg-white p-2 rounded-full shadow-sm" />
-                        </div>
-
-                        <div className="text-center mt-4 px-2">
-                          <CardTitle className="text-lg font-semibold text-gray-800">
-                            {item.name}
-                          </CardTitle>
-                          <p className="text-sm text-gray-600 mt-1 line-clamp-2">
-                            {item.story}
-                          </p>
-                        </div>
-                      </Card>
-                    </a>
-                  ))
-                ) : (
-                  <p className="text-center text-gray-500 col-span-full">{t('menu.no_results.title')}</p>
-                )}
-              </div>
-            </div>
-          )}
 
         </div>
       </div>
