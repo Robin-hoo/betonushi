@@ -4,6 +4,7 @@ import { Heart } from 'lucide-react';
 import { favoritesApi } from "@/api/favorites.api";
 import { useAuth } from "@/context/AuthContext";
 import { useNavigate } from "react-router-dom";
+import { useFavorites } from "@/context/FavoritesContext";
 
 // Definition of Food interface based on usage in HomePage/favoritesModel
 // Should ideally be shared
@@ -20,21 +21,44 @@ export default function FavoritesPage() {
   const { t, i18n } = useTranslation();
   const { isLoggedIn } = useAuth();
   const navigate = useNavigate();
-  const [favorites, setFavorites] = useState<Food[]>([]);
+  const { favoriteFoodIds, toggleFavorite, refreshFavorites } = useFavorites();
+
+  // We still need to store Food objects (details)
+  const [foodsMap, setFoodsMap] = useState<Map<number, Food>>(new Map());
   const [loading, setLoading] = useState(true);
+
   useEffect(() => {
     if (!isLoggedIn) {
       navigate('/login');
       return;
     }
 
-    favoritesApi.getFavorites('food', i18n.language)
-      .then((data: any) => {
-        setFavorites(data);
-      })
-      .catch(err => console.error("Failed to load favorites", err))
-      .finally(() => setLoading(false));
-  }, [isLoggedIn, navigate, i18n.language]);
+    const loadFavorites = async () => {
+      setLoading(true);
+      try {
+        // Fetch full details of favorites
+        const data: Food[] = await favoritesApi.getFavorites('food', i18n.language);
+
+        // Update our local map of food details
+        const newMap = new Map<number, Food>();
+        data.forEach(f => newMap.set(f.food_id, f));
+        setFoodsMap(newMap);
+
+        // Also ensure context is up to date (though App global refresh might handle it, safety first)
+        await refreshFavorites();
+      } catch (err) {
+        console.error("Failed to load favorites", err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    loadFavorites();
+  }, [isLoggedIn, navigate, i18n.language, refreshFavorites]);
+
+  // Derived favorites list: Intersection of fetched Details + Context IDs
+  // This ensures if context updates (unliked), it disappears from here.
+  const favorites = Array.from(foodsMap.values()).filter(f => favoriteFoodIds.has(f.food_id));
 
   const [loadingIds, setLoadingIds] = useState<number[]>([]);
   const [currentPage, setCurrentPage] = useState(1);
@@ -46,30 +70,15 @@ export default function FavoritesPage() {
     if (currentPage > totalPages) setCurrentPage(totalPages);
   }, [favorites.length]);
 
-  const handleOptimisticToggle = async (e: React.MouseEvent<HTMLButtonElement>, id: number) => {
+  const handleToggle = async (e: React.MouseEvent<HTMLButtonElement>, id: number) => {
     e.preventDefault();
     e.stopPropagation();
 
-    if (!isLoggedIn) {
-      navigate('/login');
-      return;
-    }
+    if (!isLoggedIn) return;
 
-    const removedItem = favorites.find(f => f.food_id === id);
-    // Optimistically remove from UI
-    setFavorites(prev => prev.filter(f => f.food_id !== id));
     setLoadingIds(prev => [...prev, id]);
-
     try {
-      const res = await favoritesApi.toggleFavorite(id, 'food');
-      // If server reports it's still favorited, restore
-      if (res.added && removedItem) {
-        setFavorites(prev => [removedItem, ...prev]);
-      }
-    } catch (err) {
-      console.error('Failed to toggle favorite', err);
-      // Revert on error
-      if (removedItem) setFavorites(prev => [removedItem, ...prev]);
+      await toggleFavorite(id, 'food');
     } finally {
       setLoadingIds(prev => prev.filter(i => i !== id));
     }
@@ -96,7 +105,7 @@ export default function FavoritesPage() {
         ) : (
           <>
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-16 justify-end">
-              { (favorites.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage)).map((item) => (
+              {(favorites.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage)).map((item) => (
                 <div key={item.food_id} className="bg-white rounded-lg shadow-md hover:shadow-lg transition overflow-hidden flex flex-col">
                   <div className="relative w-full h-48 bg-gray-200 overflow-hidden group">
                     <img
@@ -106,7 +115,7 @@ export default function FavoritesPage() {
                     />
 
                     <button
-                      onClick={(e) => handleOptimisticToggle(e, item.food_id)}
+                      onClick={(e) => handleToggle(e, item.food_id)}
                       disabled={loadingIds.includes(item.food_id)}
                       className="absolute top-2 right-2 z-10 bg-white rounded-full p-2 shadow-md hover:bg-gray-100 transition"
                     >
