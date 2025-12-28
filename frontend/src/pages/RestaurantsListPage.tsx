@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
-import { Heart } from 'lucide-react';
+import { Heart, Star } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import defaultRestaurantImage from '@/assets/default.jpg';
@@ -18,6 +18,8 @@ interface Restaurant {
     phone_number: string | null;
     distance_km?: number;
     liked?: boolean;
+    rating?: number;
+    number_of_rating?: number;
 }
 
 const DISTANCE_OPTIONS = [
@@ -397,6 +399,14 @@ export default function RestaurantsListPage() {
                                                 <h3 className="font-bold text-lg mb-2 text-gray-800 text-center">
                                                     {restaurant.name}
                                                 </h3>
+                                                <div className="flex flex-col items-center gap-1 mb-2">
+                                                    <div className="flex items-center gap-1">
+                                                        <span className="font-bold text-gray-800">
+                                                            {restaurant.rating || 0}{t('foodDetail.rating.outOf')}
+                                                        </span>
+                                                        <Star className="w-4 h-4 fill-yellow-400 text-yellow-400" />
+                                                    </div>
+                                                </div>
                                                 <p className="text-sm text-gray-600 mb-3 line-clamp-2 text-center">
                                                     {restaurant.address || 'Địa chỉ không có sẵn'}
                                                 </p>
