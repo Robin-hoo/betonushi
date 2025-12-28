@@ -335,10 +335,10 @@
     "edit": "Edit",
     "cancel": "Cancel",
     "save": "Save",
-    "saving": "Saving...",
-    "saveSuccess": "Save successfully!",
-    "saveFailed": "Save failed!",
-    "surveyHistory": {
+  "saving": "Saving...",
+  "saveSuccess": "Save successfully!",
+  "saveFailed": "Save failed!",
+  "surveyHistory": {
       "title": "Survey History",
       "questions": {
         "q1": "1. What genre of food do you usually eat?",
@@ -368,7 +368,10 @@
         "people34": "3-4 people"
       },
       "delete": "Delete",
-      "viewRecommendation": "View Recommendation"
+      "viewRecommendation": "View Recommendation",
+      "loading": "Loading saved surveys...",
+      "none": "None",
+      "defaultName": "Saved survey"
     }
   },
   "deliveryPlatforms": {

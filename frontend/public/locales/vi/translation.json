@@ -360,7 +360,10 @@
         "people34": "3-4 người"
       },
       "delete": "Xóa",
-      "viewRecommendation": "Xem đề xuất"
+      "viewRecommendation": "Xem đề xuất",
+      "loading": "Đang tải lịch sử khảo sát...",
+      "none": "Không có",
+      "defaultName": "Khảo sát đã lưu"
     }
   },
   "deliveryPlatforms": {
